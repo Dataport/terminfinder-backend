@@ -1,0 +1,10 @@
+stages:
+  - build
+
+container-build:
+  image: $ARTIFACTORY_SERVICE_IMAGES_URL/buildah
+  stage: build
+  script:
+    - echo ${CI_COMMIT_SHORT_SHA}
+    - cd src
+    - buildah bud --creds ${DOCKER_DEV_USER}:${DOCKER_DEV_PASSWORD} -t ${DOCKER_DEV_URL}/${DOCKER_IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}

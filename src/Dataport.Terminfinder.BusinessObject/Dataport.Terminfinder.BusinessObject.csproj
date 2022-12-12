@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Dataport.Terminfinder.BusinessObject</RootNamespace>
+    <AssemblyName>Dataport.Terminfinder.BusinessObject</AssemblyName>
+    <DebugType>Portable</DebugType>
+    <ProjectGuid>{EF3E18F3-A3ED-48F2-B006-2D24FB2C7C14}</ProjectGuid>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug</OutputPath>
+    <DocumentationFile>bin\Xml\Dataport.Terminfinder.BusinessObject.xml</DocumentationFile>
+    <NoWarn>1701;1702;S3903</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release</OutputPath>
+    <DocumentationFile>bin\Xml\Dataport.Terminfinder.BusinessObject.xml</DocumentationFile>
+    <NoWarn>1701;1702;S3903</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dataport.Terminfinder.Common\Dataport.Terminfinder.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\ParticipantsOfOneAppointment.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ParticipantsOfOneAppointment.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\SuggestedDate.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SuggestedDate.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ParticipantsOfOneAppointment.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ParticipantsOfOneAppointment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SuggestedDate.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuggestedDate.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Dataport.Terminfinder.Common</RootNamespace>
+	<AssemblyName>Dataport.Terminfinder.Common</AssemblyName>
+    <DebugType>Portable</DebugType>
+    <ProjectGuid>{5CF17597-DF2A-4FD2-A725-33E7E41B0A86}</ProjectGuid>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug</OutputPath>
+    <DocumentationFile>bin\Xml\Dataport.Terminfinder.Common.xml</DocumentationFile>
+    <NoWarn>1701;1702;S3903</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Xml\Dataport.Terminfinder.Common.xml</DocumentationFile>
+	<OutputPath>bin\Release</OutputPath>
+    <NoWarn>1701;1702;S3903</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
+  </ItemGroup>
+
+</Project>

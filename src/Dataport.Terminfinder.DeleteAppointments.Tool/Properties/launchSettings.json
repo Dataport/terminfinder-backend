@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TerminfinderDeleteAppointments": {
+      "commandName": "Project",
+      "commandLineArgs": "'1CDCD974-1169-4E04-8144-5A4AAFF55667' 50"
+    }
+  }
+}

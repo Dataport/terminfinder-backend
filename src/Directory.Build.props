@@ -1,0 +1,12 @@
+﻿<Project>
+  <PropertyGroup>
+    <Version>1.0.9</Version>
+    <FileVersion>1.0.9.0</FileVersion>
+	<AssemblyVersion>1.0.9.0</AssemblyVersion>
+    <Product>Terminfinder</Product>
+    <Company>Dataport AöR</Company>
+    <Copyright>Dataport AöR (c) 2019-2023</Copyright>
+    <Authors>Dataport AöR</Authors>
+	<LangVersion>10.0</LangVersion>
+  </PropertyGroup>
+</Project>
