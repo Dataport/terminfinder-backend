@@ -18,6 +18,8 @@ features:
 * Participate in appointment polls and respond to the appointment suggestions
 * Choices for responding - "Accept, Decline or Questionable"
 
+[SECURITY.md](./SECURITY.md)
+
 ## Parts of the backend
 
 * WebAPI-Application
