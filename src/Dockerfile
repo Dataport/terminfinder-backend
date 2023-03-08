@@ -22,4 +22,4 @@ WORKDIR /app
 COPY --from=build /app/publish/ .
 EXPOSE 80
 
-CMD ["dotnet", "Dataport.Terminfinder.WebAPI.dll", "--urls=http://+:80"]
+CMD ["dotnet", "Dataport.Terminfinder.WebAPI.dll"]
