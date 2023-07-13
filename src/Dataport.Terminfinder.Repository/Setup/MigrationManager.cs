@@ -28,8 +28,11 @@ namespace Dataport.Terminfinder.Repository.Setup
         {
             try
             {
-                _dataContext.Database.Migrate();
-                _logger.LogInformation("Migration completed successfully");
+                if (_dataContext.Database.GetPendingMigrations().Any())
+                {
+                    _dataContext.Database.Migrate();
+                    _logger.LogInformation("Migration completed successfully");
+                }
             }
             catch (Exception ex)
             {

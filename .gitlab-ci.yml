@@ -1,14 +1,4 @@
-stages:
-  - build
-
-container-build:
-  image: $ARTIFACTORY_SERVICE_IMAGES_URL/buildah
-  stage: build
-  script:
-    - echo ${CI_COMMIT_SHORT_SHA}
-    - cd src
-    - >
-      buildah bud
-      --build-arg MCR_REGISTRY=${ARTIFACTORY_MICROSOFT_IMAGES}
-      --creds ${DOCKER_DEV_USER}:${DOCKER_DEV_PASSWORD}
-      -t ${DOCKER_DEV_URL}/${DOCKER_IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}
+include:
+  - project: "dabstimmbox/ci"
+    ref: "main"
+    file: "backend-oss.yml"

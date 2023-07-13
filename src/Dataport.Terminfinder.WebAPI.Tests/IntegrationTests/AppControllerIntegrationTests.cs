@@ -22,7 +22,7 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
     {
         AppInfo expectedAppInfo = new()
         {
-            BuildDate = "2022-12-01",
+            BuildDate = "2023-05-05",
             VersionNumber = AssemblyUtils.GetProductVersion(GetType().Assembly)
         };
 
