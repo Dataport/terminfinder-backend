@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public abstract class BaseIntegrationTests
 {
     /// <summary>
