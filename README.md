@@ -32,7 +32,7 @@ features:
 
 ## Database
 First, the database has to be created by yourself. Afterwards the `additional supplied module` `uuid-ossp` has to be installed because the database generates unique uuids.  
-When starting the webapi-application the tables are being created in the database and a first customer with the customerid `80248A42-8FE2-4D4A-89DA-02E683511F76` will be inserted.  
+When starting the webapi-application with the parameter `--dbmigrate` the tables are being created in the database and a first customer with the customerid `80248A42-8FE2-4D4A-89DA-02E683511F76` will be inserted.  
 
 ## Configuration
 The connection-string has to be defined in the `appsettings.json`.  

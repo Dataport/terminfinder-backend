@@ -18,14 +18,17 @@ public static class Program
     public static async Task Main(string[] args)
     {
         var hostBuilder = CreateHostBuilder(args).Build();
-
-        using var scope = hostBuilder.Services.CreateScope();
-        var migrationManager = scope.ServiceProvider.GetService<IMigrationManager>();
-        if (migrationManager == null)
+        if (args.Contains("--dbmigrate"))
         {
-            throw new ApplicationException("Database Migration failed!");
+            using var scope = hostBuilder.Services.CreateScope();
+            var migrationManager = scope.ServiceProvider.GetService<IMigrationManager>();
+            if (migrationManager == null)
+            {
+                throw new ApplicationException("Database Migration failed!");
+            }
+
+            migrationManager.MigrateDatabase();
         }
-        migrationManager.MigrateDatabase();
 
         await hostBuilder.RunAsync();
     }
