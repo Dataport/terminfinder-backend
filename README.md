@@ -18,7 +18,9 @@ features:
 * Participate in appointment polls and respond to the appointment suggestions
 * Choices for responding - "Accept, Decline or Questionable"
 
-[SECURITY.md](./SECURITY.md)
+[SECURITY.md](docs/SECURITY.md)
+
+[CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
 ## Parts of the backend
 
