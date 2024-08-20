@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Dataport.Terminfinder.BusinessObject.JsonSerializer;
 using Dataport.Terminfinder.BusinessObject.Validators;
+using JetBrains.Annotations;
 
 namespace Dataport.Terminfinder.BusinessObject;
 
@@ -22,7 +23,7 @@ public class SuggestedDate
     public Guid SuggestedDateId { get; set; }
 
     /// <summary>
-    /// Identfier of the assigned appointment
+    /// Identifier of the assigned appointment
     /// </summary>
     /// <example>00000000-0000-0000-0000-000000000000</example>
     [Column("appointmentid")]
@@ -36,7 +37,7 @@ public class SuggestedDate
     public Appointment Appointment { get; set; }
 
     /// <summary>
-    /// Identifer of the assigned customer
+    /// Identifier of the assigned customer
     /// </summary>
     /// <example>00000000-0000-0000-0000-000000000000</example>
     [Column("customerid")]
@@ -94,6 +95,16 @@ public class SuggestedDate
     [JsonProperty(PropertyName = "endTime")]
     [JsonConverter(typeof(TimeConverter))]
     public DateTimeOffset? EndTime { get; set; }
+    
+    
+    /// <summary>
+    /// Optional description of the suggested date
+    /// </summary>
+    [Column("description")]
+    [MaxLength(100, ErrorMessage = "The description must be a string with a maximum length of 100 characters.")]
+    [JsonProperty(PropertyName = "description")]
+    [CanBeNull]
+    public string Description { get; set; }
 
     /// <summary>
     /// List of all votings
