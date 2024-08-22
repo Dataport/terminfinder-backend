@@ -11,7 +11,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
@@ -96,5 +96,24 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(HttpStatusCode.Unauthorized, result.StatusCode);
+    }
+
+    [TestMethod]
+    public async Task AddSuggestedDateDescription_GetSuggestedDate_ValueMatches()
+    {
+        // arrange
+        const string description = "Im the test description!";
+        HttpClient client = _testServer.CreateClient();
+        
+        var appointment = CreateTestAppointment(_customerId, It.IsAny<Guid>());
+        appointment.SuggestedDates.First().Description = description;
+
+        // act
+        var result = await CreateTestAppointmentInDatabase(client, _customerId, null, appointment);
+
+        // assert
+        var resultDescription = result.SuggestedDates.First().Description;
+        Assert.IsNotNull(resultDescription);
+        Assert.AreEqual(resultDescription, description);
     }
 }

@@ -67,9 +67,14 @@ public abstract class BaseIntegrationTests
         return appointment;
     }
 
-    protected async Task<Appointment> CreateTestAppointmentInDatabase(HttpClient client, Guid customerId, string password = null)
+    protected async Task<Appointment> CreateTestAppointmentInDatabase(
+        HttpClient client,
+        Guid customerId,
+        string password = null,
+        Appointment appointment = null
+    )
     {
-        var appointment = CreateTestAppointment(customerId, Guid.Empty, password);
+        appointment ??= CreateTestAppointment(customerId, Guid.Empty, password);
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
