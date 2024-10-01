@@ -1,17 +1,18 @@
-ARG MCR_REGISTRY=mcr.microsoft.com
-FROM ${MCR_REGISTRY}/dotnet/sdk:6.0 AS build
+ARG MCR_REGISTRY=mcr.microsoft.com/
+
+FROM ${MCR_REGISTRY}dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY src .
-RUN dotnet restore "Dataport.Terminfinder.WebAPI/Dataport.Terminfinder.WebAPI.csproj"
-RUN dotnet build "Dataport.Terminfinder.WebAPI/Dataport.Terminfinder.WebAPI.csproj" -c Release -o /app/build
-RUN dotnet publish "Dataport.Terminfinder.WebAPI/Dataport.Terminfinder.WebAPI.csproj" -c Release -o /app/publish
+COPY . ./
+RUN dotnet publish "Dataport.Terminfinder.WebAPI/Dataport.Terminfinder.WebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-ARG MCR_REGISTRY=mcr.microsoft.com
-FROM ${MCR_REGISTRY}/dotnet/aspnet:6.0
+
+FROM ${MCR_REGISTRY}dotnet/aspnet:8.0
 WORKDIR /app
-
-COPY --from=build /app/publish/ .
 EXPOSE 80
 
-CMD ["dotnet", "Dataport.Terminfinder.WebAPI.dll"]
+RUN apt-get update
+
+COPY --from=build /app/publish/ .
+
+CMD ["dotnet", "Dataport.Terminfinder.WebAPI.dll", "--dbmigrate"]

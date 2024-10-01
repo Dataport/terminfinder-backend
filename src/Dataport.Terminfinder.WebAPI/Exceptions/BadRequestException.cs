@@ -1,5 +1,4 @@
 ﻿using Dataport.Terminfinder.BusinessObject.Enum;
-using System.Runtime.Serialization;
 
 // ReSharper disable UnusedMember.Global
 namespace Dataport.Terminfinder.WebAPI.Exceptions;
@@ -27,11 +26,5 @@ public class BadRequestException : RestApiException
         : base(localizedErrorMessage, errorCode, innerException)
     {
         LocalizedErrorMessage = localizedErrorMessage;
-    }
-
-    /// <inheritdoc />
-    protected BadRequestException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
     }
 }
