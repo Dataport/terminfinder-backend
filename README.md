@@ -29,7 +29,7 @@ features:
 * PostgreSql Database
 
 ## Requirements
-* Microsoft dotnet 6, [ASP.NET Core Runtime 6.0.11](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+* Microsoft dotnet 8, [ASP.NET Core Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 * Database [PostgreSQL](https://www.postgresql.org/)
 
 ## Database
