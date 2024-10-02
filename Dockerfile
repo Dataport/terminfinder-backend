@@ -1,11 +1,8 @@
 ARG MCR_REGISTRY=mcr.microsoft.com/
 
 FROM ${MCR_REGISTRY}dotnet/sdk:8.0 AS build
-WORKDIR /src
-
-COPY . ./
+COPY src ./
 RUN dotnet publish "Dataport.Terminfinder.WebAPI/Dataport.Terminfinder.WebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
 
 FROM ${MCR_REGISTRY}dotnet/aspnet:8.0
 WORKDIR /app
