@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Dataport.Terminfinder.BusinessObject</RootNamespace>
     <AssemblyName>Dataport.Terminfinder.BusinessObject</AssemblyName>
     <DebugType>Portable</DebugType>
     <ProjectGuid>{EF3E18F3-A3ED-48F2-B006-2D24FB2C7C14}</ProjectGuid>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

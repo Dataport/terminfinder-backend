@@ -1,16 +1,10 @@
 ﻿using System.Globalization;
-using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
@@ -266,10 +260,10 @@ public class Startup
 
         app.Use(async (context, next) =>
         {
-            context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
-            context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-            context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
+            context.Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
+            context.Response.Headers.Append("X-Xss-Protection", "1; mode=block");
+            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
             await next();
         });
 

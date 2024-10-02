@@ -1,8 +1,4 @@
 ﻿using Dataport.Terminfinder.Repository.Setup;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Dataport.Terminfinder.WebAPI;
 
@@ -18,9 +14,12 @@ public static class Program
     public static async Task Main(string[] args)
     {
         var hostBuilder = CreateHostBuilder(args).Build();
-        if (args.Contains("--dbmigrate"))
+
+        using var scope = hostBuilder.Services.CreateScope();
+        var configuration = scope.ServiceProvider.GetService<IConfiguration>();
+
+        if (args.Contains("--dbmigrate") || (configuration?.GetValue<string>("Terminfinder:dbmigrate") == "true"))
         {
-            using var scope = hostBuilder.Services.CreateScope();
             var migrationManager = scope.ServiceProvider.GetService<IMigrationManager>();
             if (migrationManager == null)
             {

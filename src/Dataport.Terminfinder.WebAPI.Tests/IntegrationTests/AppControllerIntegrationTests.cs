@@ -1,5 +1,3 @@
-using Dataport.Terminfinder.Common;
-
 namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 
 [TestClass]
@@ -22,8 +20,8 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
     {
         AppInfo expectedAppInfo = new()
         {
-            BuildDate = "2023-05-05",
-            VersionNumber = AssemblyUtils.GetProductVersion(GetType().Assembly)
+            BuildDate = "2024-10-01",
+            VersionNumber = "1.0.11"
         };
 
         HttpClient client = _testServer.CreateClient();

@@ -1,5 +1,4 @@
 ﻿using Dataport.Terminfinder.BusinessObject.Enum;
-using System.Runtime.Serialization;
 
 namespace Dataport.Terminfinder.WebAPI.Exceptions;
 
@@ -26,11 +25,5 @@ public abstract class RestApiException : Exception
         : base(message, innerException)
     {
         ErrorCode = errorCode;
-    }
-
-    /// <inheritdoc />
-    protected RestApiException(SerializationInfo info, StreamingContext context)
-        :base(info, context)
-    {
     }
 }

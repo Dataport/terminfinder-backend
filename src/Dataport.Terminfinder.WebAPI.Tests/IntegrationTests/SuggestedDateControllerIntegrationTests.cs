@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
+﻿namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 
 [TestClass]
 [TestCategory("Integrationtest")]
@@ -112,7 +110,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         var result = await CreateTestAppointmentInDatabase(client, _customerId, null, appointment);
 
         // assert
-        var resultDescription = result.SuggestedDates.First().Description;
+        var resultDescription = result.SuggestedDates.First(s => s.Description==description).Description;
         Assert.IsNotNull(resultDescription);
         Assert.AreEqual(resultDescription, description);
     }
