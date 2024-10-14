@@ -8,4 +8,4 @@ ENV LANG de_DE.utf8
 WORKDIR /app
 EXPOSE 5432
 
-copy create_user.sql /docker-entrypoint-initdb.d
+COPY create_user.sql /docker-entrypoint-initdb.d
