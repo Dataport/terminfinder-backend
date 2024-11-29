@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Dataport.Terminfinder.BusinessObject.JsonSerializer;
+﻿using Dataport.Terminfinder.BusinessObject.JsonSerializer;
 using Dataport.Terminfinder.BusinessObject.Validators;
 using JetBrains.Annotations;
 

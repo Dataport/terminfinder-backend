@@ -1,5 +1,4 @@
 ﻿using Dataport.Terminfinder.WebAPI.Constants;
-using System.Linq;
 using System.Text;
 
 namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;

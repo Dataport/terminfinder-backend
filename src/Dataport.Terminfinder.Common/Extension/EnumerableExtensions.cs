@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Dataport.Terminfinder.Common.Extension;
+﻿namespace Dataport.Terminfinder.Common.Extension;
 
 /// <summary>
 /// Extension methods for interface IEnumerable

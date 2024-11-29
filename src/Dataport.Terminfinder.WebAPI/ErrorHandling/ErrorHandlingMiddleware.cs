@@ -1,10 +1,8 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Dataport.Terminfinder.BusinessObject.Enum;
+﻿using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.BusinessObject.Error;
 using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.Exceptions;
+using System.Net;
 
 namespace Dataport.Terminfinder.WebAPI.ErrorHandling;
 

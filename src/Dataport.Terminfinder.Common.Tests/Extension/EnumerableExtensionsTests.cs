@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Dataport.Terminfinder.Common.Extension;
+﻿using Dataport.Terminfinder.Common.Extension;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.Common.Tests.Extension;

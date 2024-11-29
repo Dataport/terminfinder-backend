@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 
 namespace Dataport.Terminfinder.BusinessLayer;

@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using Npgsql;
+﻿using Npgsql;
 using NpgsqlTypes;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool;
 
 /// <inheritdoc cref="IRepository" />
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage]
 public class Repository : IRepository
 {
     private readonly ILogger _logger;

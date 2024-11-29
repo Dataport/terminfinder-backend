@@ -1,10 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Text;
-using System.Xml.Linq;
-using Microsoft.OpenApi.Any;
+﻿using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using System.Xml.Linq;
 
 namespace Dataport.Terminfinder.WebAPI.Swagger;
 
