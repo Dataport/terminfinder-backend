@@ -246,6 +246,89 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
+    public async Task RepostAppointment_SameObject_IsValid()
+    {
+        // Arrange
+        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        HttpClient client = _testServer.CreateClient();
+
+        // Act
+        var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
+            HttpConstants.TerminfinderMediaTypeJsonV1);
+        var response = await client.PostAsync($"appointment/{_customerId}", content);
+
+        // Assert
+        Assert.IsNotNull(response);
+        response.EnsureSuccessStatusCode();
+
+        // Act
+        var responseText = await response.Content.ReadAsStringAsync();
+        var appointmentResult = JsonConvert.DeserializeObject<Appointment>(responseText);
+
+        // resend previous result
+        var contentRepost = new StringContent(JsonConvert.SerializeObject(appointmentResult), Encoding.UTF8,
+            HttpConstants.TerminfinderMediaTypeJsonV1);
+        var responseRepost = await client.PostAsync($"appointment/{_customerId}", contentRepost);
+
+        // Assert
+        Assert.IsNotNull(responseRepost);
+        responseRepost.EnsureSuccessStatusCode();
+
+        var responseRepostText = await responseRepost.Content.ReadAsStringAsync();
+        Assert.AreEqual(responseText, responseRepostText);
+    }
+
+    [TestMethod]
+    public async Task RepostAppointment_DifferentObject_PersistentValuesUnchanged()
+    {
+        // Arrange
+        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        HttpClient client = _testServer.CreateClient();
+
+        // Act
+        var contentString = JsonConvert.SerializeObject(appointment);
+        var content = new StringContent(contentString, Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
+        var response = await client.PostAsync($"appointment/{_customerId}", content);
+
+        // Assert
+        Assert.IsNotNull(response);
+        response.EnsureSuccessStatusCode();
+
+        // resend previous result
+        // Act
+        var responseText = await response.Content.ReadAsStringAsync();
+        var appointmentResponse = JsonConvert.DeserializeObject<Appointment>(responseText);
+        var responseVerify1 = await client.GetAsync($"appointment/{_customerId}/{appointmentResponse.AppointmentId}");
+
+        appointmentResponse.CreatorName = "New Creator!";
+
+        var contentRepost = new StringContent(JsonConvert.SerializeObject(appointmentResponse), Encoding.UTF8,
+            HttpConstants.TerminfinderMediaTypeJsonV1);
+        var responseRepost = await client.PostAsync($"appointment/{_customerId}", contentRepost);
+
+        // Assert
+        Assert.IsNotNull(responseRepost);
+        responseRepost.EnsureSuccessStatusCode();
+
+        var responseRepostText = await responseRepost.Content.ReadAsStringAsync();
+        Assert.AreNotEqual(responseText, responseRepostText);
+
+        // verify that values are unchanged from second post request
+        // Act
+        var responseVerify2 = await client.GetAsync($"appointment/{_customerId}/{appointmentResponse.AppointmentId}");
+        var responseVerify1Text = await responseVerify1.Content.ReadAsStringAsync();
+        var responseVerify2Text = await responseVerify2.Content.ReadAsStringAsync();
+
+        // Assert
+        Assert.IsNotNull(responseVerify1);
+        Assert.IsNotNull(responseVerify2);
+        responseVerify1.EnsureSuccessStatusCode();
+        responseVerify2.EnsureSuccessStatusCode();
+
+        Assert.AreEqual(responseVerify1Text, responseVerify2Text);
+    }
+
+    [TestMethod]
     public async Task GetAppointment_AppointmentId_NotFound()
     {
         Guid appointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
