@@ -1,5 +1,4 @@
-﻿using System;
-using Dataport.Terminfinder.BusinessLayer.Security;
+﻿using Dataport.Terminfinder.BusinessLayer.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool;
+﻿namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool;
 
 /// <summary>
 /// delete all appointments, if the oldest startdate (when enddate is null) or the oldest enddate older than x days

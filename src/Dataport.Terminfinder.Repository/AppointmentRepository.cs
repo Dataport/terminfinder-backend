@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.Common.Extension;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Dataport.Terminfinder.Repository.Tests")]
 

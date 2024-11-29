@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
-using Dataport.Terminfinder.BusinessObject.Validators;
+﻿using Dataport.Terminfinder.BusinessObject.Validators;
 using Dataport.Terminfinder.WebAPI.Localisation;
 using Dataport.Terminfinder.WebAPI.Localisation.AttributeAdapters;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dataport.Terminfinder.WebAPI.Tests.Localisation;
 

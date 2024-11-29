@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Dataport.Terminfinder.BusinessLayer;
+﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.Common.Extension;
 using Dataport.Terminfinder.WebAPI.Exceptions;
 using Dataport.Terminfinder.WebAPI.RequestContext;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dataport.Terminfinder.WebAPI.Controllers;
 

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Dataport.Terminfinder.BusinessLayer.Security;
-using Dataport.Terminfinder.Repository;
+﻿using Dataport.Terminfinder.BusinessLayer.Security;
 using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
+using Dataport.Terminfinder.Repository;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
