@@ -208,13 +208,10 @@ public class AppointmentController : ApiControllerBase
         Logger.LogDebug("Enter {NameofPost}, Parameter: {AppointmentObject}, {CustomerId}", nameof(Post),
             appointmentObject, customerId);
 
-        if (appointmentObject == null || appointmentObject.AdminId != Guid.Empty ||
-            appointmentObject.AppointmentId != Guid.Empty)
-        {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
-        }
-
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (appointmentObject == null
+            || (appointmentObject.AdminId == Guid.Empty && appointmentObject.AppointmentId != Guid.Empty)
+            || (appointmentObject.AdminId != Guid.Empty && appointmentObject.AppointmentId == Guid.Empty)
+            || !Guid.TryParse(customerId, out Guid customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -225,7 +222,12 @@ public class AppointmentController : ApiControllerBase
 
         ValidateCreateAndUpdateAppointmentRequest(appointmentObject, customerId);
 
-        appointmentObject = _appointmentBusinessLayer.AddAppointment(appointmentObject);
+        // When the object contains both AdminId & AppointmentId the user tried to resend the request.
+        // Nothing will be updated and the same object is returned
+        if (appointmentObject.AdminId == Guid.Empty && appointmentObject.AppointmentId == Guid.Empty)
+        {
+            appointmentObject = _appointmentBusinessLayer.AddAppointment(appointmentObject);
+        }
 
         return Created(CreateCreatedUri(appointmentObject.AppointmentId.ToString()), appointmentObject);
     }
