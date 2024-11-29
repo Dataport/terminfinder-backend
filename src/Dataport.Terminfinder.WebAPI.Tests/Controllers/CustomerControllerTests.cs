@@ -9,7 +9,7 @@ public class CustomerControllerTests
     private IRequestContext _requestContext;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         var mockLog = new Mock<ILogger<CustomerController>>();

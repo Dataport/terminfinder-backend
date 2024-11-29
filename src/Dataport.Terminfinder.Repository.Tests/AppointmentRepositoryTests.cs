@@ -7,7 +7,7 @@ public class AppointmentRepositoryTests
     private ILogger<AppointmentRepository> _logger;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         var mockLog = new Mock<ILogger<AppointmentRepository>>();

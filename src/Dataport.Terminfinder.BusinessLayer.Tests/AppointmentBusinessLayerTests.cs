@@ -23,7 +23,7 @@ public class AppointmentBusinessLayerTests
         "$2b$10$bKHadGFqngTajUrRAozjxeS3r5Mz6.nQwOBjT.kUcBeIF7FFYVt2W";
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         var mockLog = new Mock<ILogger<AppointmentBusinessLayer>>();
@@ -646,7 +646,7 @@ public class AppointmentBusinessLayerTests
         Guid expectedParticipantId1 = new("CF1E5ABB-7D41-41AA-8DDC-0EB0319CD6B4");
         Guid expectedParticipantId2 = new("D1C2DB5B-3FD8-4D8B-9A64-0C90298897D0");
 
-        List<Participant> fakeParcipiants = new()
+        List<Participant> fakeParticipants = new()
         {
             new Participant()
             {
@@ -688,13 +688,13 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        businessLayer.SetParticipantsForeignKeys(fakeParcipiants, expectedCustomerId, expectedAppointmentId);
+        businessLayer.SetParticipantsForeignKeys(fakeParticipants, expectedCustomerId, expectedAppointmentId);
 
-        foreach (Participant participant in fakeParcipiants)
+        foreach (Participant participant in fakeParticipants)
         {
             Assert.AreEqual(expectedCustomerId, participant.CustomerId);
             Assert.AreEqual(expectedAppointmentId, participant.AppointmentId);
-            Guid expectedParcipiantId = participant.ParticipantId;
+            Guid expectedParticipantId = participant.ParticipantId;
 
             List<Voting> votings = participant.Votings.ToList();
 
@@ -704,7 +704,7 @@ public class AppointmentBusinessLayerTests
 
                 Assert.AreEqual(expectedCustomerId, voting.CustomerId);
                 Assert.AreEqual(expectedAppointmentId, voting.AppointmentId);
-                Assert.AreEqual(expectedParcipiantId, voting.ParticipantId);
+                Assert.AreEqual(expectedParticipantId, voting.ParticipantId);
             }
         }
     }

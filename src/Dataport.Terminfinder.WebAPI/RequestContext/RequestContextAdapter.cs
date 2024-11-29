@@ -8,7 +8,7 @@ public sealed class RequestContextAdapter : IRequestContext
     [NotNull] private readonly IHttpContextAccessor _accessor;
 
     /// <summary>
-    /// Defaul constructor
+    /// Default constructor
     /// </summary>
     /// <param name="accessor"></param>
     public RequestContextAdapter(IHttpContextAccessor accessor)

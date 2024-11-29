@@ -13,7 +13,7 @@ public class CustomValidationAttributeAdapterProviderTests
     private IStringLocalizer localizer;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake localizer
         var mockLocalize = new Mock<IStringLocalizer<CustomValidationAttributeAdapterProvider>>();

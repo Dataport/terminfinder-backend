@@ -14,7 +14,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
@@ -22,7 +22,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task AddApppointment()
+    public async Task AddAppointment()
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
 
@@ -101,7 +101,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(appointmentId, protectionResult.AppointmentId);
         Assert.AreEqual(false, protectionResult.IsProtectedByPassword);
 
-        //-- get GetPasswordVerifcation
+        //-- get GetPasswordVerification
         // Act
         response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}/passwordverification");
 
@@ -118,7 +118,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task UpdateApppointment()
+    public async Task UpdateAppointment()
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
 
@@ -247,7 +247,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_AppointmentId_NotFound()
+    public async Task GetAppointment_AppointmentId_NotFound()
     {
         Guid appointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
 
@@ -262,7 +262,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_AppointmentId_InvalidGuid()
+    public async Task GetAppointment_AppointmentId_InvalidGuid()
     {
         var appointmentId = "C1C2474B-488A-4ECF-94E8-47387BB715D6";
 
@@ -277,7 +277,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_AppointmentId_InvalidCustomerId()
+    public async Task GetAppointment_AppointmentId_InvalidCustomerId()
     {
         var appointmentId = "C1C2474B-488A-4ECF-94E8-47387BB715D5";
 
@@ -292,7 +292,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task AddApppointment_WithAdminId_BadRequest()
+    public async Task AddAppointment_WithAdminId_BadRequest()
     {
         Guid adminId = new("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
 
@@ -312,7 +312,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task AddApppointment_WithPassword_Unauthorized()
+    public async Task AddAppointment_WithPassword_Unauthorized()
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, "P@$$w0rd");
 
@@ -344,7 +344,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task AddApppointment_WithWrongPassword_BadRequest()
+    public async Task AddAppointment_WithWrongPassword_BadRequest()
     {
         //--- too short
         var password = "12345";
@@ -385,7 +385,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task AddApppointment_WithPassword()
+    public async Task AddAppointment_WithPassword()
     {
         var password = "P@$$w0rd";
 
@@ -483,7 +483,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetPasswordVerifcation()
+    public async Task GetPasswordVerification()
     {
         var password = "P@$$w0rd";
 

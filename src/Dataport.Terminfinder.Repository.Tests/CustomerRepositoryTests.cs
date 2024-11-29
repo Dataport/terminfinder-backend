@@ -7,7 +7,7 @@ public class CustomerRepositoryTests
     private ILogger<CustomerRepository> _logger;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         var mockLog = new Mock<ILogger<CustomerRepository>>();

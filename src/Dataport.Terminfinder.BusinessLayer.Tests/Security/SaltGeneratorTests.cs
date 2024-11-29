@@ -13,7 +13,7 @@ public class SaltGeneratorTests
     private ILogger<SaltGenerator> logger;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         logger = Mock.Of<ILogger<SaltGenerator>>();

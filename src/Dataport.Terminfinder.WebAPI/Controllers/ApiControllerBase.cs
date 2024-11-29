@@ -32,7 +32,7 @@ public abstract class ApiControllerBase : ControllerBase
     private IRequestContext RequestContext { get; }
 
     /// <summary>
-    /// Defaul constructor
+    /// Default constructor
     /// </summary>
     /// <param name="requestContext"></param>
     /// <param name="logger"></param>
@@ -238,7 +238,7 @@ public abstract class ApiControllerBase : ControllerBase
     /// <param name="customerIdFromRequest"></param>
     /// <param name="appointmentId"></param>
     /// <param name="appointmentBusinessLayer">appointment business layer</param>
-    protected void ValidateAppointmentRequestSkipPasswordVerifcation(Guid customerIdFromRequest, Guid appointmentId,
+    protected void ValidateAppointmentRequestSkipPasswordVerification(Guid customerIdFromRequest, Guid appointmentId,
         IAppointmentBusinessLayer appointmentBusinessLayer)
     {
         ValidateAppointmentRequestHelper(customerIdFromRequest, appointmentId, appointmentBusinessLayer);

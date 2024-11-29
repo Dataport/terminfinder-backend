@@ -14,7 +14,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
