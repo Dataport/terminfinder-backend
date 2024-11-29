@@ -7,11 +7,12 @@ public class AppointmentControllerTests
     private ILogger<AppointmentController> _logger;
     private IStringLocalizer<AppointmentController> _localizer;
     private IRequestContext _requestContext;
-    
-    private static readonly Guid ExpectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-    private static readonly Guid ExpectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-    private static readonly Guid ExpectedAdminId = new ("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
+
+    private static readonly Guid ExpectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+    private static readonly Guid ExpectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    private static readonly Guid ExpectedAdminId = new("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
     private const string ExpectedPassword = "P@$$w0rd";
+
     private static readonly Appointment FakeAppointment = new()
     {
         AppointmentId = ExpectedAppointmentId,
@@ -261,7 +262,7 @@ public class AppointmentControllerTests
     [TestMethod]
     public void AddAppointment_Okay()
     {
-        Guid expectedSuggestedDateId1 = new ("5FE9C00C-A59C-4985-A2BB-53D179C2B52C");
+        Guid expectedSuggestedDateId1 = new("5FE9C00C-A59C-4985-A2BB-53D179C2B52C");
 
         Appointment fakeAppointment = new()
         {
@@ -321,11 +322,11 @@ public class AppointmentControllerTests
             EndDate = new DateTime(2018, 12, 12).AddDays(1)
         };
 
-        SuggestedDate fakeSuggestedDateReturn2 = new ()
+        SuggestedDate fakeSuggestedDateReturn2 = new()
         {
             AppointmentId = fakeAppointmentReturn.AppointmentId,
             CustomerId = ExpectedCustomerId,
-            SuggestedDateId = new ("76AAC930-EC94-4B78-8F5B-B108E1A53860"),
+            SuggestedDateId = new("76AAC930-EC94-4B78-8F5B-B108E1A53860"),
             StartDate = new DateTime(2018, 12, 14),
             StartTime = new DateTimeOffset(2018, 12, 14, 20, 05, 0, new TimeSpan(1, 0, 0)),
             EndDate = new DateTime(2018, 12, 14),
