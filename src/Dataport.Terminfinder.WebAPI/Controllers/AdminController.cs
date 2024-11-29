@@ -141,10 +141,10 @@ public class AdminController : ApiControllerBase
     [ProducesResponseType(typeof(IErrorResult), 404)]
     [ProducesResponseType(typeof(IErrorResult), 500)]
     [BasicAuthenticationOperation]
-    public IActionResult GetPasswordVerifcation(string customerId, string adminId)
+    public IActionResult GetPasswordVerification(string customerId, string adminId)
     {
-        Logger.LogDebug("Enter {NameofGetPasswordVerifcation}, Parameter: {CustomerId}, {AdminId}",
-            nameof(GetPasswordVerifcation), customerId, adminId);
+        Logger.LogDebug("Enter {NameofGetPasswordVerification}, Parameter: {CustomerId}, {AdminId}",
+            nameof(GetPasswordVerification), customerId, adminId);
 
         if (!Guid.TryParse(customerId, out Guid customerIdGuid)
             || !Guid.TryParse(adminId, out Guid adminIdGuid))

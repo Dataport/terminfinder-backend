@@ -16,7 +16,7 @@ public class BcryptWrapperTests
     private readonly string SaltForUnittests = "$2b$10$bKHadGFqngTajUrRAozjxe";
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         logger = Mock.Of<ILogger<BcryptWrapper>>();

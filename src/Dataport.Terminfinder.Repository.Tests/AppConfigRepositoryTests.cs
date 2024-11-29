@@ -7,7 +7,7 @@ public class AppConfigRepositoryTests
     private ILogger<AppConfigRepository> _logger;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         var mockLog = new Mock<ILogger<AppConfigRepository>>();

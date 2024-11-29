@@ -15,7 +15,7 @@ public class DeleteAppointmentsTests
     private IDateTimeGeneratorService _dateTimeGeneratorServiceFake;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         var mockLog = new Mock<ILogger<DeleteAppointmentsService>>();

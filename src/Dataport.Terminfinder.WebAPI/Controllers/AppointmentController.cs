@@ -117,7 +117,7 @@ public class AppointmentController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        ValidateAppointmentRequestSkipPasswordVerifcation(customerIdGuid, appointmentIdGuid,
+        ValidateAppointmentRequestSkipPasswordVerification(customerIdGuid, appointmentIdGuid,
             _appointmentBusinessLayer);
 
         var result = new AppointmentProtectionResult
@@ -151,10 +151,10 @@ public class AppointmentController : ApiControllerBase
     [ProducesResponseType(typeof(IErrorResult), 404)]
     [ProducesResponseType(typeof(IErrorResult), 500)]
     [BasicAuthenticationOperation]
-    public IActionResult GetPasswordVerifcation(string customerId, string appointmentId)
+    public IActionResult GetPasswordVerification(string customerId, string appointmentId)
     {
-        Logger.LogDebug("Enter {NameofGetPasswordVerifcation}, Parameter: {CustomerId}, {AppointmentId}",
-            nameof(GetPasswordVerifcation), customerId, appointmentId);
+        Logger.LogDebug("Enter {NameofGetPasswordVerification}, Parameter: {CustomerId}, {AppointmentId}",
+            nameof(GetPasswordVerification), customerId, appointmentId);
 
         if (!Guid.TryParse(customerId, out Guid customerIdGuid))
         {
@@ -166,7 +166,7 @@ public class AppointmentController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        ValidateAppointmentRequestSkipPasswordVerifcation(customerIdGuid, appointmentIdGuid,
+        ValidateAppointmentRequestSkipPasswordVerification(customerIdGuid, appointmentIdGuid,
             _appointmentBusinessLayer);
 
         var result = new AppointmentPasswordVerificationResult

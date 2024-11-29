@@ -12,7 +12,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
@@ -20,7 +20,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment()
+    public async Task GetAppointment()
     {
         HttpClient client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
@@ -55,7 +55,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_AdminIdIsEmpty()
+    public async Task GetAppointment_AdminIdIsEmpty()
     {
         HttpClient client = _testServer.CreateClient();
         await CreateTestAppointmentInDatabase(client, _customerId);
@@ -72,7 +72,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_NotFound()
+    public async Task GetAppointment_NotFound()
     {
         HttpClient client = _testServer.CreateClient();
         await CreateTestAppointmentInDatabase(client, _customerId);
@@ -89,7 +89,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_verificationFailed_Unauthorized()
+    public async Task GetAppointment_verificationFailed_Unauthorized()
     {
         var password = "P@$$w0rd";
 
@@ -121,7 +121,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetApppointment_verificationSuccessful_okay()
+    public async Task GetAppointment_verificationSuccessful_okay()
     {
         var password = "P@$$w0rd";
 
@@ -193,7 +193,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetPasswordVerifcation_verificationSuccessful_True()
+    public async Task GetPasswordVerification_verificationSuccessful_True()
     {
         var password = "P@$$w0rd";
 
@@ -219,7 +219,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetPasswordVerifcation_verificationSuccessful_False()
+    public async Task GetPasswordVerification_verificationSuccessful_False()
     {
         var password = "P@$$w0rd";
 
@@ -245,7 +245,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     }
 
     [TestMethod]
-    public async Task GetPasswordVerifcation_AppointmentNotProtected_True()
+    public async Task GetPasswordVerification_AppointmentNotProtected_True()
     {
         var password = "P@$$w0rd";
 

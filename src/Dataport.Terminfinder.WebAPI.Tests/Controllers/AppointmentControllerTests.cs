@@ -9,7 +9,7 @@ public class AppointmentControllerTests
     private IRequestContext _requestContext;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         _logger = Mock.Of<ILogger<AppointmentController>>();
@@ -22,7 +22,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_Okay()
+    public void GetAppointment_Okay()
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
@@ -67,7 +67,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_AppointmentId_NotFound()
+    public void GetAppointment_AppointmentId_NotFound()
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
@@ -95,7 +95,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_AppointmentIdIsEmpty()
+    public void GetAppointment_AppointmentIdIsEmpty()
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
@@ -145,7 +145,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_noUserCredentialSubmittedButTheyAreRequired_Unauthorized()
+    public void GetAppointment_noUserCredentialSubmittedButTheyAreRequired_Unauthorized()
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
@@ -189,7 +189,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_verificationFailed_Unauthorized()
+    public void GetAppointment_verificationFailed_Unauthorized()
     {
         const string expectedPassword = "P@$$w0rd";
 
@@ -244,7 +244,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_verificationFailedPasswordCanNotBeDecoded_BadRequest()
+    public void GetAppointment_verificationFailedPasswordCanNotBeDecoded_BadRequest()
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
@@ -292,7 +292,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetApppointment_verificationSuccessful_okay()
+    public void GetAppointment_verificationSuccessful_okay()
     {
         const string expectedPassword = "P@$$w0rd";
 
@@ -344,7 +344,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void AddApppointment_Okay()
+    public void AddAppointment_Okay()
     {
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         Guid expectedAdminId = new ("8FD9B537-2BF4-4931-A86B-F805715BAF8C");
@@ -487,7 +487,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void AddApppointment_WithAppointmentId_FailtNotFound()
+    public void AddAppointment_WithAppointmentId_FailedNotFound()
     {
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         Guid appointmentId = new ("3C1178B4-7115-46DA-AABA-F388ADAEF76E");
@@ -543,7 +543,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void AddApppointment_WithAdminId_FailtNotFound()
+    public void AddAppointment_WithAdminId_FailedNotFound()
     {
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         Guid adminId = new ("3C1178B4-7115-46DA-AABA-F388ADAEF76E");
@@ -599,7 +599,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void AddApppointment_verificationFailed_Unauthorized()
+    public void AddAppointment_verificationFailed_Unauthorized()
     {
         const string expectedPassword = "P@$$w0rd";
 
@@ -751,7 +751,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetPasswordVerifcation_verificationSuccessful_True()
+    public void GetPasswordVerification_verificationSuccessful_True()
     {
         const string expectedPassword = "P@$$w0rd";
 
@@ -793,7 +793,7 @@ public class AppointmentControllerTests
 
         // Act
         IActionResult httpResult =
-            controller.GetPasswordVerifcation(expectedCustomerId.ToString(), expectedAppointmentId.ToString());
+            controller.GetPasswordVerification(expectedCustomerId.ToString(), expectedAppointmentId.ToString());
         OkObjectResult result = httpResult as OkObjectResult;
         AppointmentPasswordVerificationResult verificationResult =
             result?.Value as AppointmentPasswordVerificationResult;
@@ -804,7 +804,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetPasswordVerifcation_verificationSuccessful_False()
+    public void GetPasswordVerification_verificationSuccessful_False()
     {
         const string expectedPassword = "P@$$w0rd";
 
@@ -846,7 +846,7 @@ public class AppointmentControllerTests
 
         // Act
         IActionResult httpResult =
-            controller.GetPasswordVerifcation(expectedCustomerId.ToString(), expectedAppointmentId.ToString());
+            controller.GetPasswordVerification(expectedCustomerId.ToString(), expectedAppointmentId.ToString());
         OkObjectResult result = httpResult as OkObjectResult;
         AppointmentPasswordVerificationResult verificationResult =
             result?.Value as AppointmentPasswordVerificationResult;
@@ -857,7 +857,7 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
-    public void GetPasswordVerifcation_AppointmentNotProtected_True()
+    public void GetPasswordVerification_AppointmentNotProtected_True()
     {
         const string expectedPassword = "P@$$w0rd";
 
@@ -899,7 +899,7 @@ public class AppointmentControllerTests
 
         // Act
         IActionResult httpResult =
-            controller.GetPasswordVerifcation(expectedCustomerId.ToString(), expectedAppointmentId.ToString());
+            controller.GetPasswordVerification(expectedCustomerId.ToString(), expectedAppointmentId.ToString());
         OkObjectResult result = httpResult as OkObjectResult;
         AppointmentPasswordVerificationResult verificationResult =
             result?.Value as AppointmentPasswordVerificationResult;

@@ -9,7 +9,7 @@ public class VotingControllerTests
     private IRequestContext _requestContext;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         // fake logger
         _logger = Mock.Of<ILogger<VotingController>>();

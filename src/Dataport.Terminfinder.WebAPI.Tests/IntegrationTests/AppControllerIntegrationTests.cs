@@ -8,7 +8,7 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
     private TestServer _testServer;
 
     [TestInitialize]
-    public void Inilialize()
+    public void Initialize()
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
