@@ -18,6 +18,10 @@ features:
 * Participate in appointment polls and respond to the appointment suggestions
 * Choices for responding - "Accept, Decline or Questionable"
 
+Licensed under the EUPL 1.2
+
+Copyright © 2022-2023 Dataport AöR
+
 [SECURITY.md](docs/SECURITY.md)
 
 [CONTRIBUTING.md](docs/CONTRIBUTING.md)
