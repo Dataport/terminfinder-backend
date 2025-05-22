@@ -94,8 +94,7 @@ public class SuggestedDate
     [JsonProperty(PropertyName = "endTime")]
     [JsonConverter(typeof(TimeConverter))]
     public DateTimeOffset? EndTime { get; set; }
-    
-    
+
     /// <summary>
     /// Optional description of the suggested date
     /// </summary>
@@ -110,4 +109,11 @@ public class SuggestedDate
     /// </summary>
     [JsonIgnore]
     public ICollection<Voting> Votings { get; set; }
+
+    /// <summary>
+    /// Indicates if participants have voted on this suggested date
+    /// </summary>
+    [NotMapped]
+    [JsonProperty(PropertyName = "hasVotings")]
+    public bool HasVotings => Votings.Count != 0;
 }
