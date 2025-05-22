@@ -321,7 +321,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         if (customerId == Guid.Empty || appointmentId == Guid.Empty)
         {
             _logger.LogDebug($"Leave {nameof(GetParticipants)}");
-            return null;
+            return [];
         }
 
         var participants = (from a in Context.Participants
