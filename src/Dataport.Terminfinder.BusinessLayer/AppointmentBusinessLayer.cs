@@ -305,8 +305,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     /// <inheritdoc />
     public bool ParticipantsAreValid(ICollection<Participant> participants)
     {
-        return !participants.IsNullOrEmpty()
-             && participants.All(participant => participant.IsValid);
+        return !participants.IsNullOrEmpty() && participants.All(participant => participant.IsValid);
     }
 
     /// <inheritdoc />
@@ -446,6 +445,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
         {
             return _appointmentRepo.ExistsAppointment(customerId, appointmentId);
         }
+
         return false;
     }
 
@@ -460,6 +460,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
         {
             return _appointmentRepo.ExistsAppointment(customerId, appointmentId, adminId);
         }
+
         return false;
     }
 
