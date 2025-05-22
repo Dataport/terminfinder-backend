@@ -105,7 +105,7 @@ public class AdminController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        ValidateReadAppointmentByAdminIdRequestSkipPasswordVerfication(customerIdGuid, adminIdGuid,
+        ValidateReadAppointmentByAdminIdRequestSkipPasswordVerification(customerIdGuid, adminIdGuid,
             _appointmentBusinessLayer);
 
         var result = new AppointmentProtectionResult
@@ -127,7 +127,7 @@ public class AdminController : ApiControllerBase
     /// </summary>
     /// <param name="customerId">id of the customer</param>
     /// <param name="adminId">adminid of the appointment</param>
-    /// <returns>the information if the password of an protected appointment is valid</returns>
+    /// <returns>the information if the password of a protected appointment is valid</returns>
     /// <response code="200">the information if the password of the protected appointment is valid</response>
     /// <response code="400">customerId or adminId is null or empty</response>
     /// <response code="401">the appointment is protected by a password and no password was submitted or the password was wrong</response>
@@ -152,7 +152,7 @@ public class AdminController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        ValidateReadAppointmentByAdminIdRequestSkipPasswordVerfication(customerIdGuid, adminIdGuid,
+        ValidateReadAppointmentByAdminIdRequestSkipPasswordVerification(customerIdGuid, adminIdGuid,
             _appointmentBusinessLayer);
 
         var result = new AppointmentPasswordVerificationResult
@@ -178,10 +178,10 @@ public class AdminController : ApiControllerBase
     /// <param name="adminId">admin id of the appointment</param>
     /// <param name="statusType">new status of the appointment</param>
     /// <response code="200">appointment updated</response>
-    /// <response code="400">customerId or appointmentid was null or empty</response>
+    /// <response code="400">customerId or appointmentId was null or empty</response>
     /// <response code="401">the appointment is protected by a password and no password was submitted or the password was wrong</response>
     /// <response code="404">customerId and/or appointmentId was not found</response>
-    /// <response code="409">the status of the appointment can not changed to the new status</response>
+    /// <response code="409">the status of the appointment can not be changed to the new status</response>
     /// <response code="500">Unexpected error</response>
     [HttpPut("{customerId}/{adminId}/{statusType}/status")]
     [Produces(HttpConstants.TerminfinderMediaTypeJsonV1)]
@@ -230,12 +230,12 @@ public class AdminController : ApiControllerBase
     }
 
     /// <summary>
-    /// Validate application and customer request but skip the password verfication step
+    /// Validate application and customer request but skip the password verification step
     /// </summary>
     /// <param name="customerIdFromRequest"></param>
     /// <param name="adminId"></param>
     /// <param name="appointmentBusinessLayer">appointment business layer</param>
-    private void ValidateReadAppointmentByAdminIdRequestSkipPasswordVerfication(Guid customerIdFromRequest,
+    private void ValidateReadAppointmentByAdminIdRequestSkipPasswordVerification(Guid customerIdFromRequest,
         Guid adminId, IAppointmentBusinessLayer appointmentBusinessLayer)
     {
         ValidateReadAppointmentByAdminIdRequestHelper(customerIdFromRequest, adminId, appointmentBusinessLayer,
