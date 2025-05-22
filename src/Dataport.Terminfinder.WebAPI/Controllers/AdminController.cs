@@ -55,11 +55,11 @@ public class AdminController : ApiControllerBase
     /// <response code="500">Unexpected error</response>
     [HttpGet("{customerId}/{adminId}")]
     [Produces(HttpConstants.TerminfinderMediaTypeJsonV1)]
-    [ProducesResponseType(typeof(Appointment), 200)]
-    [ProducesResponseType(typeof(IErrorResult), 400)]
-    [ProducesResponseType(typeof(IErrorResult), 401)]
-    [ProducesResponseType(typeof(IErrorResult), 404)]
-    [ProducesResponseType(typeof(IErrorResult), 500)]
+    [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status500InternalServerError)]
     [BasicAuthenticationOperation]
     public IActionResult Get(string customerId, string adminId)
     {
@@ -90,10 +90,10 @@ public class AdminController : ApiControllerBase
     /// <response code="500">Unexpected error</response>
     [HttpGet("{customerId}/{adminId}/protection")]
     [Produces(HttpConstants.TerminfinderMediaTypeJsonV1)]
-    [ProducesResponseType(typeof(AppointmentProtectionResult), 200)]
-    [ProducesResponseType(typeof(IErrorResult), 400)]
-    [ProducesResponseType(typeof(IErrorResult), 404)]
-    [ProducesResponseType(typeof(IErrorResult), 500)]
+    [ProducesResponseType(typeof(AppointmentProtectionResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status500InternalServerError)]
     public IActionResult GetProtection(string customerId, string adminId)
     {
         Logger.LogDebug("Enter {NameofGetProtection}, Parameter: {CustomerId}, {AdminId}", nameof(GetProtection),
@@ -135,11 +135,11 @@ public class AdminController : ApiControllerBase
     /// <response code="500">Unexpected error</response>
     [HttpGet("{customerId}/{adminId}/passwordverification")]
     [Produces(HttpConstants.TerminfinderMediaTypeJsonV1)]
-    [ProducesResponseType(typeof(AppointmentPasswordVerificationResult), 200)]
-    [ProducesResponseType(typeof(IErrorResult), 400)]
-    [ProducesResponseType(typeof(IErrorResult), 401)]
-    [ProducesResponseType(typeof(IErrorResult), 404)]
-    [ProducesResponseType(typeof(IErrorResult), 500)]
+    [ProducesResponseType(typeof(AppointmentPasswordVerificationResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status500InternalServerError)]
     [BasicAuthenticationOperation]
     public IActionResult GetPasswordVerification(string customerId, string adminId)
     {
@@ -186,12 +186,12 @@ public class AdminController : ApiControllerBase
     [HttpPut("{customerId}/{adminId}/{statusType}/status")]
     [Produces(HttpConstants.TerminfinderMediaTypeJsonV1)]
     [Consumes(HttpConstants.TerminfinderMediaTypeJsonV1)]
-    [ProducesResponseType(typeof(Appointment), 200)]
-    [ProducesResponseType(typeof(IErrorResult), 400)]
-    [ProducesResponseType(typeof(IErrorResult), 401)]
-    [ProducesResponseType(typeof(IErrorResult), 404)]
-    [ProducesResponseType(typeof(IErrorResult), 409)]
-    [ProducesResponseType(typeof(IErrorResult), 500)]
+    [ProducesResponseType(typeof(Appointment), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(IErrorResult), StatusCodes.Status500InternalServerError)]
     [BasicAuthenticationOperation]
     public IActionResult SetStatus(string customerId, string adminId, string statusType)
     {
