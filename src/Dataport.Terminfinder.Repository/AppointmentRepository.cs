@@ -495,7 +495,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
                   && v.SuggestedDateId == suggestedDateId
                   && v.VotingId == votingId
             select v;
-        
+
         return votingObject.FirstOrDefault() != null;
     }
 
