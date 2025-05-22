@@ -46,8 +46,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         var selectedAppointmentId = (from a in Context.Appointments
             where (a.CustomerId == customerId
                    && a.AppointmentId == appointmentId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a.AppointmentId).SingleOrDefault();
 
         return (selectedAppointmentId == appointmentId);
@@ -70,8 +70,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
             where (a.CustomerId == customerId
                    && a.AppointmentId == appointmentId
                    && a.AdminId == adminId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a.AppointmentId).SingleOrDefault();
 
         return (selectedAppointmentId == appointmentId);
@@ -90,7 +90,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         var selectedAppointmentId = (from a in Context.Appointments
             where (a.CustomerId == customerId
                    && a.AppointmentId == appointmentId
-                   && a.StatusIdentifier == AppointmentStatusType.Started.ToString())
+                   && a.StatusIdentifier == nameof(AppointmentStatusType.Started))
             select a.AppointmentId).SingleOrDefault();
 
         return (selectedAppointmentId == appointmentId);
@@ -109,8 +109,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         var selectedAdminId = (from a in Context.Appointments
             where (a.CustomerId == customerId
                    && a.AdminId == adminId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a.AdminId).SingleOrDefault();
 
         return (selectedAdminId == adminId);
@@ -133,8 +133,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
                 .ThenInclude(v => v.Votings)
             where (a.AppointmentId == appointmentId
                    && a.CustomerId == customerId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a).FirstOrDefault();
 
         return appointment;
@@ -155,8 +155,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
                 .Include(s => s.SuggestedDates)
             where (a.AdminId == adminId
                    && a.CustomerId == customerId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a).FirstOrDefault();
 
         return appointment;
@@ -176,8 +176,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         var password = (from a in Context.Appointments
             where (a.AppointmentId == appointmentId
                    && a.CustomerId == customerId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a.Password).FirstOrDefault();
 
         return password;
@@ -197,8 +197,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         var password = (from a in Context.Appointments
             where (a.AdminId == adminId
                    && a.CustomerId == customerId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a.Password).FirstOrDefault();
 
         return password;
@@ -256,8 +256,8 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         var adminId = (from a in Context.Appointments
             where (a.AppointmentId == appointmentId
                    && a.CustomerId == customerId
-                   && (a.StatusIdentifier == AppointmentStatusType.Started.ToString()
-                       || a.StatusIdentifier == AppointmentStatusType.Paused.ToString()))
+                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
             select a.AdminId).FirstOrDefault();
 
         return adminId;
