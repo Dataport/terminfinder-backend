@@ -151,13 +151,14 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
             return null;
         }
 
-        var appointment = (from a in Context.Appointments
-                .Include(s => s.SuggestedDates)
-            where (a.AdminId == adminId
-                   && a.CustomerId == customerId
-                   && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
-                       || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)))
-            select a).FirstOrDefault();
+        var appointment = Context.Appointments
+            .Include(a => a.SuggestedDates)
+            .ThenInclude(sg => sg.Votings)
+            .FirstOrDefault(a =>
+                a.AdminId == adminId
+                && a.CustomerId == customerId
+                && (a.StatusIdentifier == nameof(AppointmentStatusType.Started)
+                    || a.StatusIdentifier == nameof(AppointmentStatusType.Paused)));
 
         return appointment;
     }
