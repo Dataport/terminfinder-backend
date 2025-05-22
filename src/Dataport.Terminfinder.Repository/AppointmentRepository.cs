@@ -35,7 +35,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
     public bool ExistsAppointment(Guid customerId, Guid appointmentId)
     {
         _logger.LogDebug(
-            "Enter {NameofExistsAppointment}({NameofCustomerId}={CustomerId}, {NameofappointmentId}={AppointmentId})",
+            "Enter {NameofExistsAppointment}({NameofCustomerId}={CustomerId}, {NameofAppointmentId}={AppointmentId})",
             nameof(ExistsAppointment), nameof(customerId), customerId, nameof(appointmentId), appointmentId);
 
         if (customerId == Guid.Empty || appointmentId == Guid.Empty)
