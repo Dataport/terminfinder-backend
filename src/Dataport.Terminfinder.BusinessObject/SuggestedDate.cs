@@ -115,5 +115,5 @@ public class SuggestedDate
     /// </summary>
     [NotMapped]
     [JsonProperty(PropertyName = "hasVotings")]
-    public bool HasVotings => Votings.Count != 0;
+    public bool HasVotings => Votings?.Count != 0;
 }
