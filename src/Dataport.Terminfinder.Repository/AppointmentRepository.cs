@@ -129,6 +129,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
 
         var appointment = (from a in Context.Appointments
                 .Include(s => s.SuggestedDates)
+                .ThenInclude(v => v.Votings)
                 .Include(u => u.Participants)
                 .ThenInclude(v => v.Votings)
             where (a.AppointmentId == appointmentId
