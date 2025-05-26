@@ -1,5 +1,6 @@
 ﻿using Dataport.Terminfinder.BusinessObject.JsonSerializer;
 using Dataport.Terminfinder.BusinessObject.Validators;
+using Dataport.Terminfinder.Common.Extension;
 using JetBrains.Annotations;
 
 namespace Dataport.Terminfinder.BusinessObject;
@@ -115,5 +116,5 @@ public class SuggestedDate
     /// </summary>
     [NotMapped]
     [JsonProperty(PropertyName = "hasVotings")]
-    public bool HasVotings => Votings?.Count != 0;
+    public bool HasVotings => !Votings.IsNullOrEmpty() && Votings.Count != 0;
 }
