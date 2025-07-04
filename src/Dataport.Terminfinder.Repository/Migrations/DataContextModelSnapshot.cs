@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
 namespace Dataport.Terminfinder.Repository.Migrations
 {
+    [ExcludeFromCodeCoverage]
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
     {

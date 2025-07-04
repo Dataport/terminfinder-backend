@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
 namespace Dataport.Terminfinder.Repository.Migrations
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public partial class ChangeVersionNumberTo_1_0_11 : Migration
     {
         /// <inheritdoc />

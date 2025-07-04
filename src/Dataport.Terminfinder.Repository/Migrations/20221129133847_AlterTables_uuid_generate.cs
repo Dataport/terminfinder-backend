@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
 
 #nullable disable
@@ -11,6 +12,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
     /// <summary>
     /// DB Migration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class AlterTables_uuid_generate : Migration
     {
         /// <summary>

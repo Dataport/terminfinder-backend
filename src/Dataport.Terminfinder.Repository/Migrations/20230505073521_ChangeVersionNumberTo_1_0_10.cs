@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
@@ -7,6 +8,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
     /// <summary>
     /// DB Migration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class ChangeVersionNumberTo_1_0_10 : Migration
     {
         /// <summary>

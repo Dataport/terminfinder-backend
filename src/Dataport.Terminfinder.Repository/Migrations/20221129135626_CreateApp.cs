@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
 namespace Dataport.Terminfinder.Repository.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class CreateApp : Migration
     {
         /// <summary>
