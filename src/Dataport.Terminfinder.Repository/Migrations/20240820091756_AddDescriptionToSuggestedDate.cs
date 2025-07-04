@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
 namespace Dataport.Terminfinder.Repository.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class AddDescriptionToSuggestedDate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

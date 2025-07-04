@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
@@ -8,6 +9,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
     /// <summary>
     /// DB Migration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class Create_Extention_for_uuid_v4 : Migration
     {
         /// <summary>

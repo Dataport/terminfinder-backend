@@ -1,6 +1,7 @@
 ﻿using Dataport.Terminfinder.BusinessObject;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
@@ -9,6 +10,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
     /// <summary>
     /// DB Migration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class CreateCustomer : Migration
     {
         /// <summary>
