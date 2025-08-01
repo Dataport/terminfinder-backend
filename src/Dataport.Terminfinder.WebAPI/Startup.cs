@@ -39,8 +39,8 @@ public class Startup
     private static readonly string OpenApiTitle = "Terminfinder API";
     private static readonly string OpenApiDescription = "Terminfinder API";
 
-    private static bool _useCors;
-    private static bool _useHttps;
+    private readonly bool _useCors;
+    private readonly bool _useHttps;
 
     /// <summary>
     /// Startup WebApplication
