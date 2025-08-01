@@ -183,7 +183,7 @@ and not exists
 
     private void ExecuteNonQuery(NpgsqlConnection connection, NpgsqlParameter[] parameters, string commandText)
     {
-        _logger.LogDebug("Enter {NameofExecuteNonQuery)} Parameter: {Connection}, {Parameters}, {CommandText}",
+        _logger.LogDebug("Enter {NameofExecuteNonQuery} Parameter: {Connection}, {Parameters}, {CommandText}",
             nameof(ExecuteNonQuery), connection, parameters, commandText);
 
         if (connection == null || string.IsNullOrEmpty(commandText))
