@@ -20,8 +20,8 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
     {
         AppInfo expectedAppInfo = new()
         {
-            BuildDate = "2024-10-01",
-            VersionNumber = "1.0.11"
+            BuildDate = "2025-07-04",
+            VersionNumber = "1.2.2"
         };
 
         HttpClient client = _testServer.CreateClient();
