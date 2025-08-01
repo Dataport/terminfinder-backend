@@ -7,16 +7,22 @@ namespace Dataport.Terminfinder.BusinessObject.Validators;
 /// </summary>
 public static class PasswordValidator
 {
-    private static readonly int MinLengthPassword = 8;
+    private const int RegexTimeoutMs = 100;
 
     // Max length of the password because of bcrypt - https://www.mscharhag.com/software-development/bcrypt-maximum-password-length
-    private static readonly int MaxLengthPassword = 30;
-    private static readonly Regex RegexContainsUpperCaseLetter = new ("[A-Z]");
+    private const int MaxLengthPassword = 30;
+    private const int MinLengthPassword = 8;
 
-    private static readonly Regex RegexContainsDigit = new ("\\d");
+    private static readonly Regex RegexContainsUpperCaseLetter =
+        new("[A-Z]", RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(RegexTimeoutMs));
+
+    private static readonly Regex RegexContainsDigit =
+        new("\\d", RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(RegexTimeoutMs));
 
     // Characters of the ASCII code table from 33 to 126 (except digits or letters)
-    private static readonly Regex RegexContainsSpecialCharacters = new ("[\\!\"#\\$%&'\\(\\)\\*\\+,-\\./:;<=>\\?@\\[\\\\\\]\\^_`{\\|}~]");
+    private static readonly Regex RegexContainsSpecialCharacters =
+        new("[\\!\"#\\$%&'\\(\\)\\*\\+,-\\./:;<=>\\?@\\[\\\\\\]\\^_`{\\|}~]", RegexOptions.NonBacktracking,
+            TimeSpan.FromMilliseconds(RegexTimeoutMs));
 
     /// <summary>
     /// Check if the submitted password is valid
