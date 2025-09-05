@@ -230,18 +230,16 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
     {
         _logger.LogDebug($"Enter {nameof(SetAppointmentStatusTypeByAdmin)}");
 
-        Appointment appointment = GetAppointmentByAdminId(customerId, adminId);
-        if (appointment != null)
-        {
-            appointment.StatusIdentifier = statusIdentifier;
-            Update(Context.Appointments, appointment);
-            Save();
-        }
-        else
+        var appointment = GetAppointmentByAdminId(customerId, adminId);
+        if (appointment == null)
         {
             throw new InvalidOperationException(
                 $"The appointment with customer id {customerId} and admin id '{adminId}' does not exist");
         }
+        
+        appointment.StatusIdentifier = statusIdentifier;
+        Update(Context.Appointments, appointment);
+        Save();
     }
 
     /// <inheritdoc />
