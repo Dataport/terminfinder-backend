@@ -388,7 +388,28 @@ public class AppointmentRepositoryTests
         Assert.ThrowsException<InvalidOperationException>(() =>
             sut.GetAppointmentStatusTypeByAdmin(ExpectedCustomerId, ExpectedAdminId));
     }
+    
+    [TestMethod]
+    public void GetAppointmentStatusTypeByAdmin_AppointmentDoesNotExists_ThrowsException()
+    {
+        // act fetch
+        var sut = CreateSut();
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.GetAppointmentStatusTypeByAdmin(Guid.Empty, Guid.Empty));
+    }
 
+    #endregion
+
+    #region SetAppointmentStatusTypeByAdmin
+    
+    [TestMethod]
+    public void SetAppointmentStatusTypeByAdmin_AppointmentDoesNotExists_ThrowsException()
+    {
+        var sut = CreateSut();
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.SetAppointmentStatusTypeByAdmin(Guid.Empty, Guid.Empty, nameof(AppointmentStatusType.Paused)));
+    }
+    
     #endregion
 
     #region GetAppointmentAdminId
@@ -648,7 +669,8 @@ public class AppointmentRepositoryTests
         [CanBeNull] List<Appointment> appointments = null,
         [CanBeNull] List<Voting> votings = null,
         [CanBeNull] List<Participant> participants = null,
-        [CanBeNull] List<SuggestedDate> suggestedDates = null)
+        [CanBeNull] List<SuggestedDate> suggestedDates = null,
+        [CanBeNull] Mock<DataContext> mockDataContext = null)
     {
         var appointmentsQueryable = (appointments ?? GetValidAppointments()).AsQueryable();
         var votingsQueryable = (votings ?? GetValidVotings()).AsQueryable();
@@ -662,6 +684,7 @@ public class AppointmentRepositoryTests
         mockAppointmentSet.As<IQueryable<Appointment>>().Setup(m => m.ElementType).Returns(appointmentsQueryable.ElementType);
         using var enumeratorAppointments = appointmentsQueryable.GetEnumerator();
         mockAppointmentSet.As<IQueryable<Appointment>>().Setup(m => m.GetEnumerator()).Returns(enumeratorAppointments);
+        mockAppointmentSet.Setup(m => m.Update(It.IsAny<Appointment>()));
 
         var mockVotingSet = new Mock<DbSet<Voting>>();
         mockVotingSet.As<IQueryable<Voting>>().Setup(m => m.Provider).Returns(votingsQueryable.Provider);
@@ -684,7 +707,7 @@ public class AppointmentRepositoryTests
         using var enumeratorSuggestedDates = suggestedDatesQueryable.GetEnumerator();
         mockSuggestedDateSet.As<IQueryable<SuggestedDate>>().Setup(m => m.GetEnumerator()).Returns(enumeratorSuggestedDates);
 
-        var mockContext = new Mock<DataContext>();
+        var mockContext = mockDataContext ?? new Mock<DataContext>();
         mockContext.Setup(c => c.Appointments).Returns(mockAppointmentSet.Object);
         mockContext.Setup(c => c.Votings).Returns(mockVotingSet.Object);
         mockContext.Setup(c => c.Participants).Returns(mockParticipantSet.Object);
