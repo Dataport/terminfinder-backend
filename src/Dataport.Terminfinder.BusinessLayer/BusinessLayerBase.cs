@@ -1,5 +1,7 @@
 ﻿using Dataport.Terminfinder.Repository;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Dataport.Terminfinder.BusinessLayer.Tests")]
 namespace Dataport.Terminfinder.BusinessLayer;
 
 /// <summary>
@@ -22,7 +24,7 @@ public class BusinessLayerBase
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="customerRepository"></param>
-    protected BusinessLayerBase(ILogger logger, ICustomerRepository customerRepository)
+    protected internal BusinessLayerBase(ILogger logger, ICustomerRepository customerRepository)
     {
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         CustomerRepository = customerRepository;
