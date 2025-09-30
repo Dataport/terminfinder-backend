@@ -2,7 +2,6 @@
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.Common.Extension;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Dataport.Terminfinder.Repository.Tests")]
@@ -273,7 +272,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
             return;
         }
 
-        using IDbContextTransaction transaction = BeginTransaction();
+        using var transaction = BeginTransaction();
         if (appointment.AppointmentId == Guid.Empty)
         {
             New(Context.Appointments, appointment);
@@ -282,7 +281,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         {
             if (!appointment.SuggestedDates.IsNullOrEmpty())
             {
-                foreach (SuggestedDate suggestedDate in appointment.SuggestedDates)
+                foreach (var suggestedDate in appointment.SuggestedDates)
                 {
                     if (suggestedDate.SuggestedDateId == Guid.Empty)
                     {
@@ -358,7 +357,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
 
         if (!participants.IsNullOrEmpty())
         {
-            using IDbContextTransaction transaction = BeginTransaction();
+            using var transaction = BeginTransaction();
             AddAndUpdateParticipantsWithoutExplicitTransaction(participants);
             Save();
             transaction.Commit();
@@ -378,7 +377,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
             return;
         }
 
-        foreach (Participant participant in participants)
+        foreach (var participant in participants)
         {
             if (participant.ParticipantId == Guid.Empty)
             {
@@ -393,7 +392,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
 
                 if (participant.Votings != null)
                 {
-                    foreach (Voting voting in participant.Votings)
+                    foreach (var voting in participant.Votings)
                     {
                         if (voting.VotingId == Guid.Empty)
                         {
@@ -419,7 +418,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
 
         if (participant != null && participant.ParticipantId != Guid.Empty)
         {
-            using IDbContextTransaction transaction = BeginTransaction();
+            using var transaction = BeginTransaction();
             Delete(Context.Participants, participant);
             Save();
             transaction.Commit();
@@ -457,7 +456,7 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
         if (suggestedDate != null
             && suggestedDate.SuggestedDateId != Guid.Empty)
         {
-            using IDbContextTransaction transaction = BeginTransaction();
+            using var transaction = BeginTransaction();
             Delete(Context.SuggestedDates, suggestedDate);
             Save();
             transaction.Commit();
