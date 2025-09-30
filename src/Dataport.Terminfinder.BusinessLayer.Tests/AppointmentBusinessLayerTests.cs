@@ -40,7 +40,7 @@ public class AppointmentBusinessLayerTests
 
         IList<Participant> participants = new List<Participant>();
 
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             Participant fakeParticipant = new()
             {
@@ -50,7 +50,7 @@ public class AppointmentBusinessLayerTests
             participants.Add(fakeParticipant);
         }
 
-        int fakeCountOfParticipantsInDatabase = 10;
+        var fakeCountOfParticipantsInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -59,10 +59,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -71,9 +71,9 @@ public class AppointmentBusinessLayerTests
         Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        IList<Participant> participants = new List<Participant>();
+        var participants = new List<Participant>();
 
-        for (int i = 0; i < 40; i++)
+        for (var i = 0; i < 40; i++)
         {
             Participant fakeParticipant = new()
             {
@@ -88,7 +88,7 @@ public class AppointmentBusinessLayerTests
             participants.Add(fakeParticipant);
         }
 
-        int fakeCountOfParticipantsInDatabase = 10;
+        var fakeCountOfParticipantsInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -97,10 +97,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -116,12 +116,12 @@ public class AppointmentBusinessLayerTests
             Name = "Dummy"
         };
 
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
         {
             participants.Add(fakeParticipant);
         }
 
-        int fakeCountOfParticipantsInDatabase = 4900;
+        var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -130,10 +130,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -144,7 +144,7 @@ public class AppointmentBusinessLayerTests
 
         IList<Participant> participants = new List<Participant>();
 
-        for (int i = 0; i < 200; i++)
+        for (var i = 0; i < 200; i++)
         {
             Participant fakeParticipant = new()
             {
@@ -159,7 +159,7 @@ public class AppointmentBusinessLayerTests
             participants.Add(fakeParticipant);
         }
 
-        int fakeCountOfParticipantsInDatabase = 4900;
+        var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -168,10 +168,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -182,7 +182,7 @@ public class AppointmentBusinessLayerTests
 
         IList<Participant> participants = new List<Participant>();
 
-        for (int i = 0; i < 101; i++)
+        for (var i = 0; i < 101; i++)
         {
             Participant fakeParticipant = new()
             {
@@ -192,7 +192,7 @@ public class AppointmentBusinessLayerTests
             participants.Add(fakeParticipant);
         }
 
-        int fakeCountOfParticipantsInDatabase = 4900;
+        var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -201,10 +201,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
 
-        Assert.AreEqual(false, result);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
@@ -215,7 +215,7 @@ public class AppointmentBusinessLayerTests
 
         IList<Participant> participants = new List<Participant>();
 
-        for (int i = 0; i < 204; i++)
+        for (var i = 0; i < 204; i++)
         {
             Participant fakeParticipant = new()
             {
@@ -230,7 +230,7 @@ public class AppointmentBusinessLayerTests
             participants.Add(fakeParticipant);
         }
 
-        int fakeCountOfParticipantsInDatabase = 4900;
+        var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -239,10 +239,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
 
-        Assert.AreEqual(false, result);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
@@ -253,7 +253,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -263,7 +263,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 10;
+        var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -272,10 +272,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -286,7 +286,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 40; i++)
+        for (var i = 0; i < 40; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -301,7 +301,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 10;
+        var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -310,10 +310,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -324,7 +324,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -334,7 +334,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 90;
+        var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -343,10 +343,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -357,7 +357,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -371,7 +371,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 90;
+        var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -380,10 +380,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -394,7 +394,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 15; i++)
+        for (var i = 0; i < 15; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -404,7 +404,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 90;
+        var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -413,10 +413,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(false, result);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
@@ -427,7 +427,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 22; i++)
+        for (var i = 0; i < 22; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -441,7 +441,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 90;
+        var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -450,10 +450,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(false, result);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
@@ -464,7 +464,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 20; i++)
+        for (var i = 0; i < 20; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -474,7 +474,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 10;
+        var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -483,10 +483,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMinTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -497,7 +497,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        int fakeCountOfSuggestedDatesInDatabase = 0;
+        var fakeCountOfSuggestedDatesInDatabase = 0;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -506,10 +506,10 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMinTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(false, result);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
@@ -520,7 +520,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
@@ -533,7 +533,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 5;
+        var fakeCountOfSuggestedDatesInDatabase = 5;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -542,11 +542,11 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(expectedCustomerId,
                 expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(false, result);
+        Assert.IsFalse(result);
     }
 
     [TestMethod]
@@ -557,7 +557,7 @@ public class AppointmentBusinessLayerTests
 
         IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
 
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
             SuggestedDate fakeSuggestedDate1 = new()
             {
@@ -570,7 +570,7 @@ public class AppointmentBusinessLayerTests
             suggestedDates.Add(fakeSuggestedDate1);
         }
 
-        int fakeCountOfSuggestedDatesInDatabase = 5;
+        var fakeCountOfSuggestedDatesInDatabase = 5;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -579,11 +579,11 @@ public class AppointmentBusinessLayerTests
 
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
-        bool result =
+        var result =
             businessLayer.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(expectedCustomerId,
                 expectedAppointmentId, suggestedDates);
 
-        Assert.AreEqual(true, result);
+        Assert.IsTrue(result);
     }
 
     [TestMethod]
@@ -626,7 +626,7 @@ public class AppointmentBusinessLayerTests
         businessLayer.SetAppointmentForeignKeys(fakeAppointment, expectedCustomerId);
 
         Assert.AreEqual(expectedCustomerId, fakeAppointment.CustomerId);
-        foreach (SuggestedDate sd in fakeAppointment.SuggestedDates)
+        foreach (var sd in fakeAppointment.SuggestedDates)
         {
             Assert.AreEqual(expectedCustomerId, sd.CustomerId);
             Assert.AreEqual(expectedAppointmentId, sd.AppointmentId);
@@ -636,7 +636,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void SetParticipantsForeignKeys_Okay()
     {
-        int numberOfElements = 2;
+        var numberOfElements = 2;
 
         Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
@@ -687,17 +687,17 @@ public class AppointmentBusinessLayerTests
 
         businessLayer.SetParticipantsForeignKeys(fakeParticipants, expectedCustomerId, expectedAppointmentId);
 
-        foreach (Participant participant in fakeParticipants)
+        foreach (var participant in fakeParticipants)
         {
             Assert.AreEqual(expectedCustomerId, participant.CustomerId);
             Assert.AreEqual(expectedAppointmentId, participant.AppointmentId);
-            Guid expectedParticipantId = participant.ParticipantId;
+            var expectedParticipantId = participant.ParticipantId;
 
-            List<Voting> votings = participant.Votings.ToList();
+            var votings = participant.Votings.ToList();
 
-            for (int i = 0; i < numberOfElements; i++)
+            for (var i = 0; i < numberOfElements; i++)
             {
-                Voting voting = votings[i];
+                var voting = votings[i];
 
                 Assert.AreEqual(expectedCustomerId, voting.CustomerId);
                 Assert.AreEqual(expectedAppointmentId, voting.AppointmentId);
@@ -725,7 +725,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.GetAppointment(expectedCustomerId, expectedAppointmentId);
+        var result = businessLayer.GetAppointment(expectedCustomerId, expectedAppointmentId);
         Assert.IsNotNull(result);
         Assert.IsNull(result.Password);
     }
@@ -749,7 +749,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.GetAppointment(expectedCustomerId, expectedAppointmentId);
+        var result = businessLayer.GetAppointment(expectedCustomerId, expectedAppointmentId);
         Assert.IsNull(result);
     }
 
@@ -765,7 +765,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.IsAppointmentPasswordProtected(expectedCustomerId, expectedAppointmentId);
+        var result = businessLayer.IsAppointmentPasswordProtected(expectedCustomerId, expectedAppointmentId);
         Assert.IsTrue(result);
     }
 
@@ -788,7 +788,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId);
+        var result = businessLayer.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId);
         Assert.IsNotNull(result);
         Assert.IsNull(result.Password);
     }
@@ -812,7 +812,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId);
+        var result = businessLayer.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId);
         Assert.IsNull(result);
     }
 
@@ -829,7 +829,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.IsAppointmentPasswordProtectedByAdminId(expectedCustomerId, expectedAdminId);
+        var result = businessLayer.IsAppointmentPasswordProtectedByAdminId(expectedCustomerId, expectedAdminId);
         Assert.IsTrue(result);
     }
 
@@ -853,7 +853,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.AddAppointment(new Appointment
+        var result = businessLayer.AddAppointment(new Appointment
         {
             AppointmentId = expectedAppointmentId,
             CustomerId = expectedCustomerId,
@@ -886,7 +886,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.AddAppointment(new Appointment
+        var result = businessLayer.AddAppointment(new Appointment
         {
             AppointmentId = new(appointmentId),
             CustomerId = new(customerId),
@@ -919,7 +919,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.UpdateAppointment(new Appointment
+        var result = businessLayer.UpdateAppointment(new Appointment
         {
             AppointmentId = expectedAppointmentId,
             CustomerId = expectedCustomerId,
@@ -952,7 +952,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment result = businessLayer.UpdateAppointment(new Appointment
+        var result = businessLayer.UpdateAppointment(new Appointment
         {
             AppointmentId = new(appointmentId),
             CustomerId = new(customerId),
@@ -980,7 +980,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             mockBcryptWrapper.Object, _logger);
 
-        bool result =
+        var result =
             businessLayer.VerifyAppointmentPassword(expectedCustomerId, expectedAppointmentId, expectedPassword);
         Assert.IsTrue(result);
         mockBcryptWrapper.Verify(w => w.Verify(expectedPassword, ExpectedHashPassword), Times.Once);
@@ -1005,7 +1005,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             mockBcryptWrapper.Object, _logger);
 
-        bool result =
+        var result =
             businessLayer.VerifyAppointmentPasswordByAdminId(expectedCustomerId, expectedAdminId, expectedPassword);
         Assert.IsTrue(result);
         mockBcryptWrapper.Verify(w => w.Verify(expectedPassword, ExpectedHashPassword), Times.Once);
@@ -1024,7 +1024,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result =
+        var result =
             businessLayer.ExistsAppointment(new(expectedCustomerId.ToString()), new(expectedAppointmentId.ToString()));
         Assert.IsTrue(result);
     }
@@ -1042,7 +1042,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.ExistsAppointmentIsStarted(new(expectedCustomerId.ToString()),
+        var result = businessLayer.ExistsAppointmentIsStarted(new(expectedCustomerId.ToString()),
             new(expectedAppointmentId.ToString()));
         Assert.IsFalse(result);
     }
@@ -1060,7 +1060,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result =
+        var result =
             businessLayer.ExistsAppointmentByAdminId(new(expectedCustomerId.ToString()),
                 new(expectedAdminId.ToString()));
         Assert.IsTrue(result);
@@ -1085,7 +1085,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.ParticipantToDeleteAreValid(fakeParticipant);
+        var result = businessLayer.ParticipantToDeleteAreValid(fakeParticipant);
         Assert.IsTrue(result);
     }
 
@@ -1106,7 +1106,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.ParticipantToDeleteAreValid(fakeParticipant);
+        var result = businessLayer.ParticipantToDeleteAreValid(fakeParticipant);
         Assert.IsFalse(result);
     }
 
@@ -1129,7 +1129,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.ParticipantsAreValid(new List<Participant>() { fakeParticipant });
+        var result = businessLayer.ParticipantsAreValid(new List<Participant>() { fakeParticipant });
         Assert.IsTrue(result);
     }
 
@@ -1141,7 +1141,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.ParticipantsAreValid(null);
+        var result = businessLayer.ParticipantsAreValid(null);
         Assert.IsFalse(result);
     }
 
@@ -1176,7 +1176,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        bool result = businessLayer.ParticipantsAreValid(new List<Participant>() { fakeParticipant });
+        var result = businessLayer.ParticipantsAreValid(new List<Participant>() { fakeParticipant });
         Assert.IsTrue(result);
     }
 
@@ -1185,9 +1185,9 @@ public class AppointmentBusinessLayerTests
     {
         Guid fakeAdminId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-        string password = string.Empty;
-        AppointmentStatusType oldStatusType = AppointmentStatusType.Started;
-        AppointmentStatusType newStatusType = AppointmentStatusType.Paused;
+        var password = string.Empty;
+        var oldStatusType = AppointmentStatusType.Started;
+        var newStatusType = AppointmentStatusType.Paused;
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
@@ -1215,7 +1215,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment appointment = businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
+        var appointment = businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
         Assert.IsFalse(appointment == null);
         Assert.AreEqual(fakeAdminId, appointment.AdminId);
     }
@@ -1225,9 +1225,9 @@ public class AppointmentBusinessLayerTests
     {
         Guid fakeAdminId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-        string password = string.Empty;
-        AppointmentStatusType oldStatusType = AppointmentStatusType.Paused;
-        AppointmentStatusType newStatusType = AppointmentStatusType.Started;
+        var password = string.Empty;
+        var oldStatusType = AppointmentStatusType.Paused;
+        var newStatusType = AppointmentStatusType.Started;
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
@@ -1255,7 +1255,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment appointment = businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
+        var appointment = businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
         Assert.IsFalse(appointment == null);
         Assert.AreEqual(fakeAdminId, appointment.AdminId);
     }
@@ -1265,9 +1265,9 @@ public class AppointmentBusinessLayerTests
     {
         Guid fakeAdminId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-        string password = string.Empty;
-        AppointmentStatusType oldStatusType = AppointmentStatusType.Deleted;
-        AppointmentStatusType newStatusType = AppointmentStatusType.Started;
+        var password = string.Empty;
+        var oldStatusType = AppointmentStatusType.Deleted;
+        var newStatusType = AppointmentStatusType.Started;
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
@@ -1295,7 +1295,7 @@ public class AppointmentBusinessLayerTests
         var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
             _bcryptWrapper, _logger);
 
-        Appointment appointmentObject =
+        var appointmentObject =
             businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
         Assert.IsTrue(appointmentObject == null);
         Assert.IsFalse(appointmentObject != null);

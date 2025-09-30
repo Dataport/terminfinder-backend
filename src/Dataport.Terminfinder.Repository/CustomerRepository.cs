@@ -29,7 +29,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
             throw new ArgumentNullException(nameof(customerId));
         }
 
-        Customer customer = (from c in Context.Customers
+        var customer = (from c in Context.Customers
             where (c.CustomerId == customerId)
             select c).SingleOrDefault();
 

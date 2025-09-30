@@ -25,11 +25,11 @@ public class AppConfigRepository : RepositoryBase, IAppConfigRepository
 
         AppInfo appVersion = null;
 
-        string versionnr = (from config in Context.AppConfig
+        var versionnr = (from config in Context.AppConfig
             where config.Key == "version"
             select config.Value).SingleOrDefault();
 
-        string builddate = (from config in Context.AppConfig
+        var builddate = (from config in Context.AppConfig
             where config.Key == "builddate"
             select config.Value).SingleOrDefault();
 
