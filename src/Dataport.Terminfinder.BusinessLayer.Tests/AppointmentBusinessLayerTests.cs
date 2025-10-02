@@ -2,6 +2,7 @@
 using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.Repository;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -11,520 +12,281 @@ namespace Dataport.Terminfinder.BusinessLayer.Tests;
 [TestClass]
 public class AppointmentBusinessLayerTests
 {
-    private ILogger<AppointmentBusinessLayer> _logger;
-    private IBcryptWrapper _bcryptWrapper;
-
+    private static readonly Guid ExpectedAppointmentId = Guid.Parse("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+    private static readonly Guid ExpectedAdminId = Guid.Parse("021CC2B6-9C84-4925-A927-36CC03BCC138");
+    private static readonly Guid ExpectedCustomerId = Guid.Parse("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    private static readonly Guid ExpectedParticipantId1 = Guid.Parse("09F659EF-CBBE-4B8F-BF0F-73BC3C942C0A");
+    private static readonly Guid ExpectedParticipantId2 = Guid.Parse("D1C2DB5B-3FD8-4D8B-9A64-0C90298897D0");
+    private static readonly Guid ExpectedVotingId = Guid.Parse("B198FD02-2C48-4932-AC34-A6878C65DC36");
+    private static readonly VotingStatusType ExpectedVotingStatus = VotingStatusType.Accepted;
+    private static readonly string ExpectedPassword = "P4$$w0rd";
     private static readonly string ExpectedHashPassword =
         "$2b$10$bKHadGFqngTajUrRAozjxeS3r5Mz6.nQwOBjT.kUcBeIF7FFYVt2W";
 
-    [TestInitialize]
-    public void Initialize()
-    {
-        // fake logger
-        var mockLog = new Mock<ILogger<AppointmentBusinessLayer>>();
-        _logger = mockLog.Object;
-        _logger = Mock.Of<ILogger<AppointmentBusinessLayer>>();
-        var mockBcryptWrapper = new Mock<IBcryptWrapper>();
-        mockBcryptWrapper.Setup(w => w.HashPassword(It.IsAny<string>()))
-            .Returns(ExpectedHashPassword);
-        _bcryptWrapper = mockBcryptWrapper.Object;
-    }
+    #region CheckMaxTotalCountOfParticipants
 
     [TestMethod]
-    public void CheckMaxTotalCountOfParticipantsAdd_Okay()
+    public void CheckMaxTotalCountOfParticipants_Add_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<Participant> participants = new List<Participant>();
-
-        for (var i = 0; i < 20; i++)
-        {
-            Participant fakeParticipant = new()
-            {
-                Name = "Dummy"
-            };
-
-            participants.Add(fakeParticipant);
-        }
-
+        var participants = CreateParticipants(20);
         var fakeCountOfParticipantsInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfParticipantsAddAndModify_Okay()
+    public void CheckMaxTotalCountOfParticipants_AddAndModify_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        var participants = new List<Participant>();
-
-        for (var i = 0; i < 40; i++)
-        {
-            Participant fakeParticipant = new()
-            {
-                Name = "Dummy"
-            };
-
-            if (i % 2 == 1)
-            {
-                fakeParticipant.ParticipantId = Guid.NewGuid();
-            }
-
-            participants.Add(fakeParticipant);
-        }
-
+        var participants = CreateParticipantsWithId(40, 2);
         var fakeCountOfParticipantsInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfParticipantsMaxElementsAddReached_Okay()
+    public void CheckMaxTotalCountOfParticipants_MaxElementsAddReached_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<Participant> participants = new List<Participant>();
-
-        Participant fakeParticipant = new()
-        {
-            Name = "Dummy"
-        };
-
-        for (var i = 0; i < 100; i++)
-        {
-            participants.Add(fakeParticipant);
-        }
-
+        var participants = CreateParticipants(100);
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfParticipantsMaxElementsAddModifyReached_Okay()
+    public void CheckMaxTotalCountOfParticipants_MaxElementsAddModifyReached_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<Participant> participants = new List<Participant>();
-
-        for (var i = 0; i < 200; i++)
-        {
-            Participant fakeParticipant = new()
-            {
-                Name = "Dummy"
-            };
-
-            if (i % 2 == 1)
-            {
-                fakeParticipant.ParticipantId = Guid.NewGuid();
-            }
-
-            participants.Add(fakeParticipant);
-        }
-
+        var participants = CreateParticipantsWithId(200, 2);
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfParticipantsAdd_False()
+    public void CheckMaxTotalCountOfParticipants_Add_False()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<Participant> participants = new List<Participant>();
-
-        for (var i = 0; i < 101; i++)
-        {
-            Participant fakeParticipant = new()
-            {
-                Name = "Dummy"
-            };
-
-            participants.Add(fakeParticipant);
-        }
-
+        var participants = CreateParticipants(101);
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsFalse(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfParticipantsAddModifyAndDelete_False()
+    public void CheckMaxTotalCountOfParticipants_AddModifyAndDelete_False()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<Participant> participants = new List<Participant>();
-
-        for (var i = 0; i < 204; i++)
-        {
-            Participant fakeParticipant = new()
-            {
-                Name = "Dummy"
-            };
-
-            if (i % 2 == 1)
-            {
-                fakeParticipant.ParticipantId = Guid.NewGuid();
-            }
-
-            participants.Add(fakeParticipant);
-        }
-
+        var participants = CreateParticipantsWithId(204, 2);
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsFalse(result);
     }
 
+    #endregion
+
+    #region CheckMaxTotalCountOfSuggestedDates
+
     [TestMethod]
-    public void CheckMaxTotalCountOfSuggestedDatesAdd_Okay()
+    public void CheckMaxTotalCountOfSuggestedDates_Add_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 20; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDates(20);
         var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfSuggestedDatesAddAndModify_Okay()
+    public void CheckMaxTotalCountOfSuggestedDates_AddAndModify_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 40; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-
-            if (i % 2 == 1)
-            {
-                fakeSuggestedDate.SuggestedDateId = Guid.NewGuid();
-            }
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDatesWithId(40, 2);
         var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfSuggestedDatesMaxElementsAddReached_Okay()
+    public void CheckMaxTotalCountOfSuggestedDatesMaxElements_AddReached_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 10; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDates(10);
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfSuggestedDatesMaxElementsAddAndModifyReached_Okay()
+    public void CheckMaxTotalCountOfSuggestedDates_MaxElements_AddAndModifyReached_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 20; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-            if (i % 2 == 1)
-            {
-                fakeSuggestedDate.SuggestedDateId = Guid.NewGuid();
-            }
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDatesWithId(20, 2);
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfSuggestedDatesAdd_False()
+    public void CheckMaxTotalCountOfSuggestedDates_Add_False()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 15; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDates(15);
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
     }
 
     [TestMethod]
-    public void CheckMaxTotalCountOfSuggestedDatesAddAndModify_False()
+    public void CheckMaxTotalCountOfSuggestedDates_AddAndModify_False()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 22; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-            if (i % 2 == 1)
-            {
-                fakeSuggestedDate.SuggestedDateId = Guid.NewGuid();
-            }
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDatesWithId(22, 2);
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMaxTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
     }
 
+    #endregion
+
+    #region CheckMinTotalCountOfSuggestedDates
+
     [TestMethod]
-    public void CheckMinTotalCountOfSuggestedDatesAdd_Okay()
+    public void CheckMinTotalCountOfSuggestedDates_Add_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
-        for (var i = 0; i < 20; i++)
-        {
-            SuggestedDate fakeSuggestedDate = new()
-            {
-                StartDate = DateTime.Now
-            };
-
-            suggestedDates.Add(fakeSuggestedDate);
-        }
-
+        var suggestedDates = CreateSuggestedDates(20);
         var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMinTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMinTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void CheckMinTotalCountOfSuggestedDatesMinElementsAddNotReached_Okay()
+    public void CheckMinTotalCountOfSuggestedDates_MinElementsAddNotReached_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
-
+        var suggestedDates = new List<SuggestedDate>();
         var fakeCountOfSuggestedDatesInDatabase = 0;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMinTotalCountOfSuggestedDates(expectedCustomerId, expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMinTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
     }
 
-    [TestMethod]
-    public void CheckMinTotalCountOfSuggestedDatesDelete_False()
-    {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    #endregion
 
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
+    #region CheckMinTotalCountOfSuggestedDatesWithToDeletedDates
+
+    [TestMethod]
+    public void CheckMinTotalCountOfSuggestedDatesWithToDeletedDates_False()
+    {
+        var suggestedDates = new List<SuggestedDate>();
 
         for (var i = 0; i < 5; i++)
         {
             SuggestedDate fakeSuggestedDate = new()
             {
                 StartDate = DateTime.Now,
-                AppointmentId = expectedAppointmentId,
-                CustomerId = expectedCustomerId,
+                AppointmentId = ExpectedAppointmentId,
+                CustomerId = ExpectedCustomerId,
                 SuggestedDateId = Guid.NewGuid()
             };
 
@@ -535,33 +297,28 @@ public class AppointmentBusinessLayerTests
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(expectedCustomerId,
-                expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(ExpectedCustomerId,
+            ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
     }
 
     [TestMethod]
-    public void CheckMinTotalCountOfSuggestedDatesDelete_True()
+    public void CheckMinTotalCountOfSuggestedDatesWithToDeletedDates_True()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
-        IList<SuggestedDate> suggestedDates = new List<SuggestedDate>();
+        var suggestedDates = new List<SuggestedDate>();
 
         for (var i = 0; i < 4; i++)
         {
             SuggestedDate fakeSuggestedDate1 = new()
             {
                 StartDate = DateTime.Now,
-                AppointmentId = expectedAppointmentId,
-                CustomerId = expectedCustomerId,
+                AppointmentId = ExpectedAppointmentId,
+                CustomerId = ExpectedCustomerId,
                 SuggestedDateId = Guid.NewGuid()
             };
 
@@ -572,29 +329,28 @@ public class AppointmentBusinessLayerTests
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(expectedCustomerId, expectedAppointmentId))
+        mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
-        var result =
-            businessLayer.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(expectedCustomerId,
-                expectedAppointmentId, suggestedDates);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var result = sut.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(ExpectedCustomerId,
+            ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
     }
 
+    #endregion
+
+    #region SetAppointmentForeignKeys
+
     [TestMethod]
     public void SetAppointmentForeignKeys_Okay()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         Appointment fakeAppointment = new()
         {
-            AppointmentId = expectedAppointmentId,
+            AppointmentId = ExpectedAppointmentId,
             CreatorName = "Tom",
-            CustomerId = expectedCustomerId,
+            CustomerId = ExpectedCustomerId,
             Subject = "new",
             Description = "whats new",
             Place = "Hamburg",
@@ -602,93 +358,70 @@ public class AppointmentBusinessLayerTests
             SuggestedDates = new List<SuggestedDate>()
         };
 
-        SuggestedDate fakeSuggestedDate1 = new()
-        {
-            StartDate = DateTime.Now
-        };
+        SuggestedDate fakeSuggestedDate1 = new() { StartDate = DateTime.Now };
         fakeAppointment.SuggestedDates.Add(fakeSuggestedDate1);
 
-        SuggestedDate fakeSuggestedDate2 = new()
-        {
-            StartDate = DateTime.Now
-        };
+        SuggestedDate fakeSuggestedDate2 = new() { StartDate = DateTime.Now };
         fakeAppointment.SuggestedDates.Add(fakeSuggestedDate2);
 
-        fakeSuggestedDate1.Votings = new List<Voting>() { new Voting() };
+        fakeSuggestedDate1.Votings = new List<Voting> { new() };
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        businessLayer.SetAppointmentForeignKeys(fakeAppointment, expectedCustomerId);
+        sut.SetAppointmentForeignKeys(fakeAppointment, ExpectedCustomerId);
 
-        Assert.AreEqual(expectedCustomerId, fakeAppointment.CustomerId);
+        Assert.AreEqual(ExpectedCustomerId, fakeAppointment.CustomerId);
         foreach (var sd in fakeAppointment.SuggestedDates)
         {
-            Assert.AreEqual(expectedCustomerId, sd.CustomerId);
-            Assert.AreEqual(expectedAppointmentId, sd.AppointmentId);
+            Assert.AreEqual(ExpectedCustomerId, sd.CustomerId);
+            Assert.AreEqual(ExpectedAppointmentId, sd.AppointmentId);
         }
     }
+
+    #endregion
+
+    #region SetParticipantsForeignKeys
 
     [TestMethod]
     public void SetParticipantsForeignKeys_Okay()
     {
         var numberOfElements = 2;
 
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid expectedParticipantId1 = new("CF1E5ABB-7D41-41AA-8DDC-0EB0319CD6B4");
-        Guid expectedParticipantId2 = new("D1C2DB5B-3FD8-4D8B-9A64-0C90298897D0");
-
-        List<Participant> fakeParticipants = new()
-        {
-            new Participant()
+        List<Participant> fakeParticipants =
+        [
+            new()
             {
                 Name = "Joe",
-                ParticipantId = expectedParticipantId1,
-                Votings = new List<Voting>()
+                ParticipantId = ExpectedParticipantId1,
+                Votings = new List<Voting>
                 {
-                    new Voting
-                    {
-                        Status = VotingStatusType.Accepted
-                    },
-                    new Voting
-                    {
-                        Status = VotingStatusType.Accepted
-                    }
+                    new() { Status = VotingStatusType.Accepted }, new() { Status = VotingStatusType.Accepted }
                 }
             },
-            new Participant()
+
+            new()
             {
                 Name = "Cevin",
-                ParticipantId = expectedParticipantId2,
-                Votings = new List<Voting>()
+                ParticipantId = ExpectedParticipantId2,
+                Votings = new List<Voting>
                 {
-                    new Voting()
-                    {
-                        Status = VotingStatusType.Accepted
-                    },
-                    new Voting()
-                    {
-                        Status = VotingStatusType.Accepted
-                    }
+                    new() { Status = VotingStatusType.Accepted }, new() { Status = VotingStatusType.Accepted }
                 }
             }
-
-        };
+        ];
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        businessLayer.SetParticipantsForeignKeys(fakeParticipants, expectedCustomerId, expectedAppointmentId);
+        sut.SetParticipantsForeignKeys(fakeParticipants, ExpectedCustomerId, ExpectedAppointmentId);
 
         foreach (var participant in fakeParticipants)
         {
-            Assert.AreEqual(expectedCustomerId, participant.CustomerId);
-            Assert.AreEqual(expectedAppointmentId, participant.AppointmentId);
+            Assert.AreEqual(ExpectedCustomerId, participant.CustomerId);
+            Assert.AreEqual(ExpectedAppointmentId, participant.AppointmentId);
             var expectedParticipantId = participant.ParticipantId;
 
             var votings = participant.Votings.ToList();
@@ -697,33 +430,29 @@ public class AppointmentBusinessLayerTests
             {
                 var voting = votings[i];
 
-                Assert.AreEqual(expectedCustomerId, voting.CustomerId);
-                Assert.AreEqual(expectedAppointmentId, voting.AppointmentId);
+                Assert.AreEqual(ExpectedCustomerId, voting.CustomerId);
+                Assert.AreEqual(ExpectedAppointmentId, voting.AppointmentId);
                 Assert.AreEqual(expectedParticipantId, voting.ParticipantId);
             }
         }
     }
 
+    #endregion
+
+    #region GetAppointment
+
     [TestMethod]
     public void GetAppointment_getExistingAppointment_appointmentPasswordNotSet()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AppointmentId = expectedAppointmentId,
-                Password = "password"
-            }
+            new Appointment { AppointmentId = ExpectedAppointmentId, Password = ExpectedPassword }
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.GetAppointment(expectedCustomerId, expectedAppointmentId);
+        var result = sut.GetAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsNotNull(result);
         Assert.IsNull(result.Password);
     }
@@ -731,62 +460,50 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void GetAppointment_NotExistingCustomerId_Null()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AppointmentId = expectedAppointmentId,
-                Password = "password"
-            }
+            new Appointment { AppointmentId = ExpectedAppointmentId, Password = ExpectedPassword }
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(false);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.GetAppointment(expectedCustomerId, expectedAppointmentId);
+        var result = sut.GetAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsNull(result);
     }
+
+    #endregion
+
+    #region IsAppointmentPasswordProtected
 
     [TestMethod]
     public void IsAppointmentPasswordProtected_appointmentExistsAndHasAnyPassword_true()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns("Dummy");
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.IsAppointmentPasswordProtected(expectedCustomerId, expectedAppointmentId);
+        var result = sut.IsAppointmentPasswordProtected(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsTrue(result);
     }
+
+    #endregion
+
+    #region GetAppointmentByAdminId
 
     [TestMethod]
     public void GetAppointmentByAdminId_getExistingAppointment_appointmentPasswordNotSet()
     {
-        Guid expectedAdminId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AdminId = expectedAdminId,
-                Password = "password"
-            }
+            new Appointment { AdminId = ExpectedAdminId, Password = ExpectedPassword }
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId);
+        var result = sut.GetAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsNotNull(result);
         Assert.IsNull(result.Password);
     }
@@ -794,68 +511,56 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void GetAppointmentByAdminId_NotExistingCustomerId_Null()
     {
-        Guid expectedAdminId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AdminId = expectedAdminId,
-                Password = "password"
-            }
+            new Appointment { AdminId = ExpectedAdminId, Password = ExpectedPassword }
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(false);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId);
+        var result = sut.GetAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsNull(result);
     }
+
+    #endregion
+
+    #region IsAppointmentPasswordProtectedByAdminId
 
     [TestMethod]
     public void IsAppointmentPasswordProtectedByAdminId_appointmentExistsAndHasAnyPassword_true()
     {
-        Guid expectedAdminId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPasswordByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns("Dummy");
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.IsAppointmentPasswordProtectedByAdminId(expectedCustomerId, expectedAdminId);
+        var result = sut.IsAppointmentPasswordProtectedByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsTrue(result);
     }
+
+    #endregion
+
+    #region AddAppointment
 
     [TestMethod]
     public void AddAppointment_createAppointment_appointmentPasswordOfResultNotSet()
     {
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
             new Appointment
             {
-                AppointmentId = expectedAppointmentId,
-                CustomerId = expectedCustomerId,
-                Password = "password"
+                AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
             }
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.AddAppointment(new Appointment
+        var result = sut.AddAppointment(new Appointment
         {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            Password = "password"
+            AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
         });
         Assert.IsNotNull(result);
         Assert.IsNull(result.Password);
@@ -864,15 +569,12 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void AddAppointment_createAppointment_hashPasswordInAppointmentAndStoreItInDb()
     {
-        const string customerId = "BE1D657A-4D06-40DB-8443-D67BBB950EE7";
-        const string appointmentId = "C1C2474B-488A-4ECF-94E8-47387BB715D5";
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
             new Appointment
             {
-                AppointmentId = new(appointmentId),
-                CustomerId = new(customerId),
+                AppointmentId = ExpectedAppointmentId,
+                CustomerId = ExpectedCustomerId,
                 Password = ExpectedHashPassword
             }
         );
@@ -881,32 +583,28 @@ public class AppointmentBusinessLayerTests
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.AddAppointment(new Appointment
+        var result = sut.AddAppointment(new Appointment
         {
-            AppointmentId = new(appointmentId),
-            CustomerId = new(customerId),
-            Password = "password"
+            AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
         });
         Assert.IsNotNull(result);
         mockAppointmentRepo.Verify(r => r.AddAndUpdateAppointment(It.IsAny<Appointment>()), Times.Once());
     }
 
+    #endregion
+
+    #region UpdateAppointment
+
     [TestMethod]
     public void UpdateAppointment_updateAppointment_appointmentPasswordOfResultNotSet()
     {
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
             new Appointment
             {
-                AppointmentId = expectedAppointmentId,
-                CustomerId = expectedCustomerId,
-                Password = "password"
+                AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
             }
         );
         mockAppointmentRepo.Setup(r => r.GetAppointmentAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
@@ -914,14 +612,11 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.UpdateAppointment(new Appointment
+        var result = sut.UpdateAppointment(new Appointment
         {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            Password = "password"
+            AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
         });
         Assert.IsNotNull(result);
         Assert.IsNull(result.Password);
@@ -930,15 +625,12 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void UpdateAppointment_updateAppointment_hashPasswordInAppointmentAndStoreItInDb()
     {
-        const string customerId = "BE1D657A-4D06-40DB-8443-D67BBB950EE7";
-        const string appointmentId = "C1C2474B-488A-4ECF-94E8-47387BB715D5";
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
             new Appointment
             {
-                AppointmentId = new(appointmentId),
-                CustomerId = new(customerId),
+                AppointmentId = ExpectedAppointmentId,
+                CustomerId = ExpectedCustomerId,
                 Password = ExpectedHashPassword
             }
         );
@@ -947,187 +639,164 @@ public class AppointmentBusinessLayerTests
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.UpdateAppointment(new Appointment
+        var result = sut.UpdateAppointment(new Appointment
         {
-            AppointmentId = new(appointmentId),
-            CustomerId = new(customerId),
-            Password = "password"
+            AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
         });
         Assert.IsNotNull(result);
         mockAppointmentRepo.Verify(r => r.AddAndUpdateAppointment(It.IsAny<Appointment>()), Times.Once());
     }
 
+    #endregion
+
+    #region VerifyAppointmentPassword
+
     [TestMethod]
     public void VerifyAppointmentPassword_submittedPasswordCouldBeVerified_true()
     {
-        const string expectedPassword = "password";
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns(ExpectedHashPassword);
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
-        mockBcryptWrapper.Setup(w => w.Verify(expectedPassword, ExpectedHashPassword)).Returns(true);
-        _bcryptWrapper = mockBcryptWrapper.Object;
+        mockBcryptWrapper.Setup(w => w.Verify(ExpectedPassword, ExpectedHashPassword)).Returns(true);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            mockBcryptWrapper.Object, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
 
-        var result =
-            businessLayer.VerifyAppointmentPassword(expectedCustomerId, expectedAppointmentId, expectedPassword);
+        var result = sut.VerifyAppointmentPassword(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword);
         Assert.IsTrue(result);
-        mockBcryptWrapper.Verify(w => w.Verify(expectedPassword, ExpectedHashPassword), Times.Once);
+        mockBcryptWrapper.Verify(w => w.Verify(ExpectedPassword, ExpectedHashPassword), Times.Once);
     }
+
+    #endregion
+
+    #region VerifyAppointmentPasswordByAdminId
 
     [TestMethod]
     public void VerifyAppointmentPasswordByAdminId_submittedPasswordCouldBeVerified_true()
     {
-        const string expectedPassword = "password";
-        Guid expectedAdminId = new("FFF2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPasswordByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns(ExpectedHashPassword);
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
-        mockBcryptWrapper.Setup(w => w.Verify(expectedPassword, ExpectedHashPassword)).Returns(true);
-        _bcryptWrapper = mockBcryptWrapper.Object;
+        mockBcryptWrapper.Setup(w => w.Verify(ExpectedPassword, ExpectedHashPassword)).Returns(true);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            mockBcryptWrapper.Object, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
 
-        var result =
-            businessLayer.VerifyAppointmentPasswordByAdminId(expectedCustomerId, expectedAdminId, expectedPassword);
+        var result = sut.VerifyAppointmentPasswordByAdminId(ExpectedCustomerId, ExpectedAdminId, ExpectedPassword);
         Assert.IsTrue(result);
-        mockBcryptWrapper.Verify(w => w.Verify(expectedPassword, ExpectedHashPassword), Times.Once);
+        mockBcryptWrapper.Verify(w => w.Verify(ExpectedPassword, ExpectedHashPassword), Times.Once);
     }
+
+    #endregion
+
+    #region ExistsAppointment
 
     [TestMethod]
     public void ExistsAppointment_appointmentExists_true()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
         var mockCustomerRepo = new Mock<ICustomerRepository>();
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result =
-            businessLayer.ExistsAppointment(new(expectedCustomerId.ToString()), new(expectedAppointmentId.ToString()));
+        var result = sut.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsTrue(result);
     }
+
+    #endregion
+
+    #region ExistsAppointmentIsStarted
 
     [TestMethod]
     public void ExistsAppointmentIsStarted_appointmentIsStarted_false()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentIsStarted(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(false);
         var mockCustomerRepo = new Mock<ICustomerRepository>();
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.ExistsAppointmentIsStarted(new(expectedCustomerId.ToString()),
-            new(expectedAppointmentId.ToString()));
+        var result = sut.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsFalse(result);
     }
+
+    #endregion
+
+    #region ExistsAppointmentByAdminId
 
     [TestMethod]
     public void ExistsAppointmentByAdminId_appointmentExists_true()
     {
-        Guid expectedAdminId = new("FFF2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
         var mockCustomerRepo = new Mock<ICustomerRepository>();
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result =
-            businessLayer.ExistsAppointmentByAdminId(new(expectedCustomerId.ToString()),
-                new(expectedAdminId.ToString()));
+        var result = sut.ExistsAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsTrue(result);
     }
+
+    #endregion
+
+    #region ParticipantToDeleteAreValid
 
     [TestMethod]
     public void ParticipantToDeleteAreValid_participantGuidsAreValid_true()
     {
-        Guid fakeParticipantId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid fakeAppointmentId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-
         Participant fakeParticipant = new()
         {
-            ParticipantId = fakeParticipantId,
-            CustomerId = fakeCustomerId,
-            AppointmentId = fakeAppointmentId
+            ParticipantId = ExpectedParticipantId1,
+            CustomerId = ExpectedCustomerId,
+            AppointmentId = ExpectedAppointmentId
         };
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.ParticipantToDeleteAreValid(fakeParticipant);
+        var result = sut.ParticipantToDeleteAreValid(fakeParticipant);
         Assert.IsTrue(result);
     }
 
     [TestMethod]
     public void ParticipantToDeleteAreValid_participantGuidsAreNotValid_false()
     {
-        Guid fakeAppointmentId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-
-        Participant fakeParticipant = new()
-        {
-            CustomerId = fakeCustomerId,
-            AppointmentId = fakeAppointmentId
-        };
+        Participant fakeParticipant = new() { CustomerId = ExpectedCustomerId, AppointmentId = ExpectedAppointmentId };
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.ParticipantToDeleteAreValid(fakeParticipant);
+        var result = sut.ParticipantToDeleteAreValid(fakeParticipant);
         Assert.IsFalse(result);
     }
+
+    #endregion
+
+    #region ParticipantsAreValid
 
     [TestMethod]
     public void ParticipantsAreValid_participantsAreValid_true()
     {
-        Guid fakeParticipantId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid fakeAppointmentId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-
         Participant fakeParticipant = new()
         {
-            ParticipantId = fakeParticipantId,
-            CustomerId = fakeCustomerId,
-            AppointmentId = fakeAppointmentId
+            ParticipantId = ExpectedParticipantId1,
+            CustomerId = ExpectedCustomerId,
+            AppointmentId = ExpectedAppointmentId
         };
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.ParticipantsAreValid(new List<Participant>() { fakeParticipant });
+        var result = sut.ParticipantsAreValid(new List<Participant> { fakeParticipant });
         Assert.IsTrue(result);
     }
 
@@ -1136,53 +805,48 @@ public class AppointmentBusinessLayerTests
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.ParticipantsAreValid(null);
+        var result = sut.ParticipantsAreValid(null);
         Assert.IsFalse(result);
     }
 
     [TestMethod]
     public void ParticipantsAreValid_VotingsAreValid_true()
     {
-        Guid fakeParticipantId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid fakeAppointmentId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
-        Guid fakeVotingId = new("E0C6FD7D-814C-48E7-BAD3-C2932E494675");
-
         Participant fakeParticipant = new()
         {
-            ParticipantId = fakeParticipantId,
-            CustomerId = fakeCustomerId,
-            AppointmentId = fakeAppointmentId,
-            Votings = new List<Voting>()
+            ParticipantId = ExpectedParticipantId1,
+            CustomerId = ExpectedCustomerId,
+            AppointmentId = ExpectedAppointmentId,
+            Votings = new List<Voting>
             {
-                new Voting()
+                new()
                 {
-                    AppointmentId = fakeAppointmentId,
-                    CustomerId = fakeCustomerId,
-                    ParticipantId = fakeParticipantId,
-                    VotingId = fakeVotingId,
-                    StatusIdentifier = "Accepted"
+                    AppointmentId = ExpectedAppointmentId,
+                    CustomerId = ExpectedCustomerId,
+                    ParticipantId = ExpectedParticipantId1,
+                    VotingId = ExpectedVotingId,
+                    StatusIdentifier = ExpectedVotingStatus.ToString()
                 }
             }
         };
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
 
-        var result = businessLayer.ParticipantsAreValid(new List<Participant>() { fakeParticipant });
+        var result = sut.ParticipantsAreValid(new List<Participant> { fakeParticipant });
         Assert.IsTrue(result);
     }
 
+    #endregion
+
+    #region SetAppointmentStatusType
+
     [TestMethod]
-    public void Appointment_ChangeStatusType_StartedToPaused_Okay()
+    public void SetAppointmentStatusType_ChangeStatusType_StartedToPaused_Okay()
     {
-        Guid fakeAdminId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
         var password = string.Empty;
         var oldStatusType = AppointmentStatusType.Started;
         var newStatusType = AppointmentStatusType.Paused;
@@ -1193,36 +857,28 @@ public class AppointmentBusinessLayerTests
         mockAppointmentRepo.Setup(r => r.GetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns(oldStatusType.ToString());
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AdminId = fakeAdminId,
-                Password = "password"
-            }
+            new Appointment { AdminId = ExpectedAdminId, Password = ExpectedPassword }
         );
         mockAppointmentRepo.Setup(r =>
             r.SetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<string>()));
 
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
         mockBcryptWrapper.Setup(w => w.Verify(password, ExpectedHashPassword)).Returns(true);
-        _bcryptWrapper = mockBcryptWrapper.Object;
 
         var mockAppointmentBusinessLayer = new Mock<IAppointmentBusinessLayer>();
         mockAppointmentBusinessLayer
             .Setup(r => r.IsAppointmentPasswordProtectedByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
 
-        var appointment = businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
+        var appointment = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsFalse(appointment == null);
-        Assert.AreEqual(fakeAdminId, appointment.AdminId);
+        Assert.AreEqual(ExpectedAdminId, appointment.AdminId);
     }
 
     [TestMethod]
-    public void Appointment_ChangeStatusType_PausedToStarted_Okay()
+    public void SetAppointmentStatusType_ChangeStatusType_PausedToStarted_Okay()
     {
-        Guid fakeAdminId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
         var password = string.Empty;
         var oldStatusType = AppointmentStatusType.Paused;
         var newStatusType = AppointmentStatusType.Started;
@@ -1235,34 +891,26 @@ public class AppointmentBusinessLayerTests
         mockAppointmentRepo.Setup(r =>
             r.SetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<string>()));
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AdminId = fakeAdminId,
-                Password = "password"
-            }
+            new Appointment { AdminId = ExpectedAdminId, Password = ExpectedPassword }
         );
 
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
         mockBcryptWrapper.Setup(w => w.Verify(password, ExpectedHashPassword)).Returns(true);
-        _bcryptWrapper = mockBcryptWrapper.Object;
 
         var mockAppointmentBusinessLayer = new Mock<IAppointmentBusinessLayer>();
         mockAppointmentBusinessLayer
             .Setup(r => r.IsAppointmentPasswordProtectedByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
 
-        var appointment = businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
+        var appointment = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsFalse(appointment == null);
-        Assert.AreEqual(fakeAdminId, appointment.AdminId);
+        Assert.AreEqual(ExpectedAdminId, appointment.AdminId);
     }
 
     [TestMethod]
-    public void Appointment_ChangeStatusType_DeletedToStarted_Exception()
+    public void SetAppointmentStatusType_ChangeStatusType_DeletedToStarted_Exception()
     {
-        Guid fakeAdminId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("6B2B0BCB-E0C5-4773-9104-C39BBEDF5888");
         var password = string.Empty;
         var oldStatusType = AppointmentStatusType.Deleted;
         var newStatusType = AppointmentStatusType.Started;
@@ -1275,27 +923,106 @@ public class AppointmentBusinessLayerTests
         mockAppointmentRepo.Setup(r =>
             r.SetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<string>()));
         mockAppointmentRepo.Setup(r => r.GetAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(
-            new Appointment
-            {
-                AdminId = fakeAdminId,
-                Password = "password"
-            }
+            new Appointment { AdminId = ExpectedAdminId, Password = ExpectedPassword }
         );
 
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
         mockBcryptWrapper.Setup(w => w.Verify(password, ExpectedHashPassword)).Returns(true);
-        _bcryptWrapper = mockBcryptWrapper.Object;
 
         var mockAppointmentBusinessLayer = new Mock<IAppointmentBusinessLayer>();
         mockAppointmentBusinessLayer
             .Setup(r => r.IsAppointmentPasswordProtectedByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
-        var businessLayer = new AppointmentBusinessLayer(mockAppointmentRepo.Object, mockCustomerRepo.Object,
-            _bcryptWrapper, _logger);
+        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
 
-        var appointmentObject =
-            businessLayer.SetAppointmentStatusType(fakeCustomerId, fakeAdminId, newStatusType);
+        var appointmentObject = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsTrue(appointmentObject == null);
         Assert.IsFalse(appointmentObject != null);
+    }
+
+    #endregion
+
+    private static AppointmentBusinessLayer CreateSut(
+        [CanBeNull] IAppointmentRepository appointmentRepository = null,
+        [CanBeNull] ICustomerRepository customerRepository = null,
+        [CanBeNull] IBcryptWrapper bcryptWrapper = null)
+    {
+        var appointmentRepositoryToUse = appointmentRepository ?? new Mock<IAppointmentRepository>().Object;
+        var customerRepositoryToUse = customerRepository ?? new Mock<ICustomerRepository>().Object;
+        var mockBcryptWrapper = bcryptWrapper ?? CreateDefaultBcryptWrapper();
+        var logger = new Mock<ILogger<AppointmentBusinessLayer>>();
+
+        return new AppointmentBusinessLayer(
+            appointmentRepositoryToUse,
+            customerRepositoryToUse,
+            mockBcryptWrapper,
+            logger.Object);
+    }
+
+    private static IBcryptWrapper CreateDefaultBcryptWrapper()
+    {
+        var mockBcryptWrapper = new Mock<IBcryptWrapper>();
+        mockBcryptWrapper
+            .Setup(w => w.HashPassword(It.IsAny<string>()))
+            .Returns(ExpectedHashPassword);
+
+        return mockBcryptWrapper.Object;
+    }
+
+    private static List<Participant> CreateParticipants(int total)
+    {
+        var participant = new Participant { Name = "Dummy" };
+        var participants = new List<Participant>();
+
+        for (var i = 0; i < total; i++)
+        {
+            participants.Add(participant);
+        }
+
+        return participants;
+    }
+
+    private static List<Participant> CreateParticipantsWithId(int total, int modulo)
+    {
+        var participants = new List<Participant>();
+
+        for (var i = 0; i < total; i++)
+        {
+            participants.Add(
+                new Participant { ParticipantId = i % modulo == 1 ? Guid.NewGuid() : Guid.Empty, Name = "Dummy" }
+            );
+        }
+
+        return participants;
+    }
+
+    private static List<SuggestedDate> CreateSuggestedDates(int total)
+    {
+        var suggestedDate = new SuggestedDate { StartDate = DateTime.Now };
+        var suggestedDates = new List<SuggestedDate>();
+
+        for (var i = 0; i < total; i++)
+        {
+            suggestedDates.Add(suggestedDate);
+        }
+
+        return suggestedDates;
+    }
+
+    private static List<SuggestedDate> CreateSuggestedDatesWithId(int total, int modulo)
+    {
+        var suggestedDates = new List<SuggestedDate>();
+
+        for (var i = 0; i < total; i++)
+        {
+            suggestedDates.Add(
+                new SuggestedDate
+                {
+                    SuggestedDateId = i % modulo == 1 ? Guid.NewGuid() : Guid.Empty, StartDate = DateTime.Now
+                }
+            );
+        }
+
+        return suggestedDates;
     }
 }
