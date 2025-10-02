@@ -1,6 +1,5 @@
 ﻿using Dataport.Terminfinder.Repository.Tests.Utils;
 using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -484,6 +483,38 @@ public class AppointmentRepositoryTests
 
     #endregion
 
+    #region AddAndUpdateAppointment
+
+    [TestMethod]
+    public void AddAndUpdateAppointment_AppointmentIdIsEmpty_CallExpectedMethods()
+    {
+        // arrange
+        var appointments = GetValidAppointments();
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
+        
+        var appointment = appointments[0];
+        appointment.AppointmentId = Guid.Empty;
+        
+        var mockContext = new Mock<DataContext>();
+        var options = new DbContextOptionsBuilder<TestDbContext>().Options;
+        var testDbContext = new TestDbContext(options);
+        var mockTransaction = new Mock<IDbContextTransaction>();
+        mockTransaction.Setup(t => t.Commit()).Verifiable();
+        var mockDbFacade = new Mock<DatabaseFacade>(testDbContext) { CallBase = true };
+        mockDbFacade.Setup(x => x.BeginTransaction()).Returns(mockTransaction.Object);
+        mockContext.Setup(c => c.Database).Returns(mockDbFacade.Object);
+        
+        // act
+        var sut = CreateSut(mockAppointmentsSet: mockAppointmentsSet, mockDataContext: mockContext);
+        sut.AddAndUpdateAppointment(appointment);
+
+        // assert
+        mockContext.Verify(c => c.SaveChanges(), Times.Once());
+        mockAppointmentsSet.Verify(s => s.Add(It.IsAny<Appointment>()), Times.Once());
+    }
+
+    #endregion
+
     #region GetParticipants
 
     [TestMethod]
@@ -692,7 +723,6 @@ public class AppointmentRepositoryTests
         [CanBeNull] Mock<DataContext> mockDataContext = null)
     {
         var mockAppointmentsSetToUse = mockAppointmentsSet ?? DbSetMockFactory.CreateMockDbSet(GetValidAppointments());
-        mockAppointmentsSetToUse.Setup(m => m.Update(It.IsAny<Appointment>()));
         var mockVotingSetToUse = mockVotingsSet ?? DbSetMockFactory.CreateMockDbSet(GetValidVotings());
         var mockParticipantSetToUse = mockParticipantsSet ?? DbSetMockFactory.CreateMockDbSet(GetValidParticipants());
         var mockSuggestedDatesSetToUse = mockSuggestedDatesSet ?? DbSetMockFactory.CreateMockDbSet(GetValidSuggestedDates());
@@ -703,6 +733,7 @@ public class AppointmentRepositoryTests
         mockContext.Setup(c => c.Participants).Returns(mockParticipantSetToUse.Object);
         mockContext.Setup(c => c.SuggestedDates).Returns(mockSuggestedDatesSetToUse.Object);
         mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
+        mockContext.Setup(c => c.SaveChanges()).Verifiable();
 
         var logger = new Mock<ILogger<AppointmentRepository>>();
 
