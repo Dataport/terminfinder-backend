@@ -151,7 +151,7 @@ public class VotingController : ApiControllerBase
 
         _appointmentBusinessLayer.SetParticipantsForeignKeys(participants, customerIdGuid, appointmentIdGuid);
         ICollection<Participant> collectionOfParticipants =
-            _appointmentBusinessLayer.AddAndUpdateParticipiants(customerIdGuid, appointmentIdGuid, participants);
+            _appointmentBusinessLayer.AddAndUpdateParticipants(customerIdGuid, appointmentIdGuid, participants);
         return Created(CreateCreatedUri(), collectionOfParticipants);
     }
 

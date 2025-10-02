@@ -281,10 +281,10 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     }
 
     /// <inheritdoc />
-    public ICollection<Participant> AddAndUpdateParticipiants(Guid customerId, Guid appointmentId,
+    public ICollection<Participant> AddAndUpdateParticipants(Guid customerId, Guid appointmentId,
         ICollection<Participant> participants)
     {
-        Logger.LogDebug($"Enter {nameof(AddAndUpdateParticipiants)}");
+        Logger.LogDebug($"Enter {nameof(AddAndUpdateParticipants)}");
         if (participants.IsNullOrEmpty())
         {
             return (participants);
