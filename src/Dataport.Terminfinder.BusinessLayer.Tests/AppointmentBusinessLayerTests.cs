@@ -649,6 +649,14 @@ public class AppointmentBusinessLayerTests
         mockAppointmentRepo.Verify(r => r.AddAndUpdateAppointment(It.IsAny<Appointment>()), Times.Once());
     }
 
+    [TestMethod]
+    public void UpdateAppointment_AppointmentIsNull_Null()
+    {
+        var sut = CreateSut();
+        var result = sut.UpdateAppointment(null, Guid.Empty);
+        Assert.IsNull(result);
+    }
+
     #endregion
 
     #region VerifyAppointmentPassword
@@ -668,6 +676,18 @@ public class AppointmentBusinessLayerTests
         var result = sut.VerifyAppointmentPassword(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword);
         Assert.IsTrue(result);
         mockBcryptWrapper.Verify(w => w.Verify(ExpectedPassword, ExpectedHashPassword), Times.Once);
+    }
+
+    [TestMethod]
+    public void VerifyAppointmentPassword_NotProtected_ThrowsException()
+    {
+        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
+        mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>()));
+
+        var sut = CreateSut(mockAppointmentRepo.Object);
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.VerifyAppointmentPassword(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword));
     }
 
     #endregion
@@ -692,12 +712,24 @@ public class AppointmentBusinessLayerTests
         mockBcryptWrapper.Verify(w => w.Verify(ExpectedPassword, ExpectedHashPassword), Times.Once);
     }
 
+    [TestMethod]
+    public void VerifyAppointmentPasswordByAdminId_NotProtected_ThrowsException()
+    {
+        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
+        mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>()));
+
+        var sut = CreateSut(mockAppointmentRepo.Object);
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.VerifyAppointmentPasswordByAdminId(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword));
+    }
+
     #endregion
 
     #region ExistsAppointment
 
     [TestMethod]
-    public void ExistsAppointment_appointmentExists_true()
+    public void ExistsAppointment_AppointmentExists_true()
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
@@ -707,6 +739,24 @@ public class AppointmentBusinessLayerTests
 
         var result = sut.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsTrue(result);
+    }
+
+    [TestMethod]
+    public void ExistsAppointment_IdsAreEmpty_false()
+    {
+        var sut = CreateSut();
+
+        var result = sut.ExistsAppointment(Guid.Empty, Guid.Empty);
+        Assert.IsFalse(result);
+    }
+
+    [TestMethod]
+    public void ExistsAppointment_AdminId_IdsAreEmpty_false()
+    {
+        var sut = CreateSut();
+
+        var result = sut.ExistsAppointment(Guid.Empty, Guid.Empty, Guid.Empty);
+        Assert.IsFalse(result);
     }
 
     #endregion
@@ -726,6 +776,15 @@ public class AppointmentBusinessLayerTests
         Assert.IsFalse(result);
     }
 
+    [TestMethod]
+    public void ExistsAppointmentIsStarted_IdsAreEmpty_false()
+    {
+        var sut = CreateSut();
+
+        var result = sut.ExistsAppointmentIsStarted(Guid.Empty, Guid.Empty);
+        Assert.IsFalse(result);
+    }
+
     #endregion
 
     #region ExistsAppointmentByAdminId
@@ -741,6 +800,27 @@ public class AppointmentBusinessLayerTests
 
         var result = sut.ExistsAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsTrue(result);
+    }
+
+    [TestMethod]
+    public void ExistsAppointmentByAdminId_IdsAreEmpty_false()
+    {
+        var sut = CreateSut();
+
+        var result = sut.ExistsAppointmentByAdminId(Guid.Empty, Guid.Empty);
+        Assert.IsFalse(result);
+    }
+
+    #endregion
+
+    #region AddAndUpdateParticipants
+
+    [TestMethod]
+    public void AddAndUpdateParticipants_ParticipantsIsNull_null()
+    {
+        var sut = CreateSut();
+        var result = sut.AddAndUpdateParticipants(Guid.Empty, Guid.Empty, null);
+        Assert.IsNull(result);
     }
 
     #endregion
@@ -938,6 +1018,34 @@ public class AppointmentBusinessLayerTests
         var appointmentObject = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsTrue(appointmentObject == null);
         Assert.IsFalse(appointmentObject != null);
+    }
+
+    [TestMethod]
+    public void SetAppointmentStatusType_NotProtected_ThrowsException()
+    {
+        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
+        mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>()));
+
+        var sut = CreateSut(mockAppointmentRepo.Object);
+
+        Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, AppointmentStatusType.Undefined));
+    }
+
+    #endregion
+
+    #region SaveAppointment
+
+    [TestMethod]
+    public void SaveAppointment_CallExpectedMethods()
+    {
+        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
+        mockAppointmentRepo.Setup(r => r.Save()).Verifiable();
+
+        var sut = CreateSut(mockAppointmentRepo.Object);
+        sut.SaveAppointment();
+
+        mockAppointmentRepo.Verify(r => r.Save(), Times.Once);
     }
 
     #endregion
