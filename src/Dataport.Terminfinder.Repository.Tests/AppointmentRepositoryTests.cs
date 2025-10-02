@@ -1,4 +1,8 @@
-﻿using JetBrains.Annotations;
+﻿using Dataport.Terminfinder.Repository.Tests.Utils;
+using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Dataport.Terminfinder.Repository.Tests;
 
@@ -42,9 +46,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Paused;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointment = sut.GetAppointment(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -57,9 +62,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointment = sut.GetAppointment(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -102,9 +108,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Paused;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointment = sut.GetAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
 
         // Assert
@@ -117,9 +124,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointment = sut.GetAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
 
         // Assert
@@ -158,9 +166,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Paused;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointmentExists = sut.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -172,9 +181,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointmentExists = sut.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -219,9 +229,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointmentExists = sut.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId, ExpectedAdminId);
 
         // Assert
@@ -248,9 +259,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Paused;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointmentExistsAndIsStarted = sut.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -277,9 +289,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Paused;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointmentExists = sut.ExistsAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
 
         // Assert
@@ -291,9 +304,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var appointmentExists = sut.ExistsAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
 
         // Assert
@@ -368,9 +382,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Paused;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var statusIdentifier = sut.GetAppointmentStatusTypeByAdmin(ExpectedCustomerId, ExpectedAdminId);
 
         // Assert
@@ -382,9 +397,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         Assert.ThrowsException<InvalidOperationException>(() =>
             sut.GetAppointmentStatusTypeByAdmin(ExpectedCustomerId, ExpectedAdminId));
     }
@@ -430,9 +446,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].CustomerId = Guid.Empty;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var returnValueAsAdminId = sut.GetAppointmentAdminId(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -444,9 +461,10 @@ public class AppointmentRepositoryTests
     {
         var appointments = GetValidAppointments();
         appointments[0].AppointmentId = Guid.Empty;
+        var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
 
         // act fetch
-        var sut = CreateSut(appointments);
+        var sut = CreateSut(mockAppointmentsSet);
         var returnValueAsAdminId = sut.GetAppointmentAdminId(ExpectedCustomerId, Guid.Empty);
 
         // Assert
@@ -492,7 +510,7 @@ public class AppointmentRepositoryTests
 
         // Assert
         Assert.IsNotNull(allParticipants);
-        Assert.AreEqual(0, allParticipants?.Count);
+        Assert.AreEqual(0, allParticipants.Count);
     }
 
     [TestMethod]
@@ -623,9 +641,10 @@ public class AppointmentRepositoryTests
                 CustomerId = ExpectedCustomerId
             }
         };
+        var mockSuggestedDatesSet = DbSetMockFactory.CreateMockDbSet(suggestedDates);
 
         // act fetch
-        var sut = CreateSut(suggestedDates: suggestedDates);
+        var sut = CreateSut(mockSuggestedDatesSet: mockSuggestedDatesSet);
         var numberOfSuggestedDates = sut.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId);
 
         // Assert
@@ -654,9 +673,10 @@ public class AppointmentRepositoryTests
                 CustomerId = ExpectedCustomerId
             }
         };
+        var mockParticipantsSet = DbSetMockFactory.CreateMockDbSet(participants);
 
         // act fetch
-        var sut = CreateSut(participants: participants);
+        var sut = CreateSut(mockParticipantsSet: mockParticipantsSet);
         var numberOfParticipants = sut.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId);
         
         // Assert
@@ -666,52 +686,23 @@ public class AppointmentRepositoryTests
     #endregion
 
     private static AppointmentRepository CreateSut(
-        [CanBeNull] List<Appointment> appointments = null,
-        [CanBeNull] List<Voting> votings = null,
-        [CanBeNull] List<Participant> participants = null,
-        [CanBeNull] List<SuggestedDate> suggestedDates = null,
+        [CanBeNull] Mock<DbSet<Appointment>> mockAppointmentsSet = null,
+        [CanBeNull] Mock<DbSet<Voting>> mockVotingsSet = null,
+        [CanBeNull] Mock<DbSet<Participant>> mockParticipantsSet = null,
+        [CanBeNull] Mock<DbSet<SuggestedDate>> mockSuggestedDatesSet = null,
         [CanBeNull] Mock<DataContext> mockDataContext = null)
     {
-        var appointmentsQueryable = (appointments ?? GetValidAppointments()).AsQueryable();
-        var votingsQueryable = (votings ?? GetValidVotings()).AsQueryable();
-        var participantsQueryable = (participants ?? GetValidParticipants()).AsQueryable();
-        var suggestedDatesQueryable = (suggestedDates ?? GetValidSuggestedDates()).AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockAppointmentSet = new Mock<DbSet<Appointment>>();
-        mockAppointmentSet.As<IQueryable<Appointment>>().Setup(m => m.Provider).Returns(appointmentsQueryable.Provider);
-        mockAppointmentSet.As<IQueryable<Appointment>>().Setup(m => m.Expression).Returns(appointmentsQueryable.Expression);
-        mockAppointmentSet.As<IQueryable<Appointment>>().Setup(m => m.ElementType).Returns(appointmentsQueryable.ElementType);
-        using var enumeratorAppointments = appointmentsQueryable.GetEnumerator();
-        mockAppointmentSet.As<IQueryable<Appointment>>().Setup(m => m.GetEnumerator()).Returns(enumeratorAppointments);
-        mockAppointmentSet.Setup(m => m.Update(It.IsAny<Appointment>()));
-
-        var mockVotingSet = new Mock<DbSet<Voting>>();
-        mockVotingSet.As<IQueryable<Voting>>().Setup(m => m.Provider).Returns(votingsQueryable.Provider);
-        mockVotingSet.As<IQueryable<Voting>>().Setup(m => m.Expression).Returns(votingsQueryable.Expression);
-        mockVotingSet.As<IQueryable<Voting>>().Setup(m => m.ElementType).Returns(votingsQueryable.ElementType);
-        using var enumeratorVotings = votingsQueryable.GetEnumerator();
-        mockVotingSet.As<IQueryable<Voting>>().Setup(m => m.GetEnumerator()).Returns(enumeratorVotings);
-
-        var mockParticipantSet = new Mock<DbSet<Participant>>();
-        mockParticipantSet.As<IQueryable<Participant>>().Setup(m => m.Provider).Returns(participantsQueryable.Provider);
-        mockParticipantSet.As<IQueryable<Participant>>().Setup(m => m.Expression).Returns(participantsQueryable.Expression);
-        mockParticipantSet.As<IQueryable<Participant>>().Setup(m => m.ElementType).Returns(participantsQueryable.ElementType);
-        using var enumeratorParticipants = participantsQueryable.GetEnumerator();
-        mockParticipantSet.As<IQueryable<Participant>>().Setup(m => m.GetEnumerator()).Returns(enumeratorParticipants);
-        
-        var mockSuggestedDateSet = new Mock<DbSet<SuggestedDate>>();
-        mockSuggestedDateSet.As<IQueryable<SuggestedDate>>().Setup(m => m.Provider).Returns(suggestedDatesQueryable.Provider);
-        mockSuggestedDateSet.As<IQueryable<SuggestedDate>>().Setup(m => m.Expression).Returns(suggestedDatesQueryable.Expression);
-        mockSuggestedDateSet.As<IQueryable<SuggestedDate>>().Setup(m => m.ElementType).Returns(suggestedDatesQueryable.ElementType);
-        using var enumeratorSuggestedDates = suggestedDatesQueryable.GetEnumerator();
-        mockSuggestedDateSet.As<IQueryable<SuggestedDate>>().Setup(m => m.GetEnumerator()).Returns(enumeratorSuggestedDates);
+        var mockAppointmentsSetToUse = mockAppointmentsSet ?? DbSetMockFactory.CreateMockDbSet(GetValidAppointments());
+        mockAppointmentsSetToUse.Setup(m => m.Update(It.IsAny<Appointment>()));
+        var mockVotingSetToUse = mockVotingsSet ?? DbSetMockFactory.CreateMockDbSet(GetValidVotings());
+        var mockParticipantSetToUse = mockParticipantsSet ?? DbSetMockFactory.CreateMockDbSet(GetValidParticipants());
+        var mockSuggestedDatesSetToUse = mockSuggestedDatesSet ?? DbSetMockFactory.CreateMockDbSet(GetValidSuggestedDates());
 
         var mockContext = mockDataContext ?? new Mock<DataContext>();
-        mockContext.Setup(c => c.Appointments).Returns(mockAppointmentSet.Object);
-        mockContext.Setup(c => c.Votings).Returns(mockVotingSet.Object);
-        mockContext.Setup(c => c.Participants).Returns(mockParticipantSet.Object);
-        mockContext.Setup(c => c.SuggestedDates).Returns(mockSuggestedDateSet.Object);
+        mockContext.Setup(c => c.Appointments).Returns(mockAppointmentsSetToUse.Object);
+        mockContext.Setup(c => c.Votings).Returns(mockVotingSetToUse.Object);
+        mockContext.Setup(c => c.Participants).Returns(mockParticipantSetToUse.Object);
+        mockContext.Setup(c => c.SuggestedDates).Returns(mockSuggestedDatesSetToUse.Object);
         mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
 
         var logger = new Mock<ILogger<AppointmentRepository>>();
