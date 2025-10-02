@@ -5,7 +5,6 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 
 [TestClass]
 [TestCategory("Integrationtest")]
-[ExcludeFromCodeCoverage]
 public class AdminControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;

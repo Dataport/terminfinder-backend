@@ -3,7 +3,6 @@
 namespace Dataport.Terminfinder.BusinessObject.Tests.Enum;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class ErrorTypeExtensionsTests
 {
     [TestMethod]

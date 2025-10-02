@@ -2,7 +2,6 @@
 
 [TestClass]
 [TestCategory("Integrationtest")]
-[ExcludeFromCodeCoverage]
 public class CustomerControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;

@@ -1,7 +1,6 @@
 ﻿namespace Dataport.Terminfinder.WebAPI.Tests.RequestContext;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class BasicAuthenticationEncoderTests
 {
     [TestMethod]

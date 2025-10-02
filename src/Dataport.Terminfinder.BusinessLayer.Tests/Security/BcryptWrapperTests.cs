@@ -2,12 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.BusinessLayer.Tests.Security;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class BcryptWrapperTests
 {
     private ILogger<BcryptWrapper> logger;

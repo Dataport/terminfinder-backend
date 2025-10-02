@@ -5,12 +5,10 @@ using Dataport.Terminfinder.Repository;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.BusinessLayer.Tests;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class AppointmentBusinessLayerTests
 {
     private ILogger<AppointmentBusinessLayer> _logger;

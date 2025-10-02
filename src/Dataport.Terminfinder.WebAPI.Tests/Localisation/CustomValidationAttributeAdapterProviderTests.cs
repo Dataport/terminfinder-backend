@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 namespace Dataport.Terminfinder.WebAPI.Tests.Localisation;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class CustomValidationAttributeAdapterProviderTests
 {
     private IStringLocalizer localizer;

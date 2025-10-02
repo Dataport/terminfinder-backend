@@ -1,7 +1,6 @@
 ﻿namespace Dataport.Terminfinder.WebAPI.Tests.Controllers;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class SuggestedDateControllerTests
 {
     private ILogger<SuggestedDateController> _logger;
