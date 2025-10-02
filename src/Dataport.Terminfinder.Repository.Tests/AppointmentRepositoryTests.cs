@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Dataport.Terminfinder.Repository.Tests;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class AppointmentRepositoryTests
 {
     private static readonly Guid ExpectedAppointmentId = Guid.Parse("C1C2474B-488A-4ECF-94E8-47387BB715D5");

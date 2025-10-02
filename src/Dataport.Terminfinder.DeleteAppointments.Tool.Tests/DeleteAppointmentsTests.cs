@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool.Tests;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class DeleteAppointmentsTests
 {
     private ILogger<DeleteAppointmentsService> _logger;

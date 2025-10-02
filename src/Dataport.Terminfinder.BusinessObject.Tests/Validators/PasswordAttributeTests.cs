@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Dataport.Terminfinder.BusinessObject.Validators;
 using System.ComponentModel.DataAnnotations;
-using Dataport.Terminfinder.BusinessObject.Validators;
 
 namespace Dataport.Terminfinder.BusinessObject.Tests.Validators;
 
@@ -8,7 +7,6 @@ namespace Dataport.Terminfinder.BusinessObject.Tests.Validators;
 /// Testclass for Business objects
 /// </summary>
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class PasswordAttributeTests
 {
     public const string ExectedPasswordAttributeErrorMessage = "Error.";

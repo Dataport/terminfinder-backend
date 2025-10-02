@@ -1,12 +1,10 @@
 ﻿using Dataport.Terminfinder.Common.Extension;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.Common.Tests.Extension;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class EnumerableExtensionsTests
 {
     [TestMethod]

@@ -1,13 +1,10 @@
-﻿using System.Globalization;
-using System.IO;
+﻿using Dataport.Terminfinder.BusinessObject.JsonSerializer;
+using System.Globalization;
 using System.Text;
-using System.Threading;
-using Dataport.Terminfinder.BusinessObject.JsonSerializer;
 
 namespace Dataport.Terminfinder.BusinessObject.Tests.JsonSerializer;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class TimeConverterTests
 {
     private CultureInfo _culture;

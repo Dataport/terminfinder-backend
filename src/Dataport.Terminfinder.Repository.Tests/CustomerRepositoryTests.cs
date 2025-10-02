@@ -1,7 +1,6 @@
 ﻿namespace Dataport.Terminfinder.Repository.Tests;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class CustomerRepositoryTests
 {
     private ILogger<CustomerRepository> _logger;

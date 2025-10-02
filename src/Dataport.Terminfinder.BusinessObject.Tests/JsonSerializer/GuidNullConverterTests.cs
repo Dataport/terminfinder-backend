@@ -1,11 +1,9 @@
-﻿using System.IO;
+﻿using Dataport.Terminfinder.BusinessObject.JsonSerializer;
 using System.Text;
-using Dataport.Terminfinder.BusinessObject.JsonSerializer;
 
 namespace Dataport.Terminfinder.BusinessObject.Tests.JsonSerializer;
 
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class GuidNullConverterTests
 {
 

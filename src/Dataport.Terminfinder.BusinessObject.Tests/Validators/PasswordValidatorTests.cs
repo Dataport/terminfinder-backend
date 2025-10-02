@@ -6,7 +6,6 @@ namespace Dataport.Terminfinder.BusinessObject.Tests.Validators;
 /// Testclass for PasswordValidator
 /// </summary>
 [TestClass]
-[ExcludeFromCodeCoverage]
 public class PasswordValidatorTests
 {
     [TestMethod]
