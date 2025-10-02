@@ -190,7 +190,7 @@ public interface IAppointmentBusinessLayer
     /// <param name="appointmentId">Id of the appointment</param>
     /// <param name="participants"></param>
     /// <returns>Collection of all participants in den database for the appointmentId</returns>
-    ICollection<Participant> AddAndUpdateParticipiants(Guid customerId, Guid appointmentId,
+    ICollection<Participant> AddAndUpdateParticipants(Guid customerId, Guid appointmentId,
         ICollection<Participant> participants);
 
     /// <summary>

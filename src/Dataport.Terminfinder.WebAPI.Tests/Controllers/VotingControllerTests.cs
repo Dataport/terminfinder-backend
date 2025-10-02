@@ -154,7 +154,7 @@ public class VotingControllerTests
                 m.CheckMaxTotalCountOfParticipants(expectedCustomerId, expectedAppointmentId, participants))
             .Returns(true);
         mockBusinessLayer.Setup(m =>
-                m.AddAndUpdateParticipiants(expectedCustomerId, expectedAppointmentId, participants))
+                m.AddAndUpdateParticipants(expectedCustomerId, expectedAppointmentId, participants))
             .Returns(participants);
         mockBusinessLayer.Setup(m =>
             m.SetParticipantsForeignKeys(participants, expectedCustomerId, expectedAppointmentId));
