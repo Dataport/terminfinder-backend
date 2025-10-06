@@ -340,6 +340,19 @@ public class AdminControllerTests
             appointmentProtectionResult.AppointmentId.ToString());
         Assert.AreEqual(false, appointmentProtectionResult.IsProtectedByPassword);
     }
+    
+    [TestMethod]
+    public void GetProtection_GuidsInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+
+        var controller = new AdminController(mockBusinessLayer.Object, mockRequestContext.Object, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() => controller.GetProtection(invalidGuidString, invalidGuidString));
+    }
 
     [TestMethod]
     public void SetStatus_appointmentStatusTypeStarted_Okay()
@@ -390,6 +403,65 @@ public class AdminControllerTests
         Assert.AreEqual(200, result.StatusCode);
         Assert.AreEqual(new Guid(appointmentIdAsString).ToString(), appointmentResult.AppointmentId.ToString());
         Assert.AreEqual(true, appointmentResult.AppointmentStatus == statusType);
+    }
+    
+    [TestMethod]
+    public void SetStatus_AppointmentIsNull_ThrowsException()
+    {
+        const string appointmentIdAsString = "C1C2474B-488A-4ECF-94E8-47387BB715D5";
+        const string adminIdAsString = "FFF2474B-488A-4ECF-94E8-47387BB715D5";
+        Guid expectedAppointmentId = new (appointmentIdAsString);
+        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        Guid expectedAdminId = new (adminIdAsString);
+        AppointmentStatusType statusType = AppointmentStatusType.Started;
+
+        Appointment fakeAppointment = new()
+        {
+            AppointmentId = expectedAppointmentId,
+            AdminId = expectedAdminId,
+            CreatorName = "Tom",
+            CustomerId = expectedCustomerId,
+            Subject = "new",
+            Description = "whats new",
+            Place = "Hamburg",
+            AppointmentStatus = statusType
+        };
+
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer
+            .Setup(m => m.GetAppointmentByAdminId(expectedCustomerId, expectedAdminId))
+            .Returns(fakeAppointment);
+        mockBusinessLayer
+            .Setup(m => m.ExistsCustomer(expectedCustomerId))
+            .Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsAppointmentByAdminId(expectedCustomerId, expectedAdminId))
+            .Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.IsAppointmentPasswordProtectedByAdminId(expectedCustomerId, expectedAdminId))
+            .Returns(false);
+        mockBusinessLayer
+            .Setup(m => m.SetAppointmentStatusType(expectedCustomerId, expectedAdminId, It.IsAny<AppointmentStatusType>()))
+            .Returns((Appointment)null);
+
+        var controller = new AdminController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        Assert.ThrowsException<ConflictException>(() =>
+            controller.SetStatus(expectedCustomerId.ToString(), expectedAdminId.ToString(), statusType.ToString()));
+    }
+    
+    [TestMethod]
+    public void SetStatus_GuidsInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+
+        var controller = new AdminController(mockBusinessLayer.Object, mockRequestContext.Object, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.SetStatus(invalidGuidString, invalidGuidString, string.Empty));
     }
 
     [TestMethod]
@@ -552,5 +624,19 @@ public class AdminControllerTests
         // Assert
         Assert.AreEqual(false, verificationResult?.IsPasswordValid);
         Assert.AreEqual(false, verificationResult?.IsProtectedByPassword);
+    }
+    
+    [TestMethod]
+    public void GetPasswordVerification_GuidsInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+
+        var controller = new AdminController(mockBusinessLayer.Object, mockRequestContext.Object, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.GetPasswordVerification(invalidGuidString, invalidGuidString));
     }
 }
