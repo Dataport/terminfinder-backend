@@ -223,4 +223,54 @@ public class ParticipantControllerTests
             Assert.AreEqual(ErrorType.PasswordRequired, uex.ErrorCode);
         }
     }
+
+    [TestMethod]
+    public void DeleteParticipants_GuidsAreInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var participantId = new Guid("7D0BB25C-214E-42CF-8BE3-89910733B763");
+
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Delete(invalidGuidString, expectedAppointmentId.ToString(), participantId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() => 
+            controller.Delete(expectedCustomerId.ToString(), invalidGuidString, participantId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() => 
+            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(), invalidGuidString));
+    }
+    
+    [TestMethod]
+    public void DeleteParticipants_ParticipantsAreInvalid_ThrowsException()
+    {
+        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        Guid participantId = new("7D0BB25C-214E-42CF-8BE3-89910733B763");
+
+        Participant fakeParticipant = new()
+        {
+            AppointmentId = expectedAppointmentId,
+            CustomerId = expectedCustomerId,
+            ParticipantId = participantId
+        };
+
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
+            .Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointmentIsStarted(expectedCustomerId, expectedAppointmentId))
+            .Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
+            .Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
+            .Returns(false);
+
+        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() => controller.Delete(expectedCustomerId.ToString(),
+            expectedAppointmentId.ToString(), participantId.ToString()));
+    }
 }
