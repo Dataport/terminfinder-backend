@@ -3,58 +3,36 @@
 [TestClass]
 public class SuggestedDateControllerTests
 {
-    private ILogger<SuggestedDateController> _logger;
-    private IStringLocalizer<SuggestedDateController> _localizer;
-    private IRequestContext _requestContext;
+    private static readonly Guid ExpectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+    private static readonly Guid ExpectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    private static readonly Guid ExpectedSuggestedDateId = new("9054E979-C40C-4FA3-B36A-D85803143F5D");
 
-    [TestInitialize]
-    public void Initialize()
+    private static readonly SuggestedDate ExpectedNewSuggestedDate = new();
+
+    private static readonly SuggestedDate ExpectedSuggestedDate = new()
     {
-        // fake logger
-        var mockLog = new Mock<ILogger<SuggestedDateController>>();
-        _logger = mockLog.Object;
-        _logger = Mock.Of<ILogger<SuggestedDateController>>();
-
-        // fake localizer
-        var mockLocalize = new Mock<IStringLocalizer<SuggestedDateController>>();
-        _localizer = mockLocalize.Object;
-        _localizer = Mock.Of<IStringLocalizer<SuggestedDateController>>();
-
-        // fake request context
-        _requestContext = Mock.Of<IRequestContext>();
-    }
+        AppointmentId = ExpectedAppointmentId,
+        CustomerId = ExpectedCustomerId,
+        SuggestedDateId = ExpectedSuggestedDateId
+    };
 
     [TestMethod]
     public void DeleteSuggestedDates_Okay()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid expectedSuggestedDateId = new ("9054E979-C40C-4FA3-B36A-D85803143F5D");
-
-        SuggestedDate fakeSuggestedDate = new ()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            SuggestedDateId = expectedSuggestedDateId
-        };
-
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(fakeSuggestedDate));
-        mockBusinessLayer.Setup(m =>
-                m.ExistsSuggestedDate(expectedCustomerId, expectedAppointmentId, expectedSuggestedDateId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>()))
+        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(ExpectedSuggestedDate));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>())).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsSuggestedDate(ExpectedCustomerId, ExpectedAppointmentId, ExpectedSuggestedDateId))
             .Returns(true);
 
-        var controller = new SuggestedDateController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var httpResult = controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-            expectedSuggestedDateId.ToString());
+        var httpResult = sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(),
+            ExpectedSuggestedDateId.ToString());
         var result = httpResult as OkResult;
 
         // Assert
@@ -65,129 +43,95 @@ public class SuggestedDateControllerTests
     [TestMethod]
     public void DeleteSuggestedDates_SuggestedDates_NoInput()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
         var expectedSuggestedDateId = Guid.Empty;
 
-        SuggestedDate fakeSuggestedDate = new ();
-
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(fakeSuggestedDate));
-        mockBusinessLayer.Setup(m =>
-                m.ExistsSuggestedDate(expectedCustomerId, expectedAppointmentId, expectedSuggestedDateId))
+        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(ExpectedNewSuggestedDate));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>())).Returns(false);
+        mockBusinessLayer
+            .Setup(m => m.ExistsSuggestedDate(ExpectedCustomerId, ExpectedAppointmentId, expectedSuggestedDateId))
             .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>()))
-            .Returns(false);
 
-        var controller = new SuggestedDateController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                expectedSuggestedDateId.ToString());
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (BadRequestException ex)
-        {
-            // Assert
-            Assert.AreEqual(ErrorType.NoInput, ex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<BadRequestException>(() => sut.Delete(ExpectedCustomerId.ToString(),
+            ExpectedAppointmentId.ToString(), expectedSuggestedDateId.ToString()));
+        Assert.AreEqual(ErrorType.NoInput, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteSuggestedDates_SuggestedDates_NotFound()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid expectedSuggestedDateId = new ("7D0BB25C-214E-42CF-8BE3-89910733B763");
-
-        SuggestedDate fakeSuggestedDate = new ();
-
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(fakeSuggestedDate));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m =>
-                m.ExistsSuggestedDate(expectedCustomerId, expectedAppointmentId, expectedSuggestedDateId))
+        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(ExpectedNewSuggestedDate));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>())).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsSuggestedDate(ExpectedCustomerId, ExpectedAppointmentId, ExpectedSuggestedDateId))
             .Returns(false);
-        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>()))
-            .Returns(true);
 
-        var controller = new SuggestedDateController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                expectedSuggestedDateId.ToString());
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (NotFoundException uex)
-        {
-            Assert.AreEqual(ErrorType.SuggestedDateNotFound, uex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<NotFoundException>(() => sut.Delete(ExpectedCustomerId.ToString(),
+            ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
+        Assert.AreEqual(ErrorType.SuggestedDateNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteSuggestedDates_AppointmentIsPasswordProtectedNoPasswordSubmitted_Unauthorized()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid expectedSuggestedDateId = new ("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
-
-        SuggestedDate fakeSuggestedDate = new();
-
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(fakeSuggestedDate));
-        mockBusinessLayer.Setup(m =>
-                m.ExistsSuggestedDate(expectedCustomerId, expectedAppointmentId, expectedSuggestedDateId))
+        mockBusinessLayer.Setup(m => m.DeleteSuggestedDate(ExpectedNewSuggestedDate));
+        mockBusinessLayer
+            .Setup(m => m.ExistsSuggestedDate(ExpectedCustomerId, ExpectedAppointmentId, ExpectedSuggestedDateId))
             .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>()))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.IsAppointmentPasswordProtected(expectedCustomerId, expectedAppointmentId))
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.SuggestedDateToDeleteAreValid(It.IsAny<SuggestedDate>())).Returns(true);
+        mockBusinessLayer.Setup(m => m.IsAppointmentPasswordProtected(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(true);
 
-        var controller = new SuggestedDateController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                expectedSuggestedDateId.ToString());
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (UnauthorizedException ex)
-        {
-            // Assert
-            Assert.AreEqual(ErrorType.PasswordRequired, ex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<UnauthorizedException>(() => sut.Delete(ExpectedCustomerId.ToString(),
+            ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
+        Assert.AreEqual(ErrorType.PasswordRequired, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteSuggestedDates_GuidsAreInvalid_ThrowsException()
     {
         var invalidGuidString = "invalid";
-        var expectedCustomerId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        var expectedAppointmentId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        var suggestedDateId = new Guid("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
 
-        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        var controller = new SuggestedDateController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut();
 
-        Assert.ThrowsException<BadRequestException>(() =>
-            controller.Delete(invalidGuidString, expectedAppointmentId.ToString(), suggestedDateId.ToString()));
-        Assert.ThrowsException<BadRequestException>(() => 
-            controller.Delete(expectedCustomerId.ToString(), invalidGuidString, suggestedDateId.ToString()));
-        Assert.ThrowsException<BadRequestException>(() => 
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(), invalidGuidString));
+        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(invalidGuidString, ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(ExpectedCustomerId.ToString(), invalidGuidString, ExpectedSuggestedDateId.ToString()));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        var exceptionSuggestedDateId = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), invalidGuidString));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionSuggestedDateId.ErrorCode);
+    }
+
+    private static SuggestedDateController CreateSut(IAppointmentBusinessLayer appointmentBusinessLayer = null)
+    {
+        var appointmentBusinessLayerToUse = appointmentBusinessLayer ?? new Mock<IAppointmentBusinessLayer>().Object;
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockLogger = new Mock<ILogger<SuggestedDateController>>();
+        var mockLocalizer = new Mock<IStringLocalizer<SuggestedDateController>>();
+
+        return new SuggestedDateController(
+            appointmentBusinessLayerToUse,
+            mockRequestContext.Object,
+            mockLogger.Object,
+            mockLocalizer.Object);
     }
 }

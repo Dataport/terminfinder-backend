@@ -684,10 +684,14 @@ public class AppointmentBusinessLayerTests
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>()));
 
+        var expectedExceptionMessage = $"The appointment with customer id '{ExpectedCustomerId}' and appointment id " +
+                                       $"'{ExpectedAppointmentId}' is not protected by a password";
+
         var sut = CreateSut(mockAppointmentRepo.Object);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsException<InvalidOperationException>(() => 
             sut.VerifyAppointmentPassword(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     #endregion
@@ -718,10 +722,14 @@ public class AppointmentBusinessLayerTests
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>()));
 
+        var expectedExceptionMessage = $"The appointment with customer id '{ExpectedCustomerId}' and admin id " +
+                                       $"'{ExpectedAdminId}' is not protected by a password";
+
         var sut = CreateSut(mockAppointmentRepo.Object);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            sut.VerifyAppointmentPasswordByAdminId(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword));
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.VerifyAppointmentPasswordByAdminId(ExpectedCustomerId, ExpectedAdminId, ExpectedPassword));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     #endregion
@@ -1025,11 +1033,15 @@ public class AppointmentBusinessLayerTests
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>()));
+        
+        var expectedExceptionMessage = $"The appointment with customer id {ExpectedCustomerId} and admin id " +
+                                       $"'{ExpectedAdminId}' does not exist";
 
         var sut = CreateSut(mockAppointmentRepo.Object);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
             sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, AppointmentStatusType.Undefined));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     #endregion

@@ -10,11 +10,15 @@ public class ApiControllerBaseTests
     [TestMethod]
     public void BuildAdditionalErrorMessageFromModelState_ModelStateIsValid_ThrowsException()
     {
+        var expectedExceptionMessage = "ModelState contains no errors and is valid";
+        
         var sut = CreateSut();
         sut.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
         sut.ModelState.Clear();
 
-        Assert.ThrowsException<ArgumentException>(() => sut.PublicBuildAdditionalErrorMessageFromModelState());
+        var exception = Assert.ThrowsException<ArgumentException>(() => 
+            sut.PublicBuildAdditionalErrorMessageFromModelState());
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     [TestMethod]
@@ -24,8 +28,10 @@ public class ApiControllerBaseTests
         var mockAppointmentBusinessLayer = new Mock<IAppointmentBusinessLayer>();
 
         var sut = CreateSut();
-        Assert.ThrowsException<NotFoundException>(() =>
+        
+        var exception = Assert.ThrowsException<NotFoundException>(() =>
             sut.PublicValidateCustomerRequest(invalidCustomerId, mockAppointmentBusinessLayer.Object));
+        Assert.AreEqual(ErrorType.CustomerIdNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -33,7 +39,9 @@ public class ApiControllerBaseTests
     {
         var sut = CreateSut();
 
-        Assert.ThrowsException<NotFoundException>(() => sut.PublicValidateCustomerRequest(ExpectedCustomerId, null));
+        var exception = Assert.ThrowsException<NotFoundException>(() => 
+            sut.PublicValidateCustomerRequest(ExpectedCustomerId, null));
+        Assert.AreEqual(ErrorType.CustomerIdNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -43,8 +51,10 @@ public class ApiControllerBaseTests
         mockAppointmentBusinessLayer.Setup(x => x.ExistsCustomer(It.IsAny<Guid>())).Returns(false);
 
         var sut = CreateSut();
-        Assert.ThrowsException<NotFoundException>(() =>
+        
+        var exception = Assert.ThrowsException<NotFoundException>(() =>
             sut.PublicValidateCustomerRequest(ExpectedCustomerId, mockAppointmentBusinessLayer.Object));
+        Assert.AreEqual(ErrorType.CustomerIdNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -55,9 +65,11 @@ public class ApiControllerBaseTests
         mockAppointmentBusinessLayer.Setup(x => x.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
 
         var sut = CreateSut();
-        Assert.ThrowsException<NotFoundException>(() =>
+        
+        var exception = Assert.ThrowsException<NotFoundException>(() =>
             sut.PublicValidateAppointmentRequest(ExpectedCustomerId, invalidAppointmentId,
                 mockAppointmentBusinessLayer.Object));
+        Assert.AreEqual(ErrorType.AppointmentIdNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -73,9 +85,11 @@ public class ApiControllerBaseTests
             .Returns(false);
 
         var sut = CreateSut();
-        Assert.ThrowsException<NotFoundException>(() =>
+        
+        var exception = Assert.ThrowsException<NotFoundException>(() =>
             sut.PublicValidateAppointmentRequest(ExpectedCustomerId, ExpectedAppointmentId, invalidAdminId,
                 mockAppointmentBusinessLayer.Object));
+        Assert.AreEqual(ErrorType.AppointmentIdNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -90,9 +104,11 @@ public class ApiControllerBaseTests
             .Returns(false);
 
         var sut = CreateSut();
-        Assert.ThrowsException<NotFoundException>(() =>
+        
+        var exception = Assert.ThrowsException<NotFoundException>(() =>
             sut.PublicValidateAppointmentRequest(ExpectedCustomerId, ExpectedAppointmentId, ExpectedAdminId,
                 mockAppointmentBusinessLayer.Object));
+        Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);
     }
 
     [TestMethod]

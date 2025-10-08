@@ -1,247 +1,115 @@
-﻿namespace Dataport.Terminfinder.Repository.Tests;
+﻿using Dataport.Terminfinder.Repository.Tests.Utils;
+using JetBrains.Annotations;
+
+namespace Dataport.Terminfinder.Repository.Tests;
 
 [TestClass]
 public class CustomerRepositoryTests
 {
-    private ILogger<CustomerRepository> _logger;
-
-    [TestInitialize]
-    public void Initialize()
-    {
-        // fake logger
-        var mockLog = new Mock<ILogger<CustomerRepository>>();
-        _logger = mockLog.Object;
-        _logger = Mock.Of<ILogger<CustomerRepository>>();
-    }
+    private static readonly Guid ExpectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    private static readonly string ExpectedCustomerName = "Customer Name";
+    private static readonly string ExpectedAppointmentStatusType = nameof(AppointmentStatusType.Started);
 
     [TestMethod]
     public void GetCustomer_Okay()
     {
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        string customerName = "bla";
-        string status = AppointmentStatusType.Started.ToString();
+        var sut = CreateSut();
 
-        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
-
-        IQueryable<Customer> customers = new List<Customer>
-        {
-            new Customer()
-            {
-                CustomerId = customerId,
-                CustomerName = customerName,
-                Status = status
-            },
-        }.AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<Customer>>();
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
-
-        var mockContext = new Mock<DataContext>();
-        mockContext.Setup(c => c.Customers).Returns(mockSet.Object);
-        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
-
-        // act fetch
-        using CustomerRepository repository = new(mockContext.Object, _logger);
-        Customer customer = repository.GetCustomer(customerId);
+        var customer = sut.GetCustomer(ExpectedCustomerId);
 
         // Assert
         Assert.IsNotNull(customer);
-        Assert.AreEqual(customer.CustomerId, customerId);
-        Assert.AreEqual(customer.CustomerName, customerName);
-        Assert.AreEqual(customer.Status, status);
+        Assert.AreEqual(ExpectedCustomerId, customer.CustomerId);
+        Assert.AreEqual(ExpectedCustomerName, customer.CustomerName);
+        Assert.AreEqual(ExpectedAppointmentStatusType, customer.Status);
     }
 
     [TestMethod]
     public void GetCustomer_GuidNotExists_Null()
     {
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid fakeCustomerId = new("27A55CAB-9628-4F52-909E-8B35B155CEEC");
-        string customerName = "bla";
-        string status = AppointmentStatusType.Started.ToString().ToLower();
-
-        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
-
-        IQueryable<Customer> customers = new List<Customer>
-        {
-            new Customer()
-            {
-                CustomerId = customerId,
-                CustomerName = customerName,
-                Status = status
-            },
-        }.AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<Customer>>();
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
-
-        var mockContext = new Mock<DataContext>();
-        mockContext.Setup(c => c.Customers).Returns(mockSet.Object);
-        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
+        var customerId = new Guid("27A55CAB-9628-4F52-909E-8B35B155CEEC");
 
         // act fetch
-        using CustomerRepository repository = new(mockContext.Object, _logger);
-        Customer customer = repository.GetCustomer(fakeCustomerId);
+        var sut = CreateSut();
+        var customer = sut.GetCustomer(customerId);
 
         // Assert
         Assert.IsNull(customer);
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void GetCustomer_GuidIsEmpty_ArgumentNullException()
     {
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        string customerName = "bla";
-        string status = AppointmentStatusType.Started.ToString().ToLower();
+        var expectedExceptionMessage = "Value cannot be null. (Parameter 'customerId')";
 
-        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
+        var sut = CreateSut();
 
-        IQueryable<Customer> customers = new List<Customer>
-        {
-            new Customer()
-            {
-                CustomerId = customerId,
-                CustomerName = customerName,
-                Status = status
-            },
-        }.AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<Customer>>();
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
-
-        var mockContext = new Mock<DataContext>();
-        mockContext.Setup(c => c.Customers).Returns(mockSet.Object);
-        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
-
-        using CustomerRepository repository = new(mockContext.Object, _logger);
-        repository.GetCustomer(Guid.Empty);
-        Assert.Fail("An Exception should be thrown");
+        var exception = Assert.ThrowsException<ArgumentNullException>(() => sut.GetCustomer(Guid.Empty));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     [TestMethod]
     public void ExistsCustomer_true()
     {
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        string customerName = "bla";
-        string status = AppointmentStatusType.Started.ToString();
-
-        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
-
-        IQueryable<Customer> customers = new List<Customer>
-        {
-            new Customer()
-            {
-                CustomerId = customerId,
-                CustomerName = customerName,
-                Status = status
-            },
-        }.AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<Customer>>();
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
-
-        var mockContext = new Mock<DataContext>();
-        mockContext.Setup(c => c.Customers).Returns(mockSet.Object);
-        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
-
         // act fetch
-        using CustomerRepository repository = new(mockContext.Object, _logger);
-        bool isExistsCustomer = repository.ExistsCustomer(customerId);
+        var sut = CreateSut();
+        var isExistsCustomer = sut.ExistsCustomer(ExpectedCustomerId);
 
         // Assert
-        Assert.AreEqual(true, isExistsCustomer);
+        Assert.IsTrue(isExistsCustomer);
     }
 
     [TestMethod]
     public void ExistsCustomer_GuidIsEmpty_false()
     {
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        string customerName = "bla";
-        string status = AppointmentStatusType.Started.ToString();
-
-        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
-
-        IQueryable<Customer> customers = new List<Customer>
-        {
-            new Customer()
-            {
-                CustomerId = customerId,
-                CustomerName = customerName,
-                Status = status
-            },
-        }.AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<Customer>>();
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
-
-        var mockContext = new Mock<DataContext>();
-        mockContext.Setup(c => c.Customers).Returns(mockSet.Object);
-        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
-
         // act fetch
-        using CustomerRepository repository = new(mockContext.Object, _logger);
-        bool isExistsCustomer = repository.ExistsCustomer(Guid.Empty);
+        var sut = CreateSut();
+        var isExistsCustomer = sut.ExistsCustomer(Guid.Empty);
 
         // Assert
-        Assert.AreEqual(false, isExistsCustomer);
+        Assert.IsFalse(isExistsCustomer);
     }
 
     [TestMethod]
     public void ExistsCustomer_StatusNotStarted_false()
     {
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        string customerName = "bla";
-        string status = AppointmentStatusType.Paused.ToString();
-
-        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
-
-        IQueryable<Customer> customers = new List<Customer>
-        {
-            new Customer()
-            {
-                CustomerId = customerId,
-                CustomerName = customerName,
-                Status = status
-            },
-        }.AsQueryable();
-
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<Customer>>();
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Provider).Returns(customers.Provider);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.Expression).Returns(customers.Expression);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.ElementType).Returns(customers.ElementType);
-        mockSet.As<IQueryable<Customer>>().Setup(m => m.GetEnumerator()).Returns(customers.GetEnumerator());
-
-        var mockContext = new Mock<DataContext>();
-        mockContext.Setup(c => c.Customers).Returns(mockSet.Object);
-        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
+        var customers = GetValidCustomers();
+        customers[0].Status = nameof(AppointmentStatusType.Paused);
+        var mockCustomersSet = DbSetMockFactory.CreateMockDbSet(customers);
 
         // act fetch
-        using CustomerRepository repository = new(mockContext.Object, _logger);
-        bool isExistsCustomer = repository.ExistsCustomer(customerId);
+        var sut = CreateSut(mockCustomersSet);
+        var isExistsCustomer = sut.ExistsCustomer(ExpectedCustomerId);
 
         // Assert
-        Assert.AreEqual(false, isExistsCustomer);
+        Assert.IsFalse(isExistsCustomer);
     }
 
+    private static CustomerRepository CreateSut([CanBeNull] Mock<DbSet<Customer>> mockCustomerSet = null)
+    {
+        // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
+        var mockCustomerSetToUse = mockCustomerSet ?? DbSetMockFactory.CreateMockDbSet(GetValidCustomers());
+
+        var mockContext = new Mock<DataContext>();
+        mockContext.Setup(c => c.Customers).Returns(mockCustomerSetToUse.Object);
+        mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
+        mockContext.Setup(c => c.SaveChanges()).Verifiable();
+
+        var logger = new Mock<ILogger<CustomerRepository>>();
+
+        return new CustomerRepository(mockContext.Object, logger.Object);
+    }
+
+    private static List<Customer> GetValidCustomers()
+    {
+        return
+        [
+            new Customer
+            {
+                CustomerId = ExpectedCustomerId,
+                CustomerName = ExpectedCustomerName,
+                Status = ExpectedAppointmentStatusType
+            }
+        ];
+    }
 }

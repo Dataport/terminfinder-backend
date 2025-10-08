@@ -55,7 +55,8 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object);
         
-        Assert.ThrowsException<BadRequestException>(() => sut.Get(ExpectedCustomerId.ToString(), string.Empty));
+        var exception = Assert.ThrowsException<BadRequestException>(() => sut.Get(ExpectedCustomerId.ToString(), string.Empty));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -67,8 +68,9 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object);
 
-        Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsException<NotFoundException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), Guid.NewGuid().ToString()));
+        Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -96,8 +98,9 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object, mockRequestContext.Object);
 
-        Assert.ThrowsException<UnauthorizedException>(() =>
+        var exception = Assert.ThrowsException<UnauthorizedException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), ExpectedAdminId.ToString()));
+        Assert.AreEqual(ErrorType.AuthorizationFailed, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -205,10 +208,12 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object, mockRequestContext.Object);
 
-        Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetProtection(ExpectedInvalidGuidString, ExpectedAdminId.ToString()));
-        Assert.ThrowsException<BadRequestException>(() =>
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        var exceptionAdminId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetProtection(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAdminId.ErrorCode);
     }
 
     [TestMethod]
@@ -267,8 +272,9 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object);
 
-        Assert.ThrowsException<ConflictException>(() => sut.SetStatus(ExpectedCustomerId.ToString(),
+        var exception = Assert.ThrowsException<ConflictException>(() => sut.SetStatus(ExpectedCustomerId.ToString(),
             ExpectedAdminId.ToString(), ExpectedAppointmentStatusType.ToString()));
+        Assert.AreEqual(ErrorType.AppointmentStatusTypeNotAllowed, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -279,8 +285,9 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object, mockRequestContext.Object);
 
-        Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsException<BadRequestException>(() =>
             sut.SetStatus(ExpectedInvalidGuidString, ExpectedInvalidGuidString, string.Empty));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -395,8 +402,9 @@ public class AdminControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object, mockRequestContext.Object);
 
-        Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetPasswordVerification(ExpectedInvalidGuidString, ExpectedInvalidGuidString));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
     }
 
     private static AdminController CreateSut(
