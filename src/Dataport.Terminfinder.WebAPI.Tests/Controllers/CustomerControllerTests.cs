@@ -29,15 +29,15 @@ public class CustomerControllerTests
     {
         Customer fakeCustomer = new()
         {
-            CustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7"),
+            CustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7"),
             CustomerName = "S-H",
-            Status = AppointmentStatusType.Started.ToString()
+            Status = nameof(AppointmentStatusType.Started)
         };
 
-        var mock = new Mock<ICustomerBusinessLayer>();
-        mock.Setup(m => m.GetCustomer(fakeCustomer.CustomerId))
+        var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
+        mockCustomerBusinessLayer.Setup(m => m.GetCustomer(fakeCustomer.CustomerId))
             .Returns(fakeCustomer);
-        var controller = new CustomerController(mock.Object, _requestContext, _logger, _localizer);
+        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
         IActionResult httpResult = controller.GetCustomer(fakeCustomer.CustomerId.ToString());
@@ -51,5 +51,50 @@ public class CustomerControllerTests
         Assert.AreEqual(customer.CustomerId, fakeCustomer.CustomerId);
         Assert.AreEqual(customer.CustomerName, fakeCustomer.CustomerName);
         Assert.AreEqual(customer.Status, fakeCustomer.Status);
+    }
+    
+    [TestMethod]
+    public void GetCustomer_CustomerIdIsEmptyString_BadRequest()
+    {
+        var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
+        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        // Act
+        var result = controller.GetCustomer(string.Empty);
+        Assert.IsNotNull(result);
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+    }
+    
+    [TestMethod]
+    public void GetCustomer_CustomerIdIsInvalid_BadRequest()
+    {
+        var invalidGuidString = "invalid";
+        var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
+        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        // Act
+        var result = controller.GetCustomer(invalidGuidString);
+        Assert.IsNotNull(result);
+        Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+    }
+    
+    [TestMethod]
+    public void GetCustomer_CustomerIsInvalid_NotFound()
+    {
+        Customer customer = new()
+        {
+            CustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7"),
+            CustomerName = "S-H",
+            Status = nameof(AppointmentStatusType.Undefined)
+        };
+
+        var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
+        mockCustomerBusinessLayer.Setup(m => m.GetCustomer(customer.CustomerId)).Returns(customer);
+        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        // Act
+        var result = controller.GetCustomer(customer.CustomerId.ToString());
+        Assert.IsNotNull(result);
+        Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
     }
 }
