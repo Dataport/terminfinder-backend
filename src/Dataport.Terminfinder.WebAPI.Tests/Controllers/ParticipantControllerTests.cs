@@ -54,9 +54,9 @@ public class ParticipantControllerTests
         var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
-        IActionResult httpResult = controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
+        var httpResult = controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
             participantId.ToString());
-        OkResult result = httpResult as OkResult;
+        var result = httpResult as OkResult;
 
         // Assert
         Assert.IsNotNull(result);
@@ -68,7 +68,7 @@ public class ParticipantControllerTests
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
         Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid participantId = Guid.Empty;
+        var participantId = Guid.Empty;
 
         Participant fakeParticipant = new ()
         {

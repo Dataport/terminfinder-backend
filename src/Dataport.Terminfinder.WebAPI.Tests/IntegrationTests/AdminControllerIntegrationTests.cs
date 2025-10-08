@@ -21,7 +21,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetAppointment()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -56,7 +56,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetAppointment_AdminIdIsEmpty()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -73,7 +73,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetAppointment_NotFound()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -92,7 +92,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
 
         //--- get the appointment
@@ -124,7 +124,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
         var adminId = dto.AdminId;
 
@@ -159,7 +159,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task SetStatus_appointmentStatusTypeStarted_Okay()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -196,7 +196,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
         var adminId = dto.AdminId;
 
@@ -222,7 +222,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
         var adminId = dto.AdminId;
 
@@ -248,7 +248,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
         var adminId = dto.AdminId;
 

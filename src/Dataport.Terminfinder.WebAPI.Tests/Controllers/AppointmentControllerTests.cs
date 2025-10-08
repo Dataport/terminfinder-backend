@@ -51,9 +51,9 @@ public class AppointmentControllerTests
         var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
-        IActionResult httpResult = controller.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        Appointment appointment = result?.Value as Appointment;
+        var httpResult = controller.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
+        var result = httpResult as OkObjectResult;
+        var appointment = result?.Value as Appointment;
 
         // Assert
         Assert.IsNotNull(result);
@@ -250,9 +250,9 @@ public class AppointmentControllerTests
             _localizer);
 
         // Act
-        IActionResult httpResult = controller.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        Appointment appointment = result?.Value as Appointment;
+        var httpResult = controller.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
+        var result = httpResult as OkObjectResult;
+        var appointment = result?.Value as Appointment;
 
         // Assert
         Assert.AreEqual(ExpectedAppointmentId.ToString(), appointment?.AppointmentId.ToString());
@@ -401,9 +401,9 @@ public class AppointmentControllerTests
         controller.ControllerContext.HttpContext.Request.Host = new HostString("localhost", 50018);
 
         // Act
-        IActionResult httpResult = controller.Post(fakeAppointment, ExpectedCustomerId.ToString());
-        CreatedResult result = httpResult as CreatedResult;
-        Appointment appointment = result?.Value as Appointment;
+        var httpResult = controller.Post(fakeAppointment, ExpectedCustomerId.ToString());
+        var result = httpResult as CreatedResult;
+        var appointment = result?.Value as Appointment;
 
         // Assert
         Assert.IsNotNull(result);
@@ -416,7 +416,7 @@ public class AppointmentControllerTests
         Assert.AreEqual(appointment.AppointmentStatus, fakeAppointmentReturn.AppointmentStatus);
         Assert.AreEqual(ExpectedAdminId, fakeAppointmentReturn.AdminId);
         Assert.AreEqual(ExpectedAppointmentId, fakeAppointmentReturn.AppointmentId);
-        foreach (SuggestedDate sd in fakeAppointmentReturn.SuggestedDates)
+        foreach (var sd in fakeAppointmentReturn.SuggestedDates)
         {
             if (sd.StartDate == new DateTime(2018, 12, 12))
             {
@@ -696,10 +696,10 @@ public class AppointmentControllerTests
         var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
-        IActionResult httpResult =
+        var httpResult =
             controller.GetProtection(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        AppointmentProtectionResult appointmentProtectionResult = result?.Value as AppointmentProtectionResult;
+        var result = httpResult as OkObjectResult;
+        var appointmentProtectionResult = result?.Value as AppointmentProtectionResult;
 
         // Assert
         Assert.IsNotNull(result);
@@ -726,10 +726,10 @@ public class AppointmentControllerTests
         var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
-        IActionResult httpResult =
+        var httpResult =
             controller.GetProtection(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        AppointmentProtectionResult appointmentProtectionResult = result?.Value as AppointmentProtectionResult;
+        var result = httpResult as OkObjectResult;
+        var appointmentProtectionResult = result?.Value as AppointmentProtectionResult;
 
         // Assert
         Assert.IsNotNull(result);
@@ -779,10 +779,10 @@ public class AppointmentControllerTests
             _localizer);
 
         // Act
-        IActionResult httpResult =
+        var httpResult =
             controller.GetPasswordVerification(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        AppointmentPasswordVerificationResult verificationResult =
+        var result = httpResult as OkObjectResult;
+        var verificationResult =
             result?.Value as AppointmentPasswordVerificationResult;
 
         // Assert
@@ -816,10 +816,10 @@ public class AppointmentControllerTests
             _localizer);
 
         // Act
-        IActionResult httpResult =
+        var httpResult =
             controller.GetPasswordVerification(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        AppointmentPasswordVerificationResult verificationResult =
+        var result = httpResult as OkObjectResult;
+        var verificationResult =
             result?.Value as AppointmentPasswordVerificationResult;
 
         // Assert
@@ -853,10 +853,10 @@ public class AppointmentControllerTests
             _localizer);
 
         // Act
-        IActionResult httpResult =
+        var httpResult =
             controller.GetPasswordVerification(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        AppointmentPasswordVerificationResult verificationResult =
+        var result = httpResult as OkObjectResult;
+        var verificationResult =
             result?.Value as AppointmentPasswordVerificationResult;
 
         // Assert

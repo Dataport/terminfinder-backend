@@ -27,8 +27,8 @@ public class AppControllerTests
     [TestMethod]
     public void GetAppInfo_Okay()
     {
-        string versionDate = "2010-10-30";
-        string versionNumber = "1.2.3";
+        var versionDate = "2010-10-30";
+        var versionNumber = "1.2.3";
 
         AppInfo fakeAppInfo = new()
         {
@@ -43,9 +43,9 @@ public class AppControllerTests
         var controller = new AppController(mockAppConfigBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
-        IActionResult httpResult = controller.Get();
-        OkObjectResult result = httpResult as OkObjectResult;
-        AppInfo app = result?.Value as AppInfo;
+        var httpResult = controller.Get();
+        var result = httpResult as OkObjectResult;
+        var app = result?.Value as AppInfo;
 
         // Assert
         Assert.IsNotNull(result);

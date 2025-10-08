@@ -32,7 +32,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         };
         appointment.SuggestedDates.Add(suggestedDate3);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
@@ -178,7 +178,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
@@ -210,7 +210,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
@@ -253,7 +253,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
         appointment.AppointmentStatus = AppointmentStatusType.Paused;
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,

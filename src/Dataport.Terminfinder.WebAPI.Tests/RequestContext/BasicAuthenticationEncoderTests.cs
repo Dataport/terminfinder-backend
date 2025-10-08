@@ -7,7 +7,7 @@ public class BasicAuthenticationEncoderTests
     public void Decode_validBasicAuthenticationPayloadValue_resultContainsExpectedUsernamePassword()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        UserCredential result = sut.Decode("Basic dXNlcm5hbWU6UDQkJHcwcmQ=");
+        var result = sut.Decode("Basic dXNlcm5hbWU6UDQkJHcwcmQ=");
         Assert.AreEqual("username", result.Username);
         Assert.AreEqual("P4$$w0rd", result.Password);
     }
@@ -16,7 +16,7 @@ public class BasicAuthenticationEncoderTests
     public void Decode_validBasicAuthenticationPayloadValueOnlyColonAsValue_resultContainsEmptyUsernameAndPassword()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        UserCredential result = sut.Decode("Basic Og==");
+        var result = sut.Decode("Basic Og==");
         Assert.AreEqual(string.Empty, result.Username);
         Assert.AreEqual(string.Empty, result.Password);
     }
@@ -26,7 +26,7 @@ public class BasicAuthenticationEncoderTests
     {
         var sut = new BasicAuthenticationValueEncoder();
         // Value 'dXNlcm5hbWU6OlA0JCR3MHJkOg==' => 'username::P4$$w0rd:'
-        UserCredential result = sut.Decode("Basic dXNlcm5hbWU6OlA0JCR3MHJkOg==");
+        var result = sut.Decode("Basic dXNlcm5hbWU6OlA0JCR3MHJkOg==");
         Assert.AreEqual("username", result.Username);
         Assert.AreEqual(":P4$$w0rd:", result.Password);
     }
@@ -36,7 +36,7 @@ public class BasicAuthenticationEncoderTests
     {
         var sut = new BasicAuthenticationValueEncoder();
         // Value 'dXNlcm5hbWU6' => 'username:'
-        UserCredential result = sut.Decode("Basic dXNlcm5hbWU6");
+        var result = sut.Decode("Basic dXNlcm5hbWU6");
         Assert.AreEqual("username", result.Username);
         Assert.AreEqual(string.Empty, result.Password);
     }
@@ -102,7 +102,7 @@ public class BasicAuthenticationEncoderTests
     public void Encode_usernamePassword_validBasicAuthPayloadValue()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        string result = sut.Encode("username", "P4$$w0rd");
+        var result = sut.Encode("username", "P4$$w0rd");
         Assert.AreEqual("Basic dXNlcm5hbWU6UDQkJHcwcmQ=", result);
     }
 }

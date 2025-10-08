@@ -23,7 +23,7 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
             VersionNumber = "1.2.2"
         };
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"app");

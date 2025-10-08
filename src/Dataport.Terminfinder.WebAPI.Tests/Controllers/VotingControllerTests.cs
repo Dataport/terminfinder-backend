@@ -160,7 +160,7 @@ public class VotingControllerTests
             Status = VotingStatusType.Accepted
         };
 
-        Participant[] participants = new Participant[1];
+        var participants = new Participant[1];
         Participant fakeParticipant = new()
         {
             AppointmentId = expectedAppointmentId,
@@ -212,9 +212,9 @@ public class VotingControllerTests
         controller.ControllerContext.HttpContext.Request.Host = new HostString("localhost", 50018);
 
         // Act
-        IActionResult httpResult =
+        var httpResult =
             controller.Put(participants, expectedCustomerId.ToString(), expectedAppointmentId.ToString());
-        CreatedResult result = httpResult as CreatedResult;
+        var result = httpResult as CreatedResult;
 
         // Assert
         Assert.IsNotNull(result);

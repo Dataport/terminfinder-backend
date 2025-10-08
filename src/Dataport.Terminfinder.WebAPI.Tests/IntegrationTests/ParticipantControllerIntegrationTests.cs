@@ -22,7 +22,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task DeleteParticipants_Okay()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -102,7 +102,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task DeleteParticipants_Participants_NotFound()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -169,7 +169,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
 
         //--- get the appointment
