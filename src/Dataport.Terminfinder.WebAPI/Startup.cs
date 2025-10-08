@@ -1,28 +1,31 @@
-﻿using System.Globalization;
-using System.Reflection;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
-using Dataport.Terminfinder.BusinessLayer;
+﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessLayer.Security;
 using Dataport.Terminfinder.Common;
 using Dataport.Terminfinder.Repository;
+using Dataport.Terminfinder.Repository.Setup;
+using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.ErrorHandling;
 using Dataport.Terminfinder.WebAPI.Localisation;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Swagger;
-using Dataport.Terminfinder.Repository.Setup;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Reflection;
 
 namespace Dataport.Terminfinder.WebAPI;
 
 /// <summary>
 /// Startup-Class
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class Startup
 {
     private static readonly string EnUsCulture = "en-US";
@@ -174,7 +177,7 @@ public class Startup
                     SystemTextJsonInputFormatter formatter)
                 {
                     formatter.SupportedMediaTypes.Add(
-                        MediaTypeHeaderValue.Parse(Constants.HttpConstants.TerminfinderMediaTypeJsonV1));
+                        MediaTypeHeaderValue.Parse(HttpConstants.TerminfinderMediaTypeJsonV1));
                 }
             })
             .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); })

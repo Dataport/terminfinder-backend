@@ -1,9 +1,12 @@
-﻿namespace Dataport.Terminfinder.WebAPI.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Dataport.Terminfinder.WebAPI.Exceptions;
 
 /// <summary>
 /// Basic authentication payload value could not be decoded
 /// </summary>
 [Serializable]
+[ExcludeFromCodeCoverage]
 public class DecodingBasicAuthenticationValueFailedException : Exception
 {
     /// <inheritdoc />

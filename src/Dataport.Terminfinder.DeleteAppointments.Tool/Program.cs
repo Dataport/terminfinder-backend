@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+﻿using Dataport.Terminfinder.Console.DeleteAppointments.Tool.Enum;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Dataport.Terminfinder.Console.DeleteAppointments.Tool.Enum;
+using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool;
 
+[ExcludeFromCodeCoverage]
 public class Program
 {
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Dataport.Terminfinder.BusinessObject.Enum;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedMember.Global
 namespace Dataport.Terminfinder.WebAPI.Exceptions;
@@ -7,6 +8,7 @@ namespace Dataport.Terminfinder.WebAPI.Exceptions;
 /// Not found exception
 /// </summary>
 [Serializable]
+[ExcludeFromCodeCoverage]
 public class NotFoundException : RestApiException
 {
     /// <inheritdoc />

@@ -1,4 +1,5 @@
 ﻿using Dataport.Terminfinder.BusinessObject.Enum;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.WebAPI.Exceptions;
 
@@ -6,6 +7,7 @@ namespace Dataport.Terminfinder.WebAPI.Exceptions;
 /// RestApiException exception
 /// </summary>
 [Serializable]
+[ExcludeFromCodeCoverage]
 public abstract class RestApiException : Exception
 {
     /// <summary>

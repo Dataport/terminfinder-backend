@@ -1,10 +1,12 @@
 ﻿using Dataport.Terminfinder.Repository.Setup;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Dataport.Terminfinder.WebAPI;
 
 /// <summary>
 /// Program
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class Program
 {
     /// <summary>
