@@ -36,11 +36,11 @@ public class AppControllerTests
             VersionNumber = versionNumber
         };
 
-        var mock = new Mock<IAppConfigBusinessLayer>();
-        mock.Setup(m => m.GetAppInfo())
+        var mockAppConfigBusinessLayer = new Mock<IAppConfigBusinessLayer>();
+        mockAppConfigBusinessLayer.Setup(m => m.GetAppInfo())
             .Returns(fakeAppInfo);
 
-        var controller = new AppController(mock.Object, _requestContext, _logger, _localizer);
+        var controller = new AppController(mockAppConfigBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
         IActionResult httpResult = controller.Get();
@@ -53,5 +53,22 @@ public class AppControllerTests
         Assert.AreEqual(200, result.StatusCode);
         Assert.AreEqual(app.VersionNumber, versionNumber);
         Assert.AreEqual(app.BuildDate, versionDate);
+    }
+    
+    [TestMethod]
+    public void GetAppInfo_AppInfoIsNull_StatusCode500()
+    {
+        var mockAppConfigBusinessLayer = new Mock<IAppConfigBusinessLayer>();
+        mockAppConfigBusinessLayer.Setup(m => m.GetAppInfo()).Returns((AppInfo)null);
+
+        var controller = new AppController(mockAppConfigBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        // Act
+        var httpResult = controller.Get();
+        var result = httpResult as ObjectResult;
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(500, result.StatusCode);
     }
 }

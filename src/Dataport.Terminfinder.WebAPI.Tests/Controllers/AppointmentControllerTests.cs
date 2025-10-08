@@ -259,6 +259,36 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
+    public void GetAppointment_GuidsAreInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+
+        var controller = new AppointmentController(mockBusinessLayer.Object, mockRequestContext.Object, _logger,
+            _localizer);
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Get(invalidGuidString, ExpectedAppointmentId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Get(ExpectedCustomerId.ToString(), invalidGuidString));
+    }
+    
+    [TestMethod]
+    public void GetAppointment_AppointmentIsNull_ThrowsException()
+    {
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(x => x.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.GetAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns((Appointment)null);
+
+        var controller = new AppointmentController(mockBusinessLayer.Object, mockRequestContext.Object, _logger,
+            _localizer);
+        Assert.ThrowsException<NotFoundException>(() =>
+            controller.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
+    }
+
+    [TestMethod]
     public void AddAppointment_Okay()
     {
         Guid expectedSuggestedDateId1 = new("5FE9C00C-A59C-4985-A2BB-53D179C2B52C");
@@ -505,6 +535,93 @@ public class AppointmentControllerTests
     }
 
     [TestMethod]
+    public void AddAppointment_ParticipantCountExceedsLimit_ThrowsException()
+    {
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(bl => bl.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer
+            .Setup(bl =>
+                bl.CheckMaxTotalCountOfParticipants(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                    It.IsAny<ICollection<Participant>>()))
+            .Returns(false);
+        
+        var objectValidator = new Mock<IObjectModelValidator>();
+        objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
+            It.IsAny<ValidationStateDictionary>(),
+            It.IsAny<string>(),
+            It.IsAny<Object>()));
+
+        var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        controller.ObjectValidator = objectValidator.Object;
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        
+        Assert.ThrowsException<BadRequestException>(() => controller.Post(new Appointment(), ExpectedCustomerId.ToString()));
+    }
+    
+    [TestMethod]
+    public void AddAppointment_SuggestedDateCountExceedsLimit_ThrowsException()
+    {
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(bl => bl.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer
+            .Setup(bl =>
+                bl.CheckMaxTotalCountOfParticipants(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                    It.IsAny<ICollection<Participant>>()))
+            .Returns(true);
+        mockBusinessLayer
+            .Setup(bl =>
+                bl.CheckMaxTotalCountOfSuggestedDates(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                    It.IsAny<ICollection<SuggestedDate>>()))
+            .Returns(false);
+        
+        var objectValidator = new Mock<IObjectModelValidator>();
+        objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
+            It.IsAny<ValidationStateDictionary>(),
+            It.IsAny<string>(),
+            It.IsAny<Object>()));
+
+        var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        controller.ObjectValidator = objectValidator.Object;
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        
+        Assert.ThrowsException<BadRequestException>(() => controller.Post(new Appointment(), ExpectedCustomerId.ToString()));
+    }
+    
+    [TestMethod]
+    public void AddAppointment_SuggestedDateCountSubceedsLimit_ThrowsException()
+    {
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(bl => bl.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer
+            .Setup(bl =>
+                bl.CheckMaxTotalCountOfParticipants(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                    It.IsAny<ICollection<Participant>>()))
+            .Returns(true);
+        mockBusinessLayer
+            .Setup(bl =>
+                bl.CheckMaxTotalCountOfSuggestedDates(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                    It.IsAny<ICollection<SuggestedDate>>()))
+            .Returns(true);
+        mockBusinessLayer
+            .Setup(bl =>
+                bl.CheckMinTotalCountOfSuggestedDates(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                    It.IsAny<ICollection<SuggestedDate>>()))
+            .Returns(false);
+        
+        var objectValidator = new Mock<IObjectModelValidator>();
+        objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
+            It.IsAny<ValidationStateDictionary>(),
+            It.IsAny<string>(),
+            It.IsAny<Object>()));
+
+        var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        controller.ObjectValidator = objectValidator.Object;
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        
+        Assert.ThrowsException<BadRequestException>(() => controller.Post(new Appointment(), ExpectedCustomerId.ToString()));
+    }
+
+    [TestMethod]
     public void AddAppointment_verificationFailed_Unauthorized()
     {
         var mockRequestContext = new Mock<IRequestContext>();
@@ -543,6 +660,24 @@ public class AppointmentControllerTests
             // Assert
             Assert.AreEqual(ErrorType.AuthorizationFailed, unex.ErrorCode);
         }
+    }
+
+    [TestMethod]
+    public void UpdateAppointment_CustomerIdIsInvalid_ThrowsException()
+    {
+        var appointment = new Appointment
+        {
+            AppointmentId = ExpectedAppointmentId,
+            AdminId = ExpectedAdminId
+        };
+        
+        var invalidGuidString = "invalid";
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+
+        var controller = new AppointmentController(mockBusinessLayer.Object, mockRequestContext.Object, _logger,
+            _localizer);
+        Assert.ThrowsException<BadRequestException>(() => controller.Put(appointment, invalidGuidString));
     }
 
     [TestMethod]
@@ -603,6 +738,19 @@ public class AppointmentControllerTests
         Assert.AreEqual(ExpectedAppointmentId.ToString(),
             appointmentProtectionResult.AppointmentId.ToString());
         Assert.AreEqual(false, appointmentProtectionResult.IsProtectedByPassword);
+    }
+
+    [TestMethod]
+    public void GetProtection_GuidsAreInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.GetProtection(invalidGuidString, ExpectedAppointmentId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.GetProtection(ExpectedCustomerId.ToString(), invalidGuidString));
     }
 
     [TestMethod]
@@ -714,5 +862,18 @@ public class AppointmentControllerTests
         // Assert
         Assert.AreEqual(false, verificationResult?.IsPasswordValid);
         Assert.AreEqual(false, verificationResult?.IsProtectedByPassword);
+    }
+    
+    [TestMethod]
+    public void GetPasswordVerification_GuidsAreInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        var controller = new AppointmentController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.GetPasswordVerification(invalidGuidString, ExpectedAppointmentId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.GetPasswordVerification(ExpectedCustomerId.ToString(), invalidGuidString));
     }
 }

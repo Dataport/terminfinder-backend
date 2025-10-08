@@ -50,6 +50,40 @@ public class VotingControllerTests
     }
 
     [TestMethod]
+    public void Get_GuidsAreInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Get(invalidGuidString, expectedAppointmentId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Get(expectedCustomerId.ToString(), invalidGuidString));
+    }
+    
+    [TestMethod]
+    public void Get_ParticipantsIsNull_ThrowsException()
+    {
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.GetParticipants(expectedCustomerId, expectedAppointmentId))
+            .Returns((List<Participant>)null);
+        
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        
+        Assert.ThrowsException<NotFoundException>(() =>
+            controller.Get(expectedCustomerId.ToString(), expectedAppointmentId.ToString()));
+    }
+
+    [TestMethod]
     public void Put_AppointmentIsPasswordProtectedAndNoPasswordSubmitted_Unauthorized()
     {
         Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
@@ -185,5 +219,141 @@ public class VotingControllerTests
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(201, result.StatusCode);
+    }
+
+    [TestMethod]
+    public void Put_ParticipantsIsNull_ThrowsException()
+    {
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Put(null, expectedCustomerId.ToString(), expectedAppointmentId.ToString()));
+    }
+    
+    [TestMethod]
+    public void Put_GuidsAreInvalid_ThrowsException()
+    {
+        var participants = new Participant[] { new() };
+        var invalidGuidString = "invalid";
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Put(participants, invalidGuidString, expectedAppointmentId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Put(participants, expectedCustomerId.ToString(), invalidGuidString));
+    }
+    
+    [TestMethod]
+    public void Put_ParticipantsAreInvalid_ThrowsException()
+    {
+        var participants = new Participant[] { new() };
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(x => x.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointmentIsStarted(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ParticipantsAreValid(It.IsAny<ICollection<Participant>>())).Returns(false);
+
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Put(participants, expectedCustomerId.ToString(), expectedAppointmentId.ToString()));
+    }
+    
+    [TestMethod]
+    public void Put_ModelIsInvalid_ThrowsException()
+    {
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var participants = new Participant[]
+        {
+            new()
+            {
+                AppointmentId = expectedAppointmentId,
+                CustomerId = expectedCustomerId,
+                ParticipantId = Guid.Empty,
+                Name = "Joe",
+                Votings = new List<Voting>()
+            }
+        };
+        
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(x => x.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointmentIsStarted(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ParticipantsAreValid(It.IsAny<ICollection<Participant>>())).Returns(true);
+
+        var objectValidator = new Mock<IObjectModelValidator>();
+        objectValidator
+            .Setup(o => o.Validate(
+                It.IsAny<ActionContext>(),
+                It.IsAny<ValidationStateDictionary>(),
+                It.IsAny<string>(),
+                It.IsAny<Object>()))
+            .Callback<ActionContext, ValidationStateDictionary, string, object>((ac, _, prefix, _) =>
+            {
+                ac.ModelState.AddModelError($"{prefix}", "Validation Error");
+            });
+        
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer)
+        {
+            ObjectValidator = objectValidator.Object,
+            ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+        };
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Put(participants, expectedCustomerId.ToString(), expectedAppointmentId.ToString()));
+    }
+    
+    [TestMethod]
+    public void Put_ParticipantCountExceedsLimit_ThrowsException()
+    {
+        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var participants = new Participant[]
+        {
+            new()
+            {
+                AppointmentId = expectedAppointmentId,
+                CustomerId = expectedCustomerId,
+                ParticipantId = Guid.Empty,
+                Name = "Joe",
+                Votings = new List<Voting>()
+            }
+        };
+        
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        mockBusinessLayer.Setup(x => x.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ExistsAppointmentIsStarted(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
+        mockBusinessLayer.Setup(x => x.ParticipantsAreValid(It.IsAny<ICollection<Participant>>())).Returns(true);
+        mockBusinessLayer
+            .Setup(x => x.CheckMaxTotalCountOfParticipants(It.IsAny<Guid>(), It.IsAny<Guid>(),
+                It.IsAny<ICollection<Participant>>()))
+            .Returns(false);
+
+        var objectValidator = new Mock<IObjectModelValidator>();
+        objectValidator
+            .Setup(o => o.Validate(
+                It.IsAny<ActionContext>(),
+                It.IsAny<ValidationStateDictionary>(),
+                It.IsAny<string>(),
+                It.IsAny<Object>()));
+        
+        var controller = new VotingController(mockBusinessLayer.Object, _requestContext, _logger, _localizer)
+        {
+            ObjectValidator = objectValidator.Object,
+            ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+        };
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Put(participants, expectedCustomerId.ToString(), expectedAppointmentId.ToString()));
     }
 }

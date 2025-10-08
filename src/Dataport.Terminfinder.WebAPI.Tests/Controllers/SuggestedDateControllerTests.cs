@@ -171,4 +171,23 @@ public class SuggestedDateControllerTests
             Assert.AreEqual(ErrorType.PasswordRequired, ex.ErrorCode);
         }
     }
+
+    [TestMethod]
+    public void DeleteSuggestedDates_GuidsAreInvalid_ThrowsException()
+    {
+        var invalidGuidString = "invalid";
+        var expectedCustomerId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var expectedAppointmentId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var suggestedDateId = new Guid("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
+
+        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
+        var controller = new SuggestedDateController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+
+        Assert.ThrowsException<BadRequestException>(() =>
+            controller.Delete(invalidGuidString, expectedAppointmentId.ToString(), suggestedDateId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() => 
+            controller.Delete(expectedCustomerId.ToString(), invalidGuidString, suggestedDateId.ToString()));
+        Assert.ThrowsException<BadRequestException>(() => 
+            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(), invalidGuidString));
+    }
 }
