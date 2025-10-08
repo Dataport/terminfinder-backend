@@ -1,6 +1,9 @@
-﻿namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool;
 
 /// <inheritdoc />
+[ExcludeFromCodeCoverage]
 public class DateTimeGeneratorService : IDateTimeGeneratorService
 {
     /// <inheritdoc />
