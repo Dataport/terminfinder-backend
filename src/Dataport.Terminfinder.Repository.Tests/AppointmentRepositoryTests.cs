@@ -330,10 +330,15 @@ public class AppointmentRepositoryTests
     [TestMethod]
     public void GetAppointmentPassword_AppointmentDoesNotExists_ThrowException()
     {
-        // act fetch
+        var unknownAppointmentId = Guid.NewGuid();
+        var expectedExceptionMessage = $"The appointment with customer id {ExpectedCustomerId} and appointment id " +
+                                       $"'{unknownAppointmentId}' does not exist";
+        
         var sut = CreateSut();
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            sut.GetAppointmentPassword(ExpectedCustomerId, Guid.Parse("FFF2474B-488A-4ECF-94E8-47387BB715D5")));
+        
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.GetAppointmentPassword(ExpectedCustomerId, unknownAppointmentId));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     #endregion
@@ -354,10 +359,15 @@ public class AppointmentRepositoryTests
     [TestMethod]
     public void GetAppointmentPasswordByAdmin_AppointmentDoesNotExists_ThrowException()
     {
-        // act fetch
+        var unknownAdminId = Guid.NewGuid();
+        var expectedExceptionMessage = $"The appointment with customer id {ExpectedCustomerId} and admin id " +
+                                       $"'{unknownAdminId}' does not exist";
+        
         var sut = CreateSut();
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            sut.GetAppointmentPasswordByAdmin(ExpectedCustomerId, Guid.Parse("B84FFAC3-C03C-4A09-B584-70E2BDE4DC73")));
+        
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+            sut.GetAppointmentPasswordByAdmin(ExpectedCustomerId, unknownAdminId));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     #endregion
@@ -396,20 +406,29 @@ public class AppointmentRepositoryTests
         var appointments = GetValidAppointments();
         appointments[0].AppointmentStatus = AppointmentStatusType.Deleted;
         var mockAppointmentsSet = DbSetMockFactory.CreateMockDbSet(appointments);
+        
+        var expectedExceptionMessage = $"The appointment with customer id {ExpectedCustomerId} and admin id " +
+                                       $"'{ExpectedAdminId}' does not exist";
 
         // act fetch
         var sut = CreateSut(mockAppointmentsSet);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
             sut.GetAppointmentStatusTypeByAdmin(ExpectedCustomerId, ExpectedAdminId));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
     
     [TestMethod]
     public void GetAppointmentStatusTypeByAdmin_AppointmentDoesNotExists_ThrowsException()
     {
-        // act fetch
+        var expectedExceptionMessage = $"The appointment with customer id {Guid.Empty} and admin id " +
+                                       $"'{Guid.Empty}' does not exist";
+        
         var sut = CreateSut();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
             sut.GetAppointmentStatusTypeByAdmin(Guid.Empty, Guid.Empty));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
     #endregion
@@ -419,9 +438,14 @@ public class AppointmentRepositoryTests
     [TestMethod]
     public void SetAppointmentStatusTypeByAdmin_AppointmentDoesNotExists_ThrowsException()
     {
+        var expectedExceptionMessage = $"The appointment with customer id {Guid.Empty} and admin id '{Guid.Empty}' " +
+                                       $"does not exist";
+        
         var sut = CreateSut();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+
+        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
             sut.SetAppointmentStatusTypeByAdmin(Guid.Empty, Guid.Empty, nameof(AppointmentStatusType.Paused)));
+        Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
     
     #endregion

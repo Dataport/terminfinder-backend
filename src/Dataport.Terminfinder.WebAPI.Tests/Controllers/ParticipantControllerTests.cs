@@ -3,59 +3,33 @@
 [TestClass]
 public class ParticipantControllerTests
 {
-    private ILogger<ParticipantController> _logger;
-    private IStringLocalizer<ParticipantController> _localizer;
-    private IRequestContext _requestContext;
-
-    [TestInitialize]
-    public void Initialize()
-    {
-        // fake logger
-        var mockLog = new Mock<ILogger<ParticipantController>>();
-        _logger = mockLog.Object;
-        _logger = Mock.Of<ILogger<ParticipantController>>();
-
-        // fake localizer
-        var mockLocalize = new Mock<IStringLocalizer<ParticipantController>>();
-        _localizer = mockLocalize.Object;
-        _localizer = Mock.Of<IStringLocalizer<ParticipantController>>();
-
-        // fake request context
-        _requestContext = Mock.Of<IRequestContext>();
-    }
+    private static readonly Guid ExpectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+    private static readonly Guid ExpectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    private static readonly Guid ExpectedParticipantId = new("9054E979-C40C-4FA3-B36A-D85803143F5D");
+    private const string ExpectedInvalidGuidString = "invalid";
 
     [TestMethod]
     public void DeleteParticipants_Okay()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid participantId = new ("9054E979-C40C-4FA3-B36A-D85803143F5D");
-
-        Participant fakeParticipant = new ()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            ParticipantId = participantId
-        };
+        var participant = CreateDefaultParticipant();
 
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(participant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>())).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointmentIsStarted(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsParticipant(expectedCustomerId, expectedAppointmentId, participantId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
+        mockBusinessLayer
+            .Setup(m => m.ExistsParticipant(ExpectedCustomerId, ExpectedAppointmentId, ExpectedParticipantId))
             .Returns(true);
 
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var httpResult = controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-            participantId.ToString());
+        var httpResult = sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(),
+            ExpectedParticipantId.ToString());
         var result = httpResult as OkResult;
 
         // Assert
@@ -66,211 +40,160 @@ public class ParticipantControllerTests
     [TestMethod]
     public void DeleteParticipants_Participants_NoInput()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        var participantId = Guid.Empty;
-
-        Participant fakeParticipant = new ()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            ParticipantId = participantId
-        };
+        var expectedParticipantId = Guid.Empty;
+        var participant = CreateDefaultParticipant();
 
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
-            .Returns(false);
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(participant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>())).Returns(false);
 
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                participantId.ToString());
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (BadRequestException ex)
-        {
-            // Assert
-            Assert.AreEqual(ErrorType.NoInput, ex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(),
+                expectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.NoInput, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteParticipants_Participants_NotFound()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid participantId = new ("7D0BB25C-214E-42CF-8BE3-89910733B763");
-
-        Participant fakeParticipant = new ()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            ParticipantId = participantId
-        };
+        var participant = CreateDefaultParticipant();
 
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(participant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>())).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointmentIsStarted(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsParticipant(expectedCustomerId, expectedAppointmentId, participantId))
+        mockBusinessLayer
+            .Setup(m => m.ExistsParticipant(ExpectedCustomerId, ExpectedAppointmentId, ExpectedParticipantId))
             .Returns(false);
-        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
-            .Returns(true);
 
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                participantId.ToString());
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (NotFoundException uex)
-        {
-            Assert.AreEqual(ErrorType.ParticipantNotFound, uex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<NotFoundException>(() => 
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), 
+                ExpectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.ParticipantNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteParticipants_AppointmentIsPaused_NotFound()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid participantId = new ("7D0BB25C-214E-42CF-8BE3-89910733B763");
-
-        Participant fakeParticipant = new ()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            ParticipantId = participantId
-        };
+        var participant = CreateDefaultParticipant();
 
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointmentIsStarted(expectedCustomerId, expectedAppointmentId))
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(participant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>())).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(false);
-        mockBusinessLayer.Setup(m => m.ExistsParticipant(expectedCustomerId, expectedAppointmentId, participantId))
+        mockBusinessLayer
+            .Setup(m => m.ExistsParticipant(ExpectedCustomerId, ExpectedAppointmentId, ExpectedParticipantId))
             .Returns(false);
-        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
-            .Returns(true);
 
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                participantId.ToString());
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (NotFoundException uex)
-        {
-            Assert.AreEqual(ErrorType.AppointmentNotFound, uex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<NotFoundException>(() => 
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(),
+                ExpectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteParticipants_AppointmentIsPasswordProtectedNoPasswordSubmitted_Unauthorized()
     {
-        Guid expectedAppointmentId = new ("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new ("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid participantId = new ("7D0BB25C-214E-42CF-8BE3-89910733B763");
-
-        Participant fakeParticipant = new ()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            ParticipantId = participantId
-        };
+        var participant = CreateDefaultParticipant();
 
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(participant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>())).Returns(true);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointmentIsStarted(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.IsAppointmentPasswordProtected(expectedCustomerId, expectedAppointmentId))
+        mockBusinessLayer
+            .Setup(m => m.IsAppointmentPasswordProtected(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(true);
 
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        try
-        {
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(),
-                participantId.ToString());
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (UnauthorizedException uex)
-        {
-            Assert.AreEqual(ErrorType.PasswordRequired, uex.ErrorCode);
-        }
+        var exception = Assert.ThrowsException<UnauthorizedException>(() =>
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), 
+                ExpectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.PasswordRequired, exception.ErrorCode);
     }
 
     [TestMethod]
     public void DeleteParticipants_GuidsAreInvalid_ThrowsException()
     {
-        var invalidGuidString = "invalid";
-        var expectedCustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        var expectedAppointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        var participantId = new Guid("7D0BB25C-214E-42CF-8BE3-89910733B763");
-
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
-        Assert.ThrowsException<BadRequestException>(() =>
-            controller.Delete(invalidGuidString, expectedAppointmentId.ToString(), participantId.ToString()));
-        Assert.ThrowsException<BadRequestException>(() => 
-            controller.Delete(expectedCustomerId.ToString(), invalidGuidString, participantId.ToString()));
-        Assert.ThrowsException<BadRequestException>(() => 
-            controller.Delete(expectedCustomerId.ToString(), expectedAppointmentId.ToString(), invalidGuidString));
+        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString(), ExpectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString, ExpectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        var exceptionParticipantId = Assert.ThrowsException<BadRequestException>(() =>
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), ExpectedInvalidGuidString));
+        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionParticipantId.ErrorCode);
     }
-    
+
     [TestMethod]
     public void DeleteParticipants_ParticipantsAreInvalid_ThrowsException()
     {
-        Guid expectedAppointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
-        Guid expectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
-        Guid participantId = new("7D0BB25C-214E-42CF-8BE3-89910733B763");
-
-        Participant fakeParticipant = new()
-        {
-            AppointmentId = expectedAppointmentId,
-            CustomerId = expectedCustomerId,
-            ParticipantId = participantId
-        };
+        var participant = CreateDefaultParticipant();
 
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        mockBusinessLayer.Setup(m => m.DeleteParticipiant(fakeParticipant));
-        mockBusinessLayer.Setup(m => m.ExistsCustomer(expectedCustomerId))
+        mockBusinessLayer.Setup(m => m.DeleteParticipiant(participant));
+        mockBusinessLayer.Setup(m => m.ExistsCustomer(ExpectedCustomerId)).Returns(true);
+        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>())).Returns(false);
+        mockBusinessLayer.Setup(m => m.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId)).Returns(true);
+        mockBusinessLayer
+            .Setup(m => m.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointmentIsStarted(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ExistsAppointment(expectedCustomerId, expectedAppointmentId))
-            .Returns(true);
-        mockBusinessLayer.Setup(m => m.ParticipantToDeleteAreValid(It.IsAny<Participant>()))
-            .Returns(false);
 
-        var controller = new ParticipantController(mockBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockBusinessLayer.Object);
 
-        Assert.ThrowsException<BadRequestException>(() => controller.Delete(expectedCustomerId.ToString(),
-            expectedAppointmentId.ToString(), participantId.ToString()));
+        var exception = Assert.ThrowsException<BadRequestException>(() => 
+            sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), 
+                ExpectedParticipantId.ToString()));
+        Assert.AreEqual(ErrorType.ParticipantNotValid, exception.ErrorCode);
+    }
+
+    private static ParticipantController CreateSut(IAppointmentBusinessLayer appointmentBusinessLayer = null)
+    {
+        var appointmentBusinessLayerToUse = appointmentBusinessLayer ?? new Mock<IAppointmentBusinessLayer>().Object;
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockLogger = new Mock<ILogger<ParticipantController>>();
+        var mockLocalizer = new Mock<IStringLocalizer<ParticipantController>>();
+
+        return new ParticipantController(
+            appointmentBusinessLayerToUse,
+            mockRequestContext.Object,
+            mockLogger.Object,
+            mockLocalizer.Object);
+    }
+
+    private static Participant CreateDefaultParticipant()
+    {
+        return new Participant
+        {
+            AppointmentId = ExpectedAppointmentId,
+            CustomerId = ExpectedCustomerId,
+            ParticipantId = ExpectedParticipantId
+        };
     }
 }

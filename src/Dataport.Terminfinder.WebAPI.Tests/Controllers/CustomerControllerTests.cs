@@ -3,98 +3,88 @@
 [TestClass]
 public class CustomerControllerTests
 {
-    private ILogger<CustomerController> _logger;
-    private IStringLocalizer<CustomerController> _localizer;
-    private IRequestContext _requestContext;
+    private static readonly Guid ExpectedCustomerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+    private static readonly string ExpectedCustomerName = "S-H";
+    private static readonly string ExpectedStatus = nameof(AppointmentStatusType.Started);
 
-    [TestInitialize]
-    public void Initialize()
+    private static readonly Customer ExpectedCustomer = new()
     {
-        // fake logger
-        var mockLog = new Mock<ILogger<CustomerController>>();
-        _logger = mockLog.Object;
-        _logger = Mock.Of<ILogger<CustomerController>>();
-
-        // fake localizer
-        var mockLocalize = new Mock<IStringLocalizer<CustomerController>>();
-        _localizer = mockLocalize.Object;
-        _localizer = Mock.Of<IStringLocalizer<CustomerController>>();
-
-        // fake request context
-        _requestContext = Mock.Of<IRequestContext>();
-    }
+        CustomerId = ExpectedCustomerId,
+        CustomerName = ExpectedCustomerName,
+        Status = ExpectedStatus
+    };
 
     [TestMethod]
     public void GetCustomer_Okay()
     {
-        Customer fakeCustomer = new()
-        {
-            CustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7"),
-            CustomerName = "S-H",
-            Status = nameof(AppointmentStatusType.Started)
-        };
-
         var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
-        mockCustomerBusinessLayer.Setup(m => m.GetCustomer(fakeCustomer.CustomerId))
-            .Returns(fakeCustomer);
-        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+        mockCustomerBusinessLayer.Setup(m => m.GetCustomer(ExpectedCustomerId)).Returns(ExpectedCustomer);
+        var sut = CreateSut(mockCustomerBusinessLayer.Object);
 
         // Act
-        var httpResult = controller.GetCustomer(fakeCustomer.CustomerId.ToString());
+        var httpResult = sut.GetCustomer(ExpectedCustomerId.ToString());
         var result = httpResult as OkObjectResult;
-        var customer = result?.Value as Customer;
+        var customerResult = result?.Value as Customer;
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.IsNotNull(customer);
+        Assert.IsNotNull(customerResult);
         Assert.AreEqual(200, result.StatusCode);
-        Assert.AreEqual(customer.CustomerId, fakeCustomer.CustomerId);
-        Assert.AreEqual(customer.CustomerName, fakeCustomer.CustomerName);
-        Assert.AreEqual(customer.Status, fakeCustomer.Status);
+        Assert.AreEqual(ExpectedCustomerId, customerResult.CustomerId);
+        Assert.AreEqual(ExpectedCustomerName, customerResult.CustomerName);
+        Assert.AreEqual(ExpectedStatus, customerResult.Status);
     }
-    
+
     [TestMethod]
     public void GetCustomer_CustomerIdIsEmptyString_BadRequest()
     {
-        var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
-        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut();
 
         // Act
-        var result = controller.GetCustomer(string.Empty);
+        var result = sut.GetCustomer(string.Empty);
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
-    
+
     [TestMethod]
     public void GetCustomer_CustomerIdIsInvalid_BadRequest()
     {
         var invalidGuidString = "invalid";
-        var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
-        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut();
 
         // Act
-        var result = controller.GetCustomer(invalidGuidString);
+        var result = sut.GetCustomer(invalidGuidString);
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
     }
-    
+
     [TestMethod]
     public void GetCustomer_CustomerIsInvalid_NotFound()
     {
-        Customer customer = new()
-        {
-            CustomerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7"),
-            CustomerName = "S-H",
-            Status = nameof(AppointmentStatusType.Undefined)
-        };
+        var customer = ExpectedCustomer;
+        customer.Status = nameof(AppointmentStatusType.Undefined);
 
         var mockCustomerBusinessLayer = new Mock<ICustomerBusinessLayer>();
-        mockCustomerBusinessLayer.Setup(m => m.GetCustomer(customer.CustomerId)).Returns(customer);
-        var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
+        mockCustomerBusinessLayer.Setup(m => m.GetCustomer(ExpectedCustomerId)).Returns(customer);
+        var sut = CreateSut(mockCustomerBusinessLayer.Object);
 
         // Act
-        var result = controller.GetCustomer(customer.CustomerId.ToString());
+        var result = sut.GetCustomer(ExpectedCustomerId.ToString());
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
+    }
+
+    private static CustomerController CreateSut(ICustomerBusinessLayer customerBusinessLayer = null)
+    {
+        var customerBusinessLayerToUse = customerBusinessLayer ?? new Mock<ICustomerBusinessLayer>().Object;
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockLogger = new Mock<ILogger<CustomerController>>();
+        var mockLocalizer = new Mock<IStringLocalizer<CustomerController>>();
+
+        return new CustomerController(
+            customerBusinessLayerToUse,
+            mockRequestContext.Object,
+            mockLogger.Object,
+            mockLocalizer.Object);
     }
 }

@@ -3,47 +3,25 @@ namespace Dataport.Terminfinder.WebAPI.Tests.Controllers;
 [TestClass]
 public class AppControllerTests
 {
-    private ILogger<AppController> _logger;
-    private IStringLocalizer<AppController> _localizer;
-    private IRequestContext _requestContext;
-
-    [TestInitialize]
-    public void Initialize()
-    {
-        // fake logger
-        var mockLog = new Mock<ILogger<AppController>>();
-        _logger = mockLog.Object;
-        _logger = Mock.Of<ILogger<AppController>>();
-
-        // fake localizer
-        var mockLocalize = new Mock<IStringLocalizer<AppController>>();
-        _localizer = mockLocalize.Object;
-        _localizer = Mock.Of<IStringLocalizer<AppController>>();
-
-        // fake request context
-        _requestContext = Mock.Of<IRequestContext>();
-    }
-
     [TestMethod]
     public void GetAppInfo_Okay()
     {
         var versionDate = "2010-10-30";
         var versionNumber = "1.2.3";
 
-        AppInfo fakeAppInfo = new()
+        AppInfo appInfo = new()
         {
             BuildDate = versionDate,
             VersionNumber = versionNumber
         };
 
         var mockAppConfigBusinessLayer = new Mock<IAppConfigBusinessLayer>();
-        mockAppConfigBusinessLayer.Setup(m => m.GetAppInfo())
-            .Returns(fakeAppInfo);
+        mockAppConfigBusinessLayer.Setup(m => m.GetAppInfo()).Returns(appInfo);
 
-        var controller = new AppController(mockAppConfigBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockAppConfigBusinessLayer.Object);
 
         // Act
-        var httpResult = controller.Get();
+        var httpResult = sut.Get();
         var result = httpResult as OkObjectResult;
         var app = result?.Value as AppInfo;
 
@@ -54,21 +32,35 @@ public class AppControllerTests
         Assert.AreEqual(app.VersionNumber, versionNumber);
         Assert.AreEqual(app.BuildDate, versionDate);
     }
-    
+
     [TestMethod]
     public void GetAppInfo_AppInfoIsNull_StatusCode500()
     {
         var mockAppConfigBusinessLayer = new Mock<IAppConfigBusinessLayer>();
         mockAppConfigBusinessLayer.Setup(m => m.GetAppInfo()).Returns((AppInfo)null);
 
-        var controller = new AppController(mockAppConfigBusinessLayer.Object, _requestContext, _logger, _localizer);
+        var sut = CreateSut(mockAppConfigBusinessLayer.Object);
 
         // Act
-        var httpResult = controller.Get();
+        var httpResult = sut.Get();
         var result = httpResult as ObjectResult;
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(500, result.StatusCode);
+    }
+
+    private static AppController CreateSut(IAppConfigBusinessLayer appConfigBusinessLayer = null)
+    {
+        var appConfigBusinessLayerToUse = appConfigBusinessLayer ?? new Mock<IAppConfigBusinessLayer>().Object;
+        var mockRequestContext = new Mock<IRequestContext>();
+        var mockLogger = new Mock<ILogger<AppController>>();
+        var mockLocalizer = new Mock<IStringLocalizer<AppController>>();
+
+        return new AppController(
+            appConfigBusinessLayerToUse,
+            mockRequestContext.Object,
+            mockLogger.Object,
+            mockLocalizer.Object);
     }
 }
