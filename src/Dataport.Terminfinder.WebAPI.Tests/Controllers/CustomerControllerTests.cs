@@ -40,9 +40,9 @@ public class CustomerControllerTests
         var controller = new CustomerController(mockCustomerBusinessLayer.Object, _requestContext, _logger, _localizer);
 
         // Act
-        IActionResult httpResult = controller.GetCustomer(fakeCustomer.CustomerId.ToString());
-        OkObjectResult result = httpResult as OkObjectResult;
-        Customer customer = result?.Value as Customer;
+        var httpResult = controller.GetCustomer(fakeCustomer.CustomerId.ToString());
+        var result = httpResult as OkObjectResult;
+        var customer = result?.Value as Customer;
 
         // Assert
         Assert.IsNotNull(result);

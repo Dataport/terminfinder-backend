@@ -25,7 +25,7 @@ public class CustomerControllerIntegrationTests : BaseIntegrationTests
             Status = AppointmentStatusType.Started.ToString()
         };
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"customer/{expectedCustomer.CustomerId}");
@@ -48,7 +48,7 @@ public class CustomerControllerIntegrationTests : BaseIntegrationTests
     {
         Guid customerId = new("B30FC6C3-5E3A-42CE-BC32-E85F8231992C");
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"customer/{customerId}");
@@ -63,7 +63,7 @@ public class CustomerControllerIntegrationTests : BaseIntegrationTests
     {
         var customerId = "12345";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"customer/{customerId}");

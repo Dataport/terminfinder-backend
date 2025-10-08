@@ -18,7 +18,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task DeleteSuggestedDates_Okay()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -62,7 +62,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task DeleteSuggestedDates_SuggestedDates_NotFound()
     {
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId);
 
         //--- get the appointment
@@ -81,7 +81,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
 
         //--- get the appointment
@@ -100,7 +100,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     {
         // arrange
         const string description = "Im the test description!";
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
         
         var appointment = CreateTestAppointment(_customerId, It.IsAny<Guid>());
         appointment.SuggestedDates.First().Description = description;

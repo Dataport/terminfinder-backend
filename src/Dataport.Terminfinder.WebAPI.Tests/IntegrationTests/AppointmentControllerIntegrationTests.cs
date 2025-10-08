@@ -24,7 +24,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -120,7 +120,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -249,7 +249,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         // Arrange
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
@@ -282,7 +282,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         // Arrange
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var contentString = JsonConvert.SerializeObject(appointment);
@@ -332,7 +332,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         Guid appointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
@@ -347,7 +347,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var appointmentId = "C1C2474B-488A-4ECF-94E8-47387BB715D6";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
@@ -362,7 +362,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var appointmentId = "C1C2474B-488A-4ECF-94E8-47387BB715D5";
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
@@ -379,7 +379,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         var appointment = CreateTestAppointment(_customerId, adminId);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
@@ -397,7 +397,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, "P@$$w0rd");
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -432,7 +432,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -472,7 +472,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -529,7 +529,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
@@ -570,7 +570,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
 
-        HttpClient client = _testServer.CreateClient();
+        var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,

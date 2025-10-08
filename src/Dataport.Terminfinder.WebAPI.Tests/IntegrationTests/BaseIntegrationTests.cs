@@ -34,8 +34,8 @@ public abstract class BaseIntegrationTests
             Password = password
         };
 
-        DateTime currentDateStartDate = DateTime.Now;
-        DateTime currentDateEndDate = DateTime.Now.AddDays(2);
+        var currentDateStartDate = DateTime.Now;
+        var currentDateEndDate = DateTime.Now.AddDays(2);
 
         SuggestedDate suggestedDate1 = new()
         {
