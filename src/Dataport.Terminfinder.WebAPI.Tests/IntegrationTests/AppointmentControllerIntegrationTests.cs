@@ -97,7 +97,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(protectionResult);
         Assert.IsInstanceOfType(protectionResult, typeof(AppointmentProtectionResult));
         Assert.AreEqual(appointmentId, protectionResult.AppointmentId);
-        Assert.AreEqual(false, protectionResult.IsProtectedByPassword);
+        Assert.IsFalse(protectionResult.IsProtectedByPassword);
 
         //-- get GetPasswordVerification
         // Act
@@ -111,8 +111,8 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(passwordVerificationResult);
         Assert.IsInstanceOfType(passwordVerificationResult, typeof(AppointmentPasswordVerificationResult));
         Assert.AreEqual(appointmentId, passwordVerificationResult.AppointmentId);
-        Assert.AreEqual(false, passwordVerificationResult.IsProtectedByPassword);
-        Assert.AreEqual(false, passwordVerificationResult.IsPasswordValid);
+        Assert.IsFalse(passwordVerificationResult.IsProtectedByPassword);
+        Assert.IsFalse(passwordVerificationResult.IsPasswordValid);
     }
 
     [TestMethod]
@@ -560,7 +560,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(protectionResult);
         Assert.IsInstanceOfType(protectionResult, typeof(AppointmentProtectionResult));
         Assert.AreEqual(appointmentId, protectionResult.AppointmentId);
-        Assert.AreEqual(true, protectionResult.IsProtectedByPassword);
+        Assert.IsTrue(protectionResult.IsProtectedByPassword);
     }
 
     [TestMethod]
@@ -603,8 +603,8 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(passwordVerificationResult);
         Assert.IsInstanceOfType(passwordVerificationResult, typeof(AppointmentPasswordVerificationResult));
         Assert.AreEqual(appointmentId, passwordVerificationResult.AppointmentId);
-        Assert.AreEqual(true, passwordVerificationResult.IsProtectedByPassword);
-        Assert.AreEqual(true, passwordVerificationResult.IsPasswordValid);
+        Assert.IsTrue(passwordVerificationResult.IsProtectedByPassword);
+        Assert.IsTrue(passwordVerificationResult.IsPasswordValid);
 
         // Act - password is not valid
         credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:7873jfe-gteA"));
@@ -619,7 +619,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(passwordVerificationResult);
         Assert.IsInstanceOfType(passwordVerificationResult, typeof(AppointmentPasswordVerificationResult));
         Assert.AreEqual(appointmentId, passwordVerificationResult.AppointmentId);
-        Assert.AreEqual(true, passwordVerificationResult.IsProtectedByPassword);
-        Assert.AreEqual(false, passwordVerificationResult.IsPasswordValid);
+        Assert.IsTrue(passwordVerificationResult.IsProtectedByPassword);
+        Assert.IsFalse(passwordVerificationResult.IsPasswordValid);
     }
 }
