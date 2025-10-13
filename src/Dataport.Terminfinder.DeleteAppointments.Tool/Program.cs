@@ -130,7 +130,7 @@ public class Program
             var error = $"An unexpected error was occurred: {e.Message} ; {e.StackTrace}";
             System.Console.WriteLine(error);
 #pragma warning disable CA2254 // Template should be a static expression
-            logger?.LogError(error);
+            logger?.LogError(e, error);
 #pragma warning restore CA2254 // Template should be a static expression
             return (int)ErrorType.UnexpectedError;
         }
