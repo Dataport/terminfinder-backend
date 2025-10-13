@@ -82,7 +82,7 @@ and not exists
 
         if (customerId == Guid.Empty)
         {
-            throw new ApplicationException("The customerid can not be empty");
+            throw new ArgumentException("The customerid can not be empty");
         }
 
         var paramCustomerId = new NpgsqlParameter("@CUSTOMERID", NpgsqlDbType.Uuid) { NpgsqlValue = customerId };
@@ -158,7 +158,7 @@ and not exists
         {
             _logger.LogError(
                 $"Error {nameof(ExecuteReader)}: The connection are not open or the command are not defined.");
-            throw new ApplicationException("The connection are not open or the command are not defined.");
+            throw new ArgumentException("The connection are not open or the command are not defined.");
         }
 
         var command = new NpgsqlCommand(commandText, connection);
@@ -185,7 +185,7 @@ and not exists
             _logger.LogError(
                 "Error {NameofExecuteNonQuery}: The connection are not open or the command are not defined.",
                 nameof(ExecuteNonQuery));
-            throw new ApplicationException("The connection are not open or the command are not defined.");
+            throw new ArgumentException("The connection are not open or the command are not defined.");
         }
 
         var command = new NpgsqlCommand(commandText, connection);
@@ -203,7 +203,7 @@ and not exists
         {
             var error = $"No rows are deleted, parameters: {parameters}";
             _logger.LogError("Error {NameofExecuteNonQuery}: {Error}", nameof(ExecuteNonQuery), error);
-            throw new ApplicationException(error);
+            throw new ArgumentException(error);
         }
     }
 }
