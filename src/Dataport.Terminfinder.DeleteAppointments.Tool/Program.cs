@@ -28,7 +28,7 @@ public class Program
 
         if (args is { Length: > 2 })
         {
-            System.Console.WriteLine("Error: There are too much parameters.");
+            System.Console.WriteLine("Error: There are too many parameters.");
             System.Console.WriteLine(
                 "dotnet Dataport.Terminfinder.DeleteAppointments.dll customerid 'days after that expired appointments would be deleted'");
             return (int)ErrorType.TooMuchParamters;
@@ -37,14 +37,14 @@ public class Program
         if (!Guid.TryParse(args[0], out var customerId))
         {
             System.Console.WriteLine(
-                "Error: The customerId are not valid. Please use a format like this '5C075919-0374-4063-A2C7-3147C6A22C30'.");
+                "Error: The customerId is not valid. Please use a format like this '5C075919-0374-4063-A2C7-3147C6A22C30'.");
             return (int)ErrorType.CustomerIdAreNotValid;
         }
 
         if (customerId == Guid.Empty)
         {
             System.Console.WriteLine(
-                "Error: The customerId are not valid. Please use a format like this '5C075919-0374-4063-A2C7-3147C6A22C30'.");
+                "Error: The customerId is not valid. Please use a format like this '5C075919-0374-4063-A2C7-3147C6A22C30'.");
             return (int)ErrorType.CustomerIdAreNotValid;
         }
 
@@ -57,7 +57,7 @@ public class Program
         if (deleteExpiredAppointmentsAfterDays <= 0)
         {
             System.Console.WriteLine(
-                $"The configurationvalue of deleteExpiredAppointmentsAfterDays has to be greater than zero.");
+                $"The configuration value of deleteExpiredAppointmentsAfterDays has to be greater than zero.");
             return (int)ErrorType.DeleteExpiredAppointmentsAfterDaysHasToBeGreaterThanZero;
         }
 
