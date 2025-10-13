@@ -85,25 +85,23 @@ and not exists
             throw new ApplicationException("The customerid can not be empty");
         }
 
-        NpgsqlParameter paramCustomerId = new("@CUSTOMERID", NpgsqlDbType.Uuid);
-        paramCustomerId.NpgsqlValue = customerId;
-        NpgsqlParameter paramDeleteDate = new("@DELETEDATE", NpgsqlDbType.Date);
-        paramDeleteDate.NpgsqlValue = deleteDate;
-        NpgsqlParameter[] parameters = new NpgsqlParameter[] { paramCustomerId, paramDeleteDate };
+        var paramCustomerId = new NpgsqlParameter("@CUSTOMERID", NpgsqlDbType.Uuid) { NpgsqlValue = customerId };
+        var paramDeleteDate = new NpgsqlParameter("@DELETEDATE", NpgsqlDbType.Date) { NpgsqlValue = deleteDate };
+        var parameters = new[] { paramCustomerId, paramDeleteDate };
 
-        List<Appointment> appointmentsToDelete = new();
+        var appointmentsToDelete = new List<Appointment>();
 
-        using NpgsqlConnection connection = GetConnection(connectionString);
-        using NpgsqlDataReader dr = ExecuteReader(connection, parameters, CmdSelectExpiresAppointments);
+        using var connection = GetConnection(connectionString);
+        using var dr = ExecuteReader(connection, parameters, CmdSelectExpiresAppointments);
         while (dr.Read())
         {
-            string appointmentId = dr["appointmentid"].ToString();
+            var appointmentId = dr["appointmentid"].ToString();
 
             if (!string.IsNullOrEmpty(appointmentId))
             {
                 appointmentsToDelete.Add(new Appointment()
                 {
-                    AppointmentId = new(appointmentId), CustomerId = customerId
+                    AppointmentId = new Guid(appointmentId), CustomerId = customerId
                 });
             }
         }
@@ -118,21 +116,17 @@ and not exists
             "Enter {NameofDeleteAppointments} Parameter: {ConnectionString}, {CustomerId}",
             nameof(DeleteAppointments), connectionString, customerId);
 
-        using NpgsqlConnection connection = GetConnection(connectionString);
-        foreach (Appointment appointmentToDelete in appointmentsToDelete)
+        using var connection = GetConnection(connectionString);
+        foreach (var appointmentToDelete in appointmentsToDelete)
         {
             _logger.LogDebug(
                 "Delete appointment {AppointmentToDeleteAppointmentId}", appointmentToDelete.AppointmentId);
 
-            NpgsqlParameter paramAppointmentIdToDelete =
-                new("@APPOINTMENTID", NpgsqlDbType.Uuid);
-            paramAppointmentIdToDelete.NpgsqlValue = appointmentToDelete.AppointmentId;
+            var paramAppointmentIdToDelete = new NpgsqlParameter("@APPOINTMENTID", NpgsqlDbType.Uuid) { NpgsqlValue = appointmentToDelete.AppointmentId };
 
-            NpgsqlParameter paramCustomerIdToDelete =
-                new("@CUSTOMERID", NpgsqlDbType.Uuid);
-            paramCustomerIdToDelete.NpgsqlValue = appointmentToDelete.CustomerId;
+            var paramCustomerIdToDelete = new NpgsqlParameter("@CUSTOMERID", NpgsqlDbType.Uuid) { NpgsqlValue = appointmentToDelete.CustomerId };
 
-            NpgsqlParameter[] parametersDeleteAppointment = new NpgsqlParameter[]
+            var parametersDeleteAppointment = new[]
             {
                 paramAppointmentIdToDelete, paramCustomerIdToDelete
             };
@@ -145,7 +139,7 @@ and not exists
         _logger.LogDebug("Enter {NameofGetConnection} Parameter: {ConnectionString}", nameof(GetConnection),
             connectionString);
 
-        NpgsqlConnection connection = new(connectionString);
+        var connection = new NpgsqlConnection(connectionString);
         if (connection.State != ConnectionState.Open)
         {
             connection.Open();
@@ -167,17 +161,17 @@ and not exists
             throw new ApplicationException("The connection are not open or the command are not defined.");
         }
 
-        NpgsqlCommand command = new(commandText, connection);
+        var command = new NpgsqlCommand(commandText, connection);
 
         if (parameters != null)
         {
-            foreach (NpgsqlParameter parameter in parameters)
+            foreach (var parameter in parameters)
             {
                 command.Parameters.Add(parameter);
             }
         }
 
-        NpgsqlDataReader dr = command.ExecuteReader();
+        var dr = command.ExecuteReader();
         return dr;
     }
 
@@ -194,20 +188,20 @@ and not exists
             throw new ApplicationException("The connection are not open or the command are not defined.");
         }
 
-        NpgsqlCommand command = new(commandText, connection);
+        var command = new NpgsqlCommand(commandText, connection);
 
         if (parameters != null)
         {
-            foreach (NpgsqlParameter parameter in parameters)
+            foreach (var parameter in parameters)
             {
                 command.Parameters.Add(parameter);
             }
         }
 
-        int rows = command.ExecuteNonQuery();
+        var rows = command.ExecuteNonQuery();
         if (rows <= 0)
         {
-            string error = $"No rows are deleted, parameters: {parameters}";
+            var error = $"No rows are deleted, parameters: {parameters}";
             _logger.LogError("Error {NameofExecuteNonQuery}: {Error}", nameof(ExecuteNonQuery), error);
             throw new ApplicationException(error);
         }

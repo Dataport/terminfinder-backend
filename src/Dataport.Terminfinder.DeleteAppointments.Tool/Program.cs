@@ -34,7 +34,7 @@ public class Program
             return (int)ErrorType.TooMuchParamters;
         }
 
-        if (!Guid.TryParse(args[0], out Guid customerId))
+        if (!Guid.TryParse(args[0], out var customerId))
         {
             System.Console.WriteLine(
                 "Error: The customerId are not valid. Please use a format like this '5C075919-0374-4063-A2C7-3147C6A22C30'.");
@@ -48,7 +48,7 @@ public class Program
             return (int)ErrorType.CustomerIdAreNotValid;
         }
 
-        if (!int.TryParse(args[1], out int deleteExpiredAppointmentsAfterDays))
+        if (!int.TryParse(args[1], out var deleteExpiredAppointmentsAfterDays))
         {
             System.Console.WriteLine("Error: The second parameter days has to be a integer");
             return (int)ErrorType.DeleteExpiredAppointmentsAfterDaysAreNotAnInteger;
@@ -61,7 +61,7 @@ public class Program
             return (int)ErrorType.DeleteExpiredAppointmentsAfterDaysHasToBeGreaterThanZero;
         }
 
-        using IHost host = Host.CreateDefaultBuilder(args)
+        using var host = Host.CreateDefaultBuilder(args)
             .ConfigureLogging(logging =>
             {
                 logging.ClearProviders();
@@ -87,9 +87,9 @@ public class Program
             })
             .Build();
 
-        IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
-        ILogger<Program> logger = host.Services.GetService<ILogger<Program>>();
-        ILoggerFactory loggerFactory = host.Services.GetService<ILoggerFactory>();
+        var config = host.Services.GetRequiredService<IConfiguration>();
+        var logger = host.Services.GetService<ILogger<Program>>();
+        var loggerFactory = host.Services.GetService<ILoggerFactory>();
 
         var log4NetFilename = config["Terminfinder:Log4NetConfigFilename"];
 
@@ -103,7 +103,7 @@ public class Program
             loggerFactory.AddLog4Net();
         }
 
-        string connectionString = config["ConnectionStrings:TerminfinderConnection"];
+        var connectionString = config["ConnectionStrings:TerminfinderConnection"];
         logger?.LogDebug($"connectionString: {connectionString}");
         if (string.IsNullOrEmpty(connectionString))
         {
@@ -127,7 +127,7 @@ public class Program
         }
         catch (Exception e)
         {
-            string error = $"An unexpected error was occurred: {e.Message} ; {e.StackTrace}";
+            var error = $"An unexpected error was occurred: {e.Message} ; {e.StackTrace}";
             System.Console.WriteLine(error);
 #pragma warning disable CA2254 // Template should be a static expression
             logger?.LogError(error);

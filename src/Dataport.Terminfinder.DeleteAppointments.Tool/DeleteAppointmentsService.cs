@@ -46,12 +46,12 @@ public class DeleteAppointmentsService : IDeleteAppointmentsService
             throw new ApplicationException($"The customerId is empty.");
         }
 
-        DateTime deleteDate = dateTimeGeneratorService.GetCurrentDateTime();
+        var deleteDate = dateTimeGeneratorService.GetCurrentDateTime();
         deleteDate = deleteDate.Subtract(TimeSpan.FromDays(deleteExpiredAppointmentsAfterDays + 1));
 
         _logger.LogDebug("Delete all appointments till {DeleteDate}.", deleteDate);
 
-        List<Appointment> appointmentsToDelete =
+        var appointmentsToDelete =
             _databaseRepository.GetListOfAppointmentsToDelete(connectionString, customerId, deleteDate);
 
         if (appointmentsToDelete.Count > 0)
