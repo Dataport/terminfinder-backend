@@ -385,30 +385,39 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
             }
             else
             {
-                if (!ExistsParticipant(participant.CustomerId, participant.AppointmentId, participant.ParticipantId))
-                {
-                    continue;
-                }
-
-                if (participant.Votings != null)
-                {
-                    foreach (var voting in participant.Votings)
-                    {
-                        if (voting.VotingId == Guid.Empty)
-                        {
-                            New(Context.Votings, voting);
-                        }
-                        else if (ExistsVoting(voting.CustomerId, voting.AppointmentId, voting.ParticipantId,
-                                     voting.VotingId, voting.SuggestedDateId))
-                        {
-                            Update(Context.Votings, voting);
-                        }
-                    }
-                }
-
-                Update(Context.Participants, participant);
+                UpdateParticipantWithoutExplicitTransaction(participant);
             }
         }
+    }
+
+    /// <summary>
+    /// Updates a participant with voting to context
+    /// </summary>
+    /// <param name="participant">participant to update</param>
+    private void UpdateParticipantWithoutExplicitTransaction(Participant participant)
+    {
+        if (!ExistsParticipant(participant.CustomerId, participant.AppointmentId, participant.ParticipantId))
+        {
+            return;
+        }
+
+        if (participant.Votings != null)
+        {
+            foreach (var voting in participant.Votings)
+            {
+                if (voting.VotingId == Guid.Empty)
+                {
+                    New(Context.Votings, voting);
+                }
+                else if (ExistsVoting(voting.CustomerId, voting.AppointmentId, voting.ParticipantId,
+                             voting.VotingId, voting.SuggestedDateId))
+                {
+                    Update(Context.Votings, voting);
+                }
+            }
+        }
+
+        Update(Context.Participants, participant);
     }
 
     /// <inheritdoc />
