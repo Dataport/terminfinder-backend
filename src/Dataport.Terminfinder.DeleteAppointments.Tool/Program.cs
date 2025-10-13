@@ -96,7 +96,7 @@ public class Program
         if (!string.IsNullOrEmpty(log4NetFilename))
         {
             loggerFactory.AddLog4Net(log4NetFilename);
-            logger?.LogDebug($"use log4Net-Filename: {log4NetFilename}");
+            logger?.LogDebug("use log4Net-Filename: {Log4NetFilename}", log4NetFilename);
         }
         else
         {
@@ -104,10 +104,10 @@ public class Program
         }
 
         var connectionString = config["ConnectionStrings:TerminfinderConnection"];
-        logger?.LogDebug($"connectionString: {connectionString}");
+        logger?.LogDebug("connectionString: {ConnectionString}", connectionString);
         if (string.IsNullOrEmpty(connectionString))
         {
-            logger?.LogError("The connectionstring is not defined");
+            logger?.LogError("The connection string is not defined");
             return (int)ErrorType.DbConnectionIsNotDefined;
         }
 
