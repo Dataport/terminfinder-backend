@@ -10,7 +10,7 @@ public abstract class BaseIntegrationTests
     /// ConfigurationBuilder for integrationstest
     /// </summary>
     /// <returns></returns>
-    protected IConfiguration GetConfigurationBuilder()
+    protected static IConfiguration GetConfigurationBuilder()
     {
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -19,7 +19,7 @@ public abstract class BaseIntegrationTests
         return config;
     }
 
-    protected Appointment CreateTestAppointment(Guid customerId, Guid adminId, string password = null)
+    protected static Appointment CreateTestAppointment(Guid customerId, Guid adminId, string password = null)
     {
         var appointment = new Appointment
         {
@@ -53,7 +53,7 @@ public abstract class BaseIntegrationTests
             SuggestedDateId = Guid.Empty,
             StartDate = currentDateStartDate.AddDays(2),
             StartTime = new DateTimeOffset(currentDateStartDate.Year, currentDateStartDate.Month, currentDateStartDate.Day, 20, 05, 0, new TimeSpan(1, 0, 0)),
-            EndDate = new DateTime(currentDateEndDate.Year, currentDateEndDate.Month, currentDateEndDate.Day),
+            EndDate = new DateTime(currentDateEndDate.Year, currentDateEndDate.Month, currentDateEndDate.Day, 0, 0, 0, DateTimeKind.Local),
             EndTime = new DateTimeOffset(currentDateEndDate.Year, currentDateEndDate.Month, currentDateEndDate.Day, 21, 05, 0, new TimeSpan(1, 0, 0))
         };
         appointment.SuggestedDates = new List<SuggestedDate>
@@ -65,7 +65,7 @@ public abstract class BaseIntegrationTests
         return appointment;
     }
 
-    protected async Task<Appointment> CreateTestAppointmentInDatabase(
+    protected static async Task<Appointment> CreateTestAppointmentInDatabase(
         HttpClient client,
         Guid customerId,
         string password = null,
