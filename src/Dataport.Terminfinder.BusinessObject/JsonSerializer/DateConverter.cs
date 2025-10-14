@@ -29,7 +29,7 @@ public class DateConverter : JsonConverter
     {
         DateTime? result = null;
 
-        switch (reader?.Value)
+        switch (reader.Value)
         {
             case null:
                 return null;

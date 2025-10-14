@@ -32,18 +32,18 @@ public class DeleteAppointmentsService : IDeleteAppointmentsService
 
         if (string.IsNullOrEmpty(connectionString))
         {
-            throw new ApplicationException($"The connectionstring are not defined.");
+            throw new ArgumentException("The connection string is not defined.");
         }
 
         if (deleteExpiredAppointmentsAfterDays <= 0)
         {
-            throw new ApplicationException(
-                $"The configurationvalue of deleteExpiredAppointmentsAfterDays has to be greater than zero.");
+            throw new ArgumentException(
+                "The configuration value of deleteExpiredAppointmentsAfterDays has to be greater than zero.");
         }
 
         if (customerId == Guid.Empty)
         {
-            throw new ApplicationException($"The customerId is empty.");
+            throw new ArgumentException("The customerId is empty.");
         }
 
         var deleteDate = dateTimeGeneratorService.GetCurrentDateTime();

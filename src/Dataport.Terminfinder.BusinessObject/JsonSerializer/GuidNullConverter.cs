@@ -24,7 +24,7 @@ public class GuidNullConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
         Newtonsoft.Json.JsonSerializer serializer)
     {
-        var value = reader?.Value;
+        var value = reader.Value;
 
 #pragma warning disable CA1806 // Do not ignore method results
         Guid.TryParse(value?.ToString(), out var guid);

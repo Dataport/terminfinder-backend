@@ -29,30 +29,17 @@ public class DeleteAppointmentsTests
         var deleteExpiredAppointmentsAfterDays = 7;
         var customerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        var expectedErrorMessage = $"The connectionstring are not defined.";
+        var expectedErrorMessage = "The connection string is not defined.";
 
         var mockRepository = new Mock<IRepository>();
-        //mockRepository.Setup(m => m.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(false);
 
         var deleteExpiredAppointments = new DeleteAppointmentsService(mockRepository.Object, _logger);
 
         // Act
-        try
-        {
+        var exception = Assert.ThrowsException<ArgumentException>(() =>
             deleteExpiredAppointments.DeleteExpiredAppointments(connectionString, customerId,
-                deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake);
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (ApplicationException ex)
-        {
-            // Assert
-            Assert.AreEqual(expectedErrorMessage, ex.Message);
-        }
-        catch (Exception)
-        {
-            // Assert
-            Assert.Fail("An ApplicationException should be thrown");
-        }
+                deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake));
+        Assert.AreEqual(expectedErrorMessage, exception.Message);
     }
 
     [TestMethod]
@@ -62,30 +49,18 @@ public class DeleteAppointmentsTests
         var deleteExpiredAppointmentsAfterDays = 0;
         var customerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        var expectedErrorMessage =
-            $"The configurationvalue of deleteExpiredAppointmentsAfterDays has to be greater than zero.";
+        var expectedErrorMessage = "The configuration value of deleteExpiredAppointmentsAfterDays has to be greater than zero.";
 
         var mockRepository = new Mock<IRepository>();
 
         var deleteExpiredAppointments = new DeleteAppointmentsService(mockRepository.Object, _logger);
 
         // Act
-        try
-        {
+        var exception = Assert.ThrowsException<ArgumentException>(() =>
             deleteExpiredAppointments.DeleteExpiredAppointments(connectionString, customerId,
-                deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake);
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (ApplicationException ex)
-        {
-            // Assert
-            Assert.AreEqual(expectedErrorMessage, ex.Message);
-        }
-        catch (Exception)
-        {
-            // Assert
-            Assert.Fail("An ApplicationException should be thrown");
-        }
+                deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake));
+        Assert.AreEqual(expectedErrorMessage, exception.Message);
+
     }
 
     [TestMethod]
@@ -95,29 +70,17 @@ public class DeleteAppointmentsTests
         var deleteExpiredAppointmentsAfterDays = 7;
         var customerId = Guid.Empty;
 
-        var expectedErrorMessage = $"The customerId is empty.";
+        var expectedErrorMessage = "The customerId is empty.";
 
         var mockRepository = new Mock<IRepository>();
 
         var deleteExpiredAppointments = new DeleteAppointmentsService(mockRepository.Object, _logger);
 
         // Act
-        try
-        {
+        var exception = Assert.ThrowsException<ArgumentException>(() =>
             deleteExpiredAppointments.DeleteExpiredAppointments(connectionString, customerId,
-                deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake);
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (ApplicationException ex)
-        {
-            // Assert
-            Assert.AreEqual(expectedErrorMessage, ex.Message);
-        }
-        catch (Exception)
-        {
-            // Assert
-            Assert.Fail("An ApplicationException should be thrown");
-        }
+                deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake));
+        Assert.AreEqual(expectedErrorMessage, exception.Message);
     }
 
     [TestMethod]
@@ -184,7 +147,7 @@ public class DeleteAppointmentsTests
 }
 
 [ExcludeFromCodeCoverage]
-class DateTimeGeneratorServiceFake : IDateTimeGeneratorService
+internal class DateTimeGeneratorServiceFake : IDateTimeGeneratorService
 {
     public DateTime GetCurrentDateTime()
     {

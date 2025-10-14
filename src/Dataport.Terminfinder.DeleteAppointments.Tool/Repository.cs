@@ -157,8 +157,8 @@ and not exists
         if (connection == null || string.IsNullOrEmpty(commandText))
         {
             _logger.LogError(
-                $"Error {nameof(ExecuteReader)}: The connection are not open or the command are not defined.");
-            throw new ArgumentException("The connection are not open or the command are not defined.");
+                $"Error {nameof(ExecuteReader)}: The connection ist not open or the command is not defined.");
+            throw new ArgumentException("The connection ist not open or the command is not defined.");
         }
 
         var command = new NpgsqlCommand(commandText, connection);
@@ -183,9 +183,9 @@ and not exists
         if (connection == null || string.IsNullOrEmpty(commandText))
         {
             _logger.LogError(
-                "Error {NameofExecuteNonQuery}: The connection are not open or the command are not defined.",
+                "Error {NameofExecuteNonQuery}: The connection ist not open or the command is not defined.",
                 nameof(ExecuteNonQuery));
-            throw new ArgumentException("The connection are not open or the command are not defined.");
+            throw new ArgumentException("The connection ist not open or the command is not defined.");
         }
 
         var command = new NpgsqlCommand(commandText, connection);
