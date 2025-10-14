@@ -288,7 +288,7 @@ public class AppointmentController : ApiControllerBase
         string customerIdFromRequest)
     {
         Logger.LogDebug(
-            "Enter {NameofValidateCreateAndUpdateAppointmentRequest}, Parameter: {appointmentFromRequest}, {customerIdFromRequest}",
+            "Enter {NameofValidateCreateAndUpdateAppointmentRequest}, Parameter: {AppointmentFromRequest}, {CustomerIdFromRequest}",
             nameof(ValidateCreateAndUpdateAppointmentRequest), appointmentFromRequest, customerIdFromRequest);
 
         if (!Guid.TryParse(customerIdFromRequest, out var customerIdGuid))

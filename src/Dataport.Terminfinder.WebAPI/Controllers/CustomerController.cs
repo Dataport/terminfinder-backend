@@ -124,7 +124,7 @@ public class CustomerController : ApiControllerBase
                 Language = languageName
             };
 
-            Logger.LogInformation("Error {NameofGetCustomer}: {errorResultObjectCode},{errorResultObjectMessage}",
+            Logger.LogInformation("Error {NameofGetCustomer}: {ErrorResultObjectCode},{ErrorResultObjectMessage}",
                 nameof(GetCustomer), errorResultObject.Code, errorResultObject.Message);
 
             return NotFound(errorResultObject);
