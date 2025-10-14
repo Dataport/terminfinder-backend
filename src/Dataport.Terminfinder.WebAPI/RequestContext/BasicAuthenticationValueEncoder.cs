@@ -7,7 +7,7 @@ namespace Dataport.Terminfinder.WebAPI.RequestContext;
 /// <summary>
 /// Decoder to decode and encode basic authentication payload values
 /// </summary>
-public class BasicAuthenticationValueEncoder
+public static class BasicAuthenticationValueEncoder
 {
     private static readonly string PrefixWithSpace = "Basic ";
 
@@ -18,7 +18,7 @@ public class BasicAuthenticationValueEncoder
     /// <param name="username">the username to encode. The username must not include a colon.</param>
     /// <param name="password">the password to encode. The password can include a colon.</param>
     /// <returns>the basic authentication payload value</returns>
-    public string Encode(string username, string password)
+    public static string Encode(string username, string password)
     {
         ArgumentNullException.ThrowIfNull(username);
         ArgumentNullException.ThrowIfNull(password);
@@ -36,7 +36,7 @@ public class BasicAuthenticationValueEncoder
     /// The structure is "Basic BASE64VALUE". The "BASE64VALUE" will be ASCII decoded and has the following format: 'username:password'</param>
     /// <exception cref="DecodingBasicAuthenticationValueFailedException">will be thrown if the basic authentication header could not be decoded</exception>
     /// <returns>the decoded username and password from the submitted basic authentication value</returns>
-    public UserCredential Decode(string encodedBasicAuthPayloadValue)
+    public static UserCredential Decode(string encodedBasicAuthPayloadValue)
     {
         ArgumentNullException.ThrowIfNull(encodedBasicAuthPayloadValue);
 

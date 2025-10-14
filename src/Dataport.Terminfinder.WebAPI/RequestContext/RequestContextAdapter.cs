@@ -26,7 +26,6 @@ public sealed class RequestContextAdapter : IRequestContext
             return null;
         }
 
-        var basicAuthValueEncoder = new BasicAuthenticationValueEncoder();
-        return basicAuthValueEncoder.Decode(basicAuthHeaderValue);
+        return BasicAuthenticationValueEncoder.Decode(basicAuthHeaderValue);
     }
 }
