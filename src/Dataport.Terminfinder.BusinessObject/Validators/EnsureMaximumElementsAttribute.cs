@@ -3,8 +3,9 @@
 namespace Dataport.Terminfinder.BusinessObject.Validators;
 
 /// <summary>
-/// Check mininum elements 
+/// Check minimum elements 
 /// </summary>
+[AttributeUsage(AttributeTargets.Property)]
 public class EnsureMaximumElementsAttribute : ValidationAttribute
 {
     private static readonly int MaximumElements_MaximumValue = 10000;

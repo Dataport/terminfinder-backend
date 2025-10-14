@@ -5,6 +5,7 @@ namespace Dataport.Terminfinder.BusinessObject.Validators;
 /// <summary>
 /// Check minimum elements 
 /// </summary>
+[AttributeUsage(AttributeTargets.Property)]
 public class EnsureMinimumElementsAttribute : ValidationAttribute
 {
     private static readonly int MinimumElements_MinimumValue = 1;

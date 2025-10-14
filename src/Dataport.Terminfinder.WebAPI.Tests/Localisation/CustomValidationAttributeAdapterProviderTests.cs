@@ -91,7 +91,8 @@ public class CustomValidationAttributeAdapterProviderTests
         Assert.IsNull(result);
     }
 
-    class UtAttribute : ValidationAttribute
+    [AttributeUsage(AttributeTargets.Class)]
+    private class UtAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {

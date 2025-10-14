@@ -3,6 +3,7 @@
 /// <summary>
 /// Check, if the Date are today or in the future
 /// </summary>
+[AttributeUsage(AttributeTargets.Property)]
 public class DateTodayOrFutureAttribute : ValidationAttribute
 {
     /// <summary>
