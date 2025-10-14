@@ -245,13 +245,6 @@ public class PasswordValidatorTests
     [TestMethod]
     public void IsValid_null_throwException()
     {
-        try
-        {
-            PasswordValidator.IsValid(null);
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (ArgumentNullException)
-        {
-        }
+        Assert.ThrowsException<ArgumentNullException>(() => PasswordValidator.IsValid(null));
     }
 }

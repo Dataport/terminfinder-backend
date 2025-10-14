@@ -99,18 +99,18 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     public async Task AddSuggestedDateDescription_GetSuggestedDate_ValueMatches()
     {
         // arrange
-        const string description = "Im the test description!";
+        const string expectedDescription = "Im the test description!";
         var client = _testServer.CreateClient();
-        
+
         var appointment = CreateTestAppointment(ExpectedCustomerId, It.IsAny<Guid>());
-        appointment.SuggestedDates.First().Description = description;
+        appointment.SuggestedDates.First().Description = expectedDescription;
 
         // act
         var result = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, null, appointment);
 
         // assert
-        var resultDescription = result.SuggestedDates.First(s => s.Description==description).Description;
+        var resultDescription = result.SuggestedDates.First(s => s.Description == expectedDescription).Description;
         Assert.IsNotNull(resultDescription);
-        Assert.AreEqual(resultDescription, description);
+        Assert.AreEqual(expectedDescription, expectedDescription);
     }
 }
