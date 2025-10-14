@@ -9,7 +9,7 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
-    private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public void Initialize()
@@ -22,14 +22,14 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task AddAppointment()
     {
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
 
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -45,7 +45,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var appointmentId= dto.AppointmentId;
 
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -87,7 +87,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         //-- Get protection
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}/protection");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}/protection");
 
         // Assert
         Assert.IsNotNull(response);
@@ -101,7 +101,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         //-- get GetPasswordVerification
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}/passwordverification");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}/passwordverification");
 
         // Assert
         Assert.IsNotNull(response);
@@ -118,14 +118,14 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task UpdateAppointment()
     {
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
 
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -142,7 +142,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         //--- get the appointment
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -162,7 +162,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var suggestedDate3 = new SuggestedDate
         {
             AppointmentId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             SuggestedDateId = Guid.Empty,
             StartDate = DateTime.Now.AddDays(3),
             EndDate = DateTime.Now.AddDays(4)
@@ -171,7 +171,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         // Act
         content = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PutAsync($"appointment/{_customerId}", content);
+        response = await client.PutAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert -- badrequest, no adminId
         Assert.IsNotNull(response);
@@ -180,7 +180,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // Act
         dto.AdminId = adminId;
         content = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PutAsync($"appointment/{_customerId}", content);
+        response = await client.PutAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -197,7 +197,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         //--- get the appointment
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -248,13 +248,13 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     public async Task RepostAppointment_SameObject_IsValid()
     {
         // Arrange
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -267,7 +267,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // resend previous result
         var contentRepost = new StringContent(JsonConvert.SerializeObject(appointmentResult), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        var responseRepost = await client.PostAsync($"appointment/{_customerId}", contentRepost);
+        var responseRepost = await client.PostAsync($"appointment/{ExpectedCustomerId}", contentRepost);
 
         // Assert
         Assert.IsNotNull(responseRepost);
@@ -281,13 +281,13 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     public async Task RepostAppointment_DifferentObject_PersistentValuesUnchanged()
     {
         // Arrange
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
         var client = _testServer.CreateClient();
 
         // Act
         var contentString = JsonConvert.SerializeObject(appointment);
         var content = new StringContent(contentString, Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -297,13 +297,13 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // Act
         var responseText = await response.Content.ReadAsStringAsync();
         var appointmentResponse = JsonConvert.DeserializeObject<Appointment>(responseText);
-        var responseVerify1 = await client.GetAsync($"appointment/{_customerId}/{appointmentResponse.AppointmentId}");
+        var responseVerify1 = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentResponse.AppointmentId}");
 
         appointmentResponse.CreatorName = "New Creator!";
 
         var contentRepost = new StringContent(JsonConvert.SerializeObject(appointmentResponse), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        var responseRepost = await client.PostAsync($"appointment/{_customerId}", contentRepost);
+        var responseRepost = await client.PostAsync($"appointment/{ExpectedCustomerId}", contentRepost);
 
         // Assert
         Assert.IsNotNull(responseRepost);
@@ -314,7 +314,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
         // verify that values are unchanged from second post request
         // Act
-        var responseVerify2 = await client.GetAsync($"appointment/{_customerId}/{appointmentResponse.AppointmentId}");
+        var responseVerify2 = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentResponse.AppointmentId}");
         var responseVerify1Text = await responseVerify1.Content.ReadAsStringAsync();
         var responseVerify2Text = await responseVerify2.Content.ReadAsStringAsync();
 
@@ -335,7 +335,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var client = _testServer.CreateClient();
 
         // Act
-        var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        var response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -350,7 +350,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var client = _testServer.CreateClient();
 
         // Act
-        var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        var response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -365,7 +365,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var client = _testServer.CreateClient();
 
         // Act
-        var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        var response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -377,7 +377,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var adminId = new Guid("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
 
-        var appointment = CreateTestAppointment(_customerId, adminId);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, adminId);
 
         var client = _testServer.CreateClient();
 
@@ -385,7 +385,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -395,14 +395,14 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task AddAppointment_WithPassword_Unauthorized()
     {
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, "P@$$w0rd");
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, "P@$$w0rd");
 
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -417,7 +417,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var appointmentId = dto.AppointmentId;
 
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -430,13 +430,13 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         //--- too short
         var password = "12345";
 
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, password);
 
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -447,7 +447,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         appointment.Password = password;
 
         content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PostAsync($"appointment/{_customerId}", content);
+        response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -458,7 +458,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         appointment.Password = password;
 
         content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PostAsync($"appointment/{_customerId}", content);
+        response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -470,14 +470,14 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, password);
 
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -495,7 +495,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // Act - wrong password
         var credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{appointmentId}:23rfgt4-We"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -504,7 +504,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // Act
         credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{appointmentId}:{password}"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -527,7 +527,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, password);
 
         var client = _testServer.CreateClient();
 
@@ -535,7 +535,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -550,7 +550,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 
 
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}/protection");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}/protection");
 
         // Assert
         Assert.IsNotNull(response);
@@ -568,7 +568,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, password);
 
         var client = _testServer.CreateClient();
 
@@ -576,7 +576,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
 
         // Assert
         Assert.IsNotNull(response);
@@ -593,7 +593,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // Act
         var credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:{password}"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}/passwordverification");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}/passwordverification");
 
         // Assert
         Assert.IsNotNull(response);
@@ -609,7 +609,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         // Act - password is not valid
         credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:7873jfe-gteA"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}/passwordverification");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}/passwordverification");
 
         // Assert
         Assert.IsNotNull(response);

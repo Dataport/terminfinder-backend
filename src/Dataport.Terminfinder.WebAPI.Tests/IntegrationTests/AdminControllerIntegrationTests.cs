@@ -8,7 +8,7 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 public class AdminControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
-    private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public void Initialize()
@@ -22,13 +22,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     public async Task GetAppointment()
     {
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var adminId = dto.AdminId;
 
         // Act
-        var response = await client.GetAsync($"admin/{_customerId}/{adminId}");
+        var response = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -40,7 +40,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         Assert.IsInstanceOfType(appointmentResult, typeof(Appointment));
 
         // Act protection
-        var responseProtection = await client.GetAsync($"admin/{_customerId}/{adminId}/protection");
+        var responseProtection = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}/protection");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -57,13 +57,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     public async Task GetAppointment_AdminIdIsEmpty()
     {
         var client = _testServer.CreateClient();
-        await CreateTestAppointmentInDatabase(client, _customerId);
+        await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var adminId = Guid.Empty;
 
         // Act
-        var response = await client.GetAsync($"admin/{_customerId}/{adminId}");
+        var response = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -74,13 +74,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     public async Task GetAppointment_NotFound()
     {
         var client = _testServer.CreateClient();
-        await CreateTestAppointmentInDatabase(client, _customerId);
+        await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var adminId = Guid.NewGuid();
 
         // Act
-        var response = await client.GetAsync($"admin/{_customerId}/{adminId}");
+        var response = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -93,20 +93,20 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, password);
 
         //--- get the appointment
         var adminId = dto.AdminId;
 
         // Act
-        var response = await client.GetAsync($"admin/{_customerId}/{adminId}");
+        var response = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}");
 
         // Assert
         Assert.IsNotNull(response);
         Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
 
         // Act Protection
-        var responseProtection = await client.GetAsync($"admin/{_customerId}/{adminId}/protection");
+        var responseProtection = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}/protection");
         responseProtection.EnsureSuccessStatusCode();
 
         // Assert
@@ -125,11 +125,11 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, password);
         var adminId = dto.AdminId;
 
         // Act Protection
-        var responseProtection = await client.GetAsync($"admin/{_customerId}/{adminId}/protection");
+        var responseProtection = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}/protection");
         responseProtection.EnsureSuccessStatusCode();
 
         // Assert
@@ -145,7 +145,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         // Act
         var credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:{password}"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        var response = await client.GetAsync($"admin/{_customerId}/{adminId}");
+        var response = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -160,13 +160,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
     public async Task SetStatus_appointmentStatusTypeStarted_Okay()
     {
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var adminId = dto.AdminId;
 
         // Act
-        var response = await client.PutAsync($"admin/{_customerId}/{adminId}/{AppointmentStatusType.Paused}/status", null);
+        var response = await client.PutAsync($"admin/{ExpectedCustomerId}/{adminId}/{AppointmentStatusType.Paused}/status", null);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -178,7 +178,7 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         Assert.IsInstanceOfType(appointmentResult, typeof(Appointment));
 
         // Act
-        response = await client.GetAsync($"admin/{_customerId}/{adminId}");
+        response = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -197,13 +197,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, password);
         var adminId = dto.AdminId;
 
         // Act Protection
         var credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:{password}"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        var responseProtection = await client.GetAsync($"admin/{_customerId}/{adminId}/passwordverification");
+        var responseProtection = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}/passwordverification");
         responseProtection.EnsureSuccessStatusCode();
 
         // Assert
@@ -223,13 +223,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, password);
         var adminId = dto.AdminId;
 
         // Act Protection
         var credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:x2er4A-4"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        var responseProtection = await client.GetAsync($"admin/{_customerId}/{adminId}/passwordverification");
+        var responseProtection = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}/passwordverification");
         responseProtection.EnsureSuccessStatusCode();
 
         // Assert
@@ -249,13 +249,13 @@ public class AdminControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
         var adminId = dto.AdminId;
 
         // Act Protection
         var credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{adminId}:{password}"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
-        var responseProtection = await client.GetAsync($"admin/{_customerId}/{adminId}/passwordverification");
+        var responseProtection = await client.GetAsync($"admin/{ExpectedCustomerId}/{adminId}/passwordverification");
         responseProtection.EnsureSuccessStatusCode();
 
         // Assert

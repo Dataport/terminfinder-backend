@@ -5,7 +5,7 @@
 public class CustomerControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
-    private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public void Initialize()
@@ -20,7 +20,7 @@ public class CustomerControllerIntegrationTests : BaseIntegrationTests
     {
         var expectedCustomer = new Customer
         {
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             CustomerName = "Test",
             Status = AppointmentStatusType.Started.ToString()
         };
