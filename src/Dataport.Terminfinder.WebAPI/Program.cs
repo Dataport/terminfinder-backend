@@ -22,11 +22,7 @@ public static class Program
 
         if (args.Contains("--dbmigrate") || (configuration?.GetValue<string>("Terminfinder:dbmigrate") == "true"))
         {
-            var migrationManager = scope.ServiceProvider.GetService<IMigrationManager>();
-            if (migrationManager == null)
-            {
-                throw new ApplicationException("Database Migration failed!");
-            }
+            var migrationManager = scope.ServiceProvider.GetRequiredService<IMigrationManager>();
 
             migrationManager.MigrateDatabase();
         }
