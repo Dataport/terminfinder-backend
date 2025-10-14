@@ -27,10 +27,7 @@ public static class AssemblyUtils
     /// <returns></returns>
     public static string GetVersion(Type type)
     {
-        if (type == null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
+        ArgumentNullException.ThrowIfNull(type);
 
         Assembly assembly = Assembly.GetAssembly(type);
         return GetVersion(assembly);
@@ -42,10 +39,7 @@ public static class AssemblyUtils
     /// <returns></returns>
     public static string GetVersion(Assembly assembly)
     {
-        if (assembly == null)
-        {
-            throw new ArgumentNullException(nameof(assembly));
-        }
+        ArgumentNullException.ThrowIfNull(assembly);
 
         FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
         return fvi.FileVersion;
@@ -67,10 +61,7 @@ public static class AssemblyUtils
     /// <returns></returns>
     public static string GetProductVersion(Type type)
     {
-        if (type == null)
-        {
-            throw new ArgumentNullException(nameof(type));
-        }
+        ArgumentNullException.ThrowIfNull(type);
 
         Assembly assembly = Assembly.GetAssembly(type);
         return GetProductVersion(assembly);
@@ -82,10 +73,7 @@ public static class AssemblyUtils
     /// <returns></returns>
     public static string GetProductVersion(Assembly assembly)
     {
-        if (assembly == null)
-        {
-            throw new ArgumentNullException(nameof(assembly));
-        }
+        ArgumentNullException.ThrowIfNull(assembly);
 
         FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
         return fvi.ProductVersion;

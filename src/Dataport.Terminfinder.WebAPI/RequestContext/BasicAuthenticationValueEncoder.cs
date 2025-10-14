@@ -20,8 +20,8 @@ public class BasicAuthenticationValueEncoder
     /// <returns>the basic authentication payload value</returns>
     public string Encode(string username, string password)
     {
-        if (username == null) throw new ArgumentNullException(nameof(username));
-        if (password == null) throw new ArgumentNullException(nameof(password));
+        ArgumentNullException.ThrowIfNull(username);
+        ArgumentNullException.ThrowIfNull(password);
 
         return string.Concat(PrefixWithSpace,
             Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password)));
@@ -38,7 +38,7 @@ public class BasicAuthenticationValueEncoder
     /// <returns>the decoded username and password from the submitted basic authentication value</returns>
     public UserCredential Decode(string encodedBasicAuthPayloadValue)
     {
-        if (encodedBasicAuthPayloadValue == null) throw new ArgumentNullException(nameof(encodedBasicAuthPayloadValue));
+        ArgumentNullException.ThrowIfNull(encodedBasicAuthPayloadValue);
 
         if (!encodedBasicAuthPayloadValue.StartsWith(PrefixWithSpace))
         {

@@ -31,7 +31,7 @@ public static class PasswordValidator
     /// <returns>true if the password is valid. otherwise false</returns>
     public static bool IsValid(string password)
     {
-        if (password == null) throw new ArgumentNullException(nameof(password));
+        ArgumentNullException.ThrowIfNull(password);
 
         if (password.Length >= MinLengthPassword && password.Length <= MaxLengthPassword)
         {
