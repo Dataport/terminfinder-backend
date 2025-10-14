@@ -3,6 +3,7 @@
 /// <summary>
 /// Check, if the password is valid
 /// </summary>
+[AttributeUsage(AttributeTargets.Property)]
 public class PasswordAttribute : ValidationAttribute
 {
     /// <summary>
