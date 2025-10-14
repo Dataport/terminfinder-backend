@@ -1,3 +1,5 @@
+using Dataport.Terminfinder.Repository.Tests.Utils;
+
 namespace Dataport.Terminfinder.Repository.Tests;
 
 [TestClass]
@@ -23,23 +25,21 @@ public class AppConfigRepositoryTests
 
         // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
 
-        IQueryable<AppConfig> appConfigs = new List<AppConfig>
+        var appConfigs = new List<AppConfig>
         {
-            new AppConfig()
+            new()
             {
                 Key = "version",
                 Value = version
             },
-            new AppConfig()
+            new()
             {
                 Key = "builddate",
                 Value = builddate
             }
-        }.AsQueryable();
+        };
 
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<AppConfig>>();
-        SetMockSetup(mockSet, appConfigs);
+        var mockSet = DbSetMockFactory.CreateMockDbSet(appConfigs);
 
         var mockContext = new Mock<DataContext>();
         mockContext.Setup(c => c.AppConfig).Returns(mockSet.Object);
@@ -61,23 +61,21 @@ public class AppConfigRepositoryTests
         string version = "1.2.3";
         string builddate = "2018-01-02";
 
-        IQueryable<AppConfig> appConfigs = new List<AppConfig>
+        var appConfigs = new List<AppConfig>
         {
-            new AppConfig()
+            new()
             {
                 Key = "unkown",
                 Value = version
             },
-            new AppConfig()
+            new()
             {
                 Key = "unknown2",
                 Value = builddate
             }
-        }.AsQueryable();
+        };
 
-        // To query our database we need to implement IQueryable  
-        var mockSet = new Mock<DbSet<AppConfig>>();
-        SetMockSetup(mockSet, appConfigs);
+        var mockSet = DbSetMockFactory.CreateMockDbSet(appConfigs);
 
         var mockContext = new Mock<DataContext>();
         mockContext.Setup(c => c.AppConfig).Returns(mockSet.Object);
@@ -89,13 +87,5 @@ public class AppConfigRepositoryTests
 
         // Assert
         Assert.AreEqual(null, appInfo);
-    }
-
-    private static void SetMockSetup(Mock<DbSet<AppConfig>> mockSet, IQueryable<AppConfig> appConfigs)
-    {
-        mockSet.As<IQueryable<AppConfig>>().Setup(m => m.Provider).Returns(appConfigs.Provider);
-        mockSet.As<IQueryable<AppConfig>>().Setup(m => m.Expression).Returns(appConfigs.Expression);
-        mockSet.As<IQueryable<AppConfig>>().Setup(m => m.ElementType).Returns(appConfigs.ElementType);
-        mockSet.As<IQueryable<AppConfig>>().Setup(m => m.GetEnumerator()).Returns(appConfigs.GetEnumerator());
     }
 }
