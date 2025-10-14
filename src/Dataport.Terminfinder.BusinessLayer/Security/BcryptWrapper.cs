@@ -24,7 +24,7 @@ public class BcryptWrapper : IBcryptWrapper
     {
         _logger.LogDebug("Enter {NameofHashPassword}(string)", nameof(HashPassword));
 
-        if (password == null) throw new ArgumentNullException(nameof(password));
+        ArgumentNullException.ThrowIfNull(password);
 
         string salt = _saltGenerator.GenerateSalt();
 
@@ -36,8 +36,8 @@ public class BcryptWrapper : IBcryptWrapper
     {
         _logger.LogDebug("Enter {NameofVerify}(string), (string)", nameof(Verify));
 
-        if (password == null) throw new ArgumentNullException(nameof(password));
-        if (passwordHash == null) throw new ArgumentNullException(nameof(passwordHash));
+        ArgumentNullException.ThrowIfNull(password);
+        ArgumentNullException.ThrowIfNull(passwordHash);
 
         return BCrypt.Net.BCrypt.Verify(password, passwordHash);
     }
