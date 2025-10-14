@@ -61,19 +61,14 @@ public class DateConverterTests
     {
         var dt = "99.99.2015";
         var sut = new DateConverter();
-        using var sr = new StringReader($"\"{dt}\"");
-        using var jsonReader = new JsonTextReader(sr);
-        try
+        
+        Assert.ThrowsException<FormatException>(() =>
         {
+            using var sr = new StringReader($"\"{dt}\"");
+            using var jsonReader = new JsonTextReader(sr);
             jsonReader.Read();
             sut.ReadJson(jsonReader, null, null, Newtonsoft.Json.JsonSerializer.CreateDefault());
-            Assert.Fail("An Exception should be thrown");
-        }
-        catch (FormatException)
-        {
-            // Assert
-            Assert.IsTrue(true);
-        }
+        });
     }
 
     [TestMethod]

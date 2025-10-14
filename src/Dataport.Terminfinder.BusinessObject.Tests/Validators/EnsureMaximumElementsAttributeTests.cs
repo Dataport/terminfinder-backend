@@ -26,22 +26,11 @@ public class EnsureMaximumElementsAttributeTests
     [TestMethod]
     public void Constructor_MaxElementsValueIsTooGreat_throwException()
     {
-        try
+        Assert.ThrowsException<ArgumentException>(() => new EnsureMaximumElementsAttribute()
         {
-            // ReSharper disable once ObjectCreationAsStatement
-#pragma warning disable CA1806 // Do not ignore method results
-            new EnsureMaximumElementsAttribute()
-            {
-                ErrorMessage = ExectedEnsureMaximumElementsAttributeErrorMessage,
-                MaxElements = 10001
-            };
-#pragma warning restore CA1806 // Do not ignore method results
-            Assert.Fail("A exception has been exprected");
-        }
-        catch (ArgumentException)
-        {
-
-        }
+            ErrorMessage = ExectedEnsureMaximumElementsAttributeErrorMessage,
+            MaxElements = 10001
+        });
     }
 
     [TestMethod]
