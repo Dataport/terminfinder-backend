@@ -38,7 +38,7 @@ public class EnumerableExtensionsTests
 
     private class UtEnumerable : IEnumerable<string>
     {
-        private readonly List<string> _values = new ();
+        private readonly List<string> _values = [];
 
         public void Add(string value)
         {
