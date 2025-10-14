@@ -23,11 +23,10 @@ public class BcryptWrapperTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void HashPassword_null_throwException()
     {
         var sut = CreateSut(saltGenerator);
-        sut.HashPassword(null);
+        Assert.ThrowsException<ArgumentNullException>(() => sut.HashPassword(null));
     }
 
     [TestMethod]
@@ -40,19 +39,17 @@ public class BcryptWrapperTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void HashPassword_passwordIsNullHashIsNotNull_throwException()
     {
         var sut = CreateSut(saltGenerator);
-        sut.Verify(null, string.Empty);
+        Assert.ThrowsException<ArgumentNullException>(() => sut.Verify(null, string.Empty));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void HashPassword_passwordIsNotNullPasswordIsNull_throwException()
     {
         var sut = CreateSut(saltGenerator);
-        sut.Verify(string.Empty, null);
+        Assert.ThrowsException<ArgumentNullException>(() => sut.Verify(string.Empty, null));
     }
 
     [TestMethod]

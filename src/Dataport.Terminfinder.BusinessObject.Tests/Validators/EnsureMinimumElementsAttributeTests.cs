@@ -26,22 +26,11 @@ public class EnsureMinimumElementsAttributeTests
     [TestMethod]
     public void Constructor_MinElementsValueIsTooSmall_throwException()
     {
-        try
+        Assert.ThrowsException<ArgumentException>(() => new EnsureMinimumElementsAttribute
         {
-            // ReSharper disable once ObjectCreationAsStatement
-#pragma warning disable CA1806 // Do not ignore method results
-            new EnsureMinimumElementsAttribute
-            {
-                ErrorMessage = ExectedEnsureMinimumElementsAttributeErrorMessage,
-                MinElements = 0
-            };
-#pragma warning restore CA1806 // Do not ignore method results
-            Assert.Fail("A exception has been exprected");
-        }
-        catch (ArgumentException)
-        {
-
-        }
+            ErrorMessage = ExectedEnsureMinimumElementsAttributeErrorMessage,
+            MinElements = 0
+        });
     }
 
     [TestMethod]

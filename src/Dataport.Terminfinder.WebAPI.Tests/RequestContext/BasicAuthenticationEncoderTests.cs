@@ -45,57 +45,28 @@ public class BasicAuthenticationEncoderTests
     public void Decode_invalidBasicAuthenticationPayloadValueNoBasicAtBeginning_throwException()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        try
-        {
-            sut.Decode(" dXNlcm5hbWU6UDQkJHcwcmQ=");
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (DecodingBasicAuthenticationValueFailedException)
-        {
-        }
+        Assert.ThrowsException<DecodingBasicAuthenticationValueFailedException>(() => sut.Decode(" dXNlcm5hbWU6UDQkJHcwcmQ="));
     }
 
     [TestMethod]
     public void Decode_invalidBasicAuthenticationPayloadValueNoColonInEncodedBasicAuthValue_throwException()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        try
-        {
-            // Value 'dXNlcm5hbWVQNCQkdzByZA==' => 'usernameP4$$w0rd'
-            sut.Decode("Basic dXNlcm5hbWVQNCQkdzByZA==");
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (DecodingBasicAuthenticationValueFailedException)
-        {
-        }
+        Assert.ThrowsException<DecodingBasicAuthenticationValueFailedException>(() => sut.Decode("Basic dXNlcm5hbWVQNCQkdzByZA=="));
     }
 
     [TestMethod]
     public void Decode_invalidBasicAuthenticationPayloadValueInvalidEncodedBasicAuthValue_throwException()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        try
-        {
-            sut.Decode("Basic aaaaaaa");
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (DecodingBasicAuthenticationValueFailedException)
-        {
-        }
+        Assert.ThrowsException<DecodingBasicAuthenticationValueFailedException>(() => sut.Decode("Basic aaaaaaa"));
     }
 
     [TestMethod]
     public void Decode_null_throwException()
     {
         var sut = new BasicAuthenticationValueEncoder();
-        try
-        {
-            sut.Decode(null);
-            Assert.Fail("An exception should be thrown");
-        }
-        catch (ArgumentNullException)
-        {
-        }
+        Assert.ThrowsException<ArgumentNullException>(() => sut.Decode(null));
     }
 
     [TestMethod]
