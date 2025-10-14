@@ -36,7 +36,7 @@ public class MigrationManager : IMigrationManager
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Migration failed {ex}", ex);
+            _logger.LogError(ex, "Migration failed {Ex}", ex);
             throw;
         }
     }
