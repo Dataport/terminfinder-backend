@@ -1,5 +1,6 @@
 ﻿using Dataport.Terminfinder.BusinessObject.Enum;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace Dataport.Terminfinder.WebAPI.Exceptions;
 
@@ -27,5 +28,24 @@ public abstract class RestApiException : Exception
         : base(message, innerException)
     {
         ErrorCode = errorCode;
+    }
+
+    /// <inheritdoc />
+    [Obsolete("Needs to be implemented for ISerializable.")]
+    protected RestApiException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        ErrorCode = (ErrorType)info.GetValue(nameof(ErrorCode), typeof(ErrorType))!;
+    }
+
+    /// <inheritdoc />
+    [Obsolete("Needs to be implemented for ISerializable.")]
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        info.AddValue(nameof(ErrorCode), ErrorCode);
+        base.GetObjectData(info, context);
     }
 }

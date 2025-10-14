@@ -1,5 +1,6 @@
 ﻿using Dataport.Terminfinder.BusinessObject.Enum;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 // ReSharper disable UnusedMember.Global
 namespace Dataport.Terminfinder.WebAPI.Exceptions;
@@ -24,6 +25,12 @@ public class UnauthorizedException : RestApiException
     /// <inheritdoc />
     public UnauthorizedException(string message, ErrorType errorCode, Exception innerException) : base(message,
         errorCode, innerException)
+    {
+    }
+
+    /// <inheritdoc />
+    [Obsolete("Needs to be implemented for ISerializable.")]
+    protected UnauthorizedException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
 }
