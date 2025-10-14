@@ -51,13 +51,15 @@ public class CustomerController : ApiControllerBase
     [ProducesResponseType(typeof(IErrorResult), 500)]
     public IActionResult GetCustomer(string customerId)
     {
+        const string loggingTemplateError = "Error {NameofGetCustomer}: {ErrorObjectCode},{ErrorObjectMessage}";
+
         try
         {
             Logger.LogDebug($"Enter {nameof(GetCustomer)}");
 
             if (string.IsNullOrEmpty(customerId))
             {
-                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerIdNotFound)}";
+                var errorMessage = $"ErrorCode{(int)ErrorType.CustomerIdNotFound:d4}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 var errorObject = new ErrorResult
@@ -67,14 +69,13 @@ public class CustomerController : ApiControllerBase
                     Language = language
                 };
 
-                Logger.LogInformation("Error {NameofGetCustomer}: {ErrorObjectCode},{ErrorObjectMessage}",
-                    nameof(GetCustomer), errorObject.Code, errorObject.Message);
+                Logger.LogInformation(loggingTemplateError, nameof(GetCustomer), errorObject.Code, errorObject.Message);
                 return BadRequest(errorObject);
             }
 
             if (!Guid.TryParse(customerId, out var customerIdGuid))
             {
-                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.WrongInputOrNotAllowed)}";
+                var errorMessage = $"ErrorCode{(int)ErrorType.WrongInputOrNotAllowed:d4}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 var errorObject = new ErrorResult
@@ -84,8 +85,7 @@ public class CustomerController : ApiControllerBase
                     Language = language
                 };
 
-                Logger.LogInformation("Error {NameofGetCustomer}: {ErrorObjectCode},{ErrorObjectMessage}",
-                    nameof(GetCustomer), errorObject.Code, errorObject.Message);
+                Logger.LogInformation(loggingTemplateError, nameof(GetCustomer), errorObject.Code, errorObject.Message);
                 return BadRequest(errorObject);
             }
 
@@ -93,7 +93,7 @@ public class CustomerController : ApiControllerBase
             var customer = _customerBusinessLayer.GetCustomer(customerIdGuid);
             if (customer == null)
             {
-                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotFound)}";
+                var errorMessage = $"ErrorCode{(int)ErrorType.CustomerNotFound:d4}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 var errorObject = new ErrorResult
@@ -103,8 +103,7 @@ public class CustomerController : ApiControllerBase
                     Language = language
                 };
 
-                Logger.LogInformation("Error {NameofGetCustomer}: {ErrorObjectCode},{ErrorObjectMessage}",
-                    nameof(GetCustomer), errorObject.Code, errorObject.Message);
+                Logger.LogInformation(loggingTemplateError, nameof(GetCustomer), errorObject.Code, errorObject.Message);
 
                 return NotFound(errorObject);
             }
@@ -114,7 +113,7 @@ public class CustomerController : ApiControllerBase
                 return Ok(customer);
             }
 
-            var errorMessageWithCode = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotValid)}";
+            var errorMessageWithCode = $"ErrorCode{(int)ErrorType.CustomerNotValid:d4}";
             var languageName = Thread.CurrentThread.CurrentCulture.Name;
 
             var errorResultObject = new ErrorResult
@@ -124,8 +123,8 @@ public class CustomerController : ApiControllerBase
                 Language = languageName
             };
 
-            Logger.LogInformation("Error {NameofGetCustomer}: {ErrorResultObjectCode},{ErrorResultObjectMessage}",
-                nameof(GetCustomer), errorResultObject.Code, errorResultObject.Message);
+            Logger.LogInformation(loggingTemplateError, nameof(GetCustomer), errorResultObject.Code,
+                errorResultObject.Message);
 
             return NotFound(errorResultObject);
         }
@@ -133,7 +132,7 @@ public class CustomerController : ApiControllerBase
         {
             Console.WriteLine(e);
 
-            var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
+            var errorMessage = $"ErrorCode{(int)ErrorType.GeneralError:d4}";
             var language = Thread.CurrentThread.CurrentCulture.Name;
 
             var errorObject = new ErrorResult
@@ -142,8 +141,7 @@ public class CustomerController : ApiControllerBase
                 Message = Localizer[errorMessage],
                 Language = language
             };
-            Logger.LogError(e, "Error {NameofGetCustomer}: {ErrorObjectCode},{ErrorObjectMessage}",
-                nameof(GetCustomer), errorObject.Code, errorObject.Message);
+            Logger.LogError(e, loggingTemplateError, nameof(GetCustomer), errorObject.Code, errorObject.Message);
 
             return StatusCode(500, errorObject);
         }
