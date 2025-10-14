@@ -14,7 +14,7 @@ public static class ErrorTypeExtensions
     /// <returns></returns>
     public static string ToLocalisationId(this ErrorType enumValue)
     {
-        return $"{LocalisationIdPrefix}{string.Format("{0:d4}", (int)enumValue)}";
+        return $"{LocalisationIdPrefix}{(int)enumValue:d4}";
     }
 
     /// <summary>
@@ -24,6 +24,6 @@ public static class ErrorTypeExtensions
     /// <returns></returns>
     public static string ToFormattedErrorNumber(this ErrorType enumValue)
     {
-        return $"{string.Format("{0:d4}", (int)enumValue)}";
+        return $"{(int)enumValue:d4}";
     }
 }
