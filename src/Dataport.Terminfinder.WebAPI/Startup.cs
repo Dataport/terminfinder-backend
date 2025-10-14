@@ -52,9 +52,9 @@ public class Startup
         Configuration = configuration;
         WebHostingEnvironment = environment;
 
-        string cors = Configuration["Terminfinder:UseCors"] ?? "false";
+        var cors = Configuration["Terminfinder:UseCors"] ?? "false";
         _useCors = cors.ToLower() == "true";
-        string https = Configuration["Terminfinder:UseHttps"] ?? "false";
+        var https = Configuration["Terminfinder:UseHttps"] ?? "false";
         _useHttps = https.ToLower() == "true";
     }
 
@@ -184,7 +184,7 @@ public class Startup
             .AddDataAnnotationsLocalization();
 
         services.AddSingleton<IValidationAttributeAdapterProvider, CustomValidationAttributeAdapterProvider>();
-        string connectionString = Configuration["ConnectionStrings:TerminfinderConnection"];
+        var connectionString = Configuration["ConnectionStrings:TerminfinderConnection"];
         services.AddDbContext<DataContext>(options =>
         {
             options.UseNpgsql(connectionString);

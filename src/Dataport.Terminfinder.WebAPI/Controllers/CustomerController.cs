@@ -57,8 +57,8 @@ public class CustomerController : ApiControllerBase
 
             if (string.IsNullOrEmpty(customerId))
             {
-                string errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerIdNotFound)}";
-                string language = Thread.CurrentThread.CurrentCulture.Name;
+                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerIdNotFound)}";
+                var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 ErrorResult errorObject = new()
                 {
@@ -72,10 +72,10 @@ public class CustomerController : ApiControllerBase
                 return BadRequest(errorObject);
             }
 
-            if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+            if (!Guid.TryParse(customerId, out var customerIdGuid))
             {
-                string errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.WrongInputOrNotAllowed)}";
-                string language = Thread.CurrentThread.CurrentCulture.Name;
+                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.WrongInputOrNotAllowed)}";
+                var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 ErrorResult errorObject = new()
                 {
@@ -90,11 +90,11 @@ public class CustomerController : ApiControllerBase
             }
 
             // check status type of customer
-            Customer customer = _customerBusinessLayer.GetCustomer(customerIdGuid);
+            var customer = _customerBusinessLayer.GetCustomer(customerIdGuid);
             if (customer == null)
             {
-                string errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotFound)}";
-                string language = Thread.CurrentThread.CurrentCulture.Name;
+                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotFound)}";
+                var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 ErrorResult errorObject = new()
                 {
@@ -114,8 +114,8 @@ public class CustomerController : ApiControllerBase
                 return Ok(customer);
             }
 
-            string errorMessageWithCode = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotValid)}";
-            string languageName = Thread.CurrentThread.CurrentCulture.Name;
+            var errorMessageWithCode = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotValid)}";
+            var languageName = Thread.CurrentThread.CurrentCulture.Name;
 
             ErrorResult errorResultObject = new()
             {
@@ -133,8 +133,8 @@ public class CustomerController : ApiControllerBase
         {
             Console.WriteLine(e);
 
-            string errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
-            string language = Thread.CurrentThread.CurrentCulture.Name;
+            var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
+            var language = Thread.CurrentThread.CurrentCulture.Name;
 
             ErrorResult errorObject = new()
             {

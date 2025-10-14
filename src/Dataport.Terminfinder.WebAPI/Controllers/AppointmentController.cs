@@ -64,19 +64,19 @@ public class AppointmentController : ApiControllerBase
         Logger.LogDebug("Enter {Name}, Parameter: {CustomerId}, {AppointmentId}", nameof(Get), customerId,
             appointmentId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(appointmentId, out Guid appointmentIdGuid))
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
         ValidateAppointmentRequest(customerIdGuid, appointmentIdGuid, _appointmentBusinessLayer);
 
-        Appointment appointment = _appointmentBusinessLayer.GetAppointment(customerIdGuid, appointmentIdGuid);
+        var appointment = _appointmentBusinessLayer.GetAppointment(customerIdGuid, appointmentIdGuid);
         if (appointment == null)
         {
             throw CreateNotFoundRequestException(ErrorType.AppointmentNotFound);
@@ -107,12 +107,12 @@ public class AppointmentController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGetProtection}, Parameter: {CustomerId}, {AppointmentId}",
             nameof(GetProtection), customerId, appointmentId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(appointmentId, out Guid appointmentIdGuid))
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -156,12 +156,12 @@ public class AppointmentController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGetPasswordVerification}, Parameter: {CustomerId}, {AppointmentId}",
             nameof(GetPasswordVerification), customerId, appointmentId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(appointmentId, out Guid appointmentIdGuid))
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -211,7 +211,7 @@ public class AppointmentController : ApiControllerBase
         if (appointmentObject == null
             || (appointmentObject.AdminId == Guid.Empty && appointmentObject.AppointmentId != Guid.Empty)
             || (appointmentObject.AdminId != Guid.Empty && appointmentObject.AppointmentId == Guid.Empty)
-            || !Guid.TryParse(customerId, out Guid customerIdGuid))
+            || !Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -265,7 +265,7 @@ public class AppointmentController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.NoInput);
         }
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -291,7 +291,7 @@ public class AppointmentController : ApiControllerBase
             "Enter {NameofValidateCreateAndUpdateAppointmentRequest}, Parameter: {appointmentFromRequest}, {customerIdFromRequest}",
             nameof(ValidateCreateAndUpdateAppointmentRequest), appointmentFromRequest, customerIdFromRequest);
 
-        if (!Guid.TryParse(customerIdFromRequest, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerIdFromRequest, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -311,10 +311,10 @@ public class AppointmentController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.CustomerNotFound);
         }
 
-        bool isModelValid = TryValidateModelCreateAndUpdateAppointmentModel(appointmentFromRequest);
+        var isModelValid = TryValidateModelCreateAndUpdateAppointmentModel(appointmentFromRequest);
         if (!isModelValid)
         {
-            string additionalErrorMessage = BuildAdditionalErrorMessageFromModelState();
+            var additionalErrorMessage = BuildAdditionalErrorMessageFromModelState();
 
             throw CreateBadRequestException(ErrorType.AppointmentNotValid, additionalErrorMessage);
         }
@@ -351,8 +351,8 @@ public class AppointmentController : ApiControllerBase
 
         if (appointmentFromRequest.SuggestedDates != null)
         {
-            int i = 0;
-            foreach (SuggestedDate elem in appointmentFromRequest.SuggestedDates)
+            var i = 0;
+            foreach (var elem in appointmentFromRequest.SuggestedDates)
             {
                 TryValidateModel(elem, $"{nameof(appointmentFromRequest.SuggestedDates)}[{i}]");
                 i++;

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Dataport.Terminfinder.BusinessLayer;
+﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.BusinessObject.Error;
 using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Swagger;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dataport.Terminfinder.WebAPI.Controllers;
 
@@ -63,17 +63,17 @@ public class SuggestedDateController : ApiControllerBase
         Logger.LogDebug("Enter {NameofDelete}, Parameter: {CustomerId}, {AppointmentId}", nameof(Delete),
             customerId, appointmentId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(appointmentId, out Guid appointmentIdGuid))
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(suggestedDateId, out Guid suggestedDateIdGuid))
+        if (!Guid.TryParse(suggestedDateId, out var suggestedDateIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }

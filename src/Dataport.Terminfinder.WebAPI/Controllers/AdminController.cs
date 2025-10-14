@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Dataport.Terminfinder.BusinessLayer;
+﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.BusinessObject.Error;
@@ -7,6 +6,7 @@ using Dataport.Terminfinder.Common.Extension;
 using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Swagger;
+using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable ParameterOnlyUsedForPreconditionCheck.Local
 
@@ -66,15 +66,15 @@ public class AdminController : ApiControllerBase
     {
         Logger.LogDebug("Enter {NameofGet}, Parameter: {CustomerId}, {AdminId}", nameof(Get), customerId, adminId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid)
-            || !Guid.TryParse(adminId, out Guid adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid)
+            || !Guid.TryParse(adminId, out var adminIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
         ValidateReadAppointmentByAdminIdRequest(customerIdGuid, adminIdGuid, _appointmentBusinessLayer);
 
-        Appointment appointment = _appointmentBusinessLayer.GetAppointmentByAdminId(customerIdGuid, adminIdGuid);
+        var appointment = _appointmentBusinessLayer.GetAppointmentByAdminId(customerIdGuid, adminIdGuid);
 
         return Ok(appointment);
     }
@@ -100,8 +100,8 @@ public class AdminController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGetProtection}, Parameter: {CustomerId}, {AdminId}", nameof(GetProtection),
             customerId, adminId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid)
-            || !Guid.TryParse(adminId, out Guid adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid)
+            || !Guid.TryParse(adminId, out var adminIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -147,8 +147,8 @@ public class AdminController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGetPasswordVerification}, Parameter: {CustomerId}, {AdminId}",
             nameof(GetPasswordVerification), customerId, adminId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid)
-            || !Guid.TryParse(adminId, out Guid adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid)
+            || !Guid.TryParse(adminId, out var adminIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -199,15 +199,15 @@ public class AdminController : ApiControllerBase
         Logger.LogDebug("Enter {NameofSetStatus}, Parameter: {CustomerId}, {AdminId}, {StatusType}", nameof(SetStatus),
             customerId, adminId, statusType);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid)
-            || !Guid.TryParse(adminId, out Guid adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid)
+            || !Guid.TryParse(adminId, out var adminIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
         ValidateReadAppointmentByAdminIdRequest(customerIdGuid, adminIdGuid, _appointmentBusinessLayer);
 
-        Appointment appointmentObject = _appointmentBusinessLayer.SetAppointmentStatusType(customerIdGuid,
+        var appointmentObject = _appointmentBusinessLayer.SetAppointmentStatusType(customerIdGuid,
             adminIdGuid, statusType.ToEnum<AppointmentStatusType>());
         if (appointmentObject == null)
         {

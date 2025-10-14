@@ -141,7 +141,7 @@ public abstract class ApiControllerBase : ControllerBase
 
                 foreach (var error in ModelState[key].Errors)
                 {
-                    string errorMessage = error.ErrorMessage;
+                    var errorMessage = error.ErrorMessage;
                     result.Add(errorMessage);
                 }
             }
@@ -316,7 +316,7 @@ public abstract class ApiControllerBase : ControllerBase
     {
         if (appointmentBusinessLayer.IsAppointmentPasswordProtected(customerIdFromRequest, appointmentId))
         {
-            string password = GetDecodedPasswordFromRequest();
+            var password = GetDecodedPasswordFromRequest();
             if (password == null)
             {
                 throw CreateUnauthorizedException(ErrorType.PasswordRequired);
@@ -337,7 +337,7 @@ public abstract class ApiControllerBase : ControllerBase
     {
         if (appointmentBusinessLayer.IsAppointmentPasswordProtectedByAdminId(customerIdFromRequest, adminId))
         {
-            string password = GetDecodedPasswordFromRequest();
+            var password = GetDecodedPasswordFromRequest();
             if (password == null)
             {
                 throw CreateUnauthorizedException(ErrorType.PasswordRequired);
@@ -363,7 +363,7 @@ public abstract class ApiControllerBase : ControllerBase
     {
         if (appointmentBusinessLayer.IsAppointmentPasswordProtected(customerId, appointmentId))
         {
-            string password = GetDecodedPasswordFromRequest();
+            var password = GetDecodedPasswordFromRequest();
             if (password == null)
             {
                 Logger.LogDebug($"The password is null");
@@ -396,7 +396,7 @@ public abstract class ApiControllerBase : ControllerBase
     {
         if (appointmentBusinessLayer.IsAppointmentPasswordProtectedByAdminId(customerId, adminId))
         {
-            string password = GetDecodedPasswordFromRequest();
+            var password = GetDecodedPasswordFromRequest();
             if (password == null)
             {
                 Logger.LogDebug($"The password is null");
