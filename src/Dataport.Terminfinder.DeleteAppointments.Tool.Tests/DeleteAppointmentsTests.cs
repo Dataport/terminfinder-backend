@@ -188,6 +188,6 @@ class DateTimeGeneratorServiceFake : IDateTimeGeneratorService
 {
     public DateTime GetCurrentDateTime()
     {
-        return new DateTime(2020, 02, 20, 12, 30, 00);
+        return new DateTime(2020, 02, 20, 12, 30, 00, DateTimeKind.Local);
     }
 }

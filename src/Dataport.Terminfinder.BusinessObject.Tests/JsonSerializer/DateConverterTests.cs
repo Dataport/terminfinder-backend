@@ -25,7 +25,7 @@ public class DateConverterTests
     [TestMethod]
     public void WriteJson_dateTimeValue_serializedDateValue()
     {
-        DateTime? dt = new DateTime(2015, 12, 1);
+        DateTime? dt = new DateTime(2015, 12, 1, 0, 0, 0, DateTimeKind.Local);
         var sut = new DateConverter();
         var sb = new StringBuilder();
         using var sw = new StringWriter(sb);
