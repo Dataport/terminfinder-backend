@@ -1,6 +1,6 @@
-﻿using System.Text;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.WebAPI.Exceptions;
+using System.Text;
 
 namespace Dataport.Terminfinder.WebAPI.RequestContext;
 
@@ -46,7 +46,7 @@ public class BasicAuthenticationValueEncoder
                 $"Value '{encodedBasicAuthPayloadValue}' is an invalid basic authentication value");
         }
 
-        string encodedBasicAuthUsernamePasswordValue =
+        var encodedBasicAuthUsernamePasswordValue =
             encodedBasicAuthPayloadValue[PrefixWithSpace.Length..].Trim();
         string decodedBasicAuthUsernamePasswordValue;
         try
@@ -60,15 +60,15 @@ public class BasicAuthenticationValueEncoder
                 $"Value '{encodedBasicAuthUsernamePasswordValue}' could not be decoded", ex);
         }
 
-        int indexOfColon = decodedBasicAuthUsernamePasswordValue.IndexOf(':');
+        var indexOfColon = decodedBasicAuthUsernamePasswordValue.IndexOf(':');
         if (indexOfColon < 0)
         {
             throw new DecodingBasicAuthenticationValueFailedException(
                 $"Value '{decodedBasicAuthUsernamePasswordValue}' has not the expected format 'username:password'");
         }
 
-        string username = decodedBasicAuthUsernamePasswordValue[..indexOfColon];
-        string password = indexOfColon != 0
+        var username = decodedBasicAuthUsernamePasswordValue[..indexOfColon];
+        var password = indexOfColon != 0
             ? decodedBasicAuthUsernamePasswordValue[(indexOfColon + 1)..]
             : string.Empty;
         return new UserCredential

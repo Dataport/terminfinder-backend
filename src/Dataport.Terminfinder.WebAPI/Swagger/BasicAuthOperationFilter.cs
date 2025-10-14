@@ -15,7 +15,7 @@ public class BasicAuthOperationFilter : IOperationFilter
     /// <inheritdoc />
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        BasicAuthenticationOperationAttribute attribute = context.MethodInfo
+        var attribute = context.MethodInfo
             .GetCustomAttributes<BasicAuthenticationOperationAttribute>()
             .FirstOrDefault();
         if (attribute == null)

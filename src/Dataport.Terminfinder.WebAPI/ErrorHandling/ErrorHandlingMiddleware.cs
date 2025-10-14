@@ -97,7 +97,7 @@ public class ErrorHandlingMiddleware
                 Message = errorMessage
             };
 
-            string result = JsonConvert.SerializeObject(error);
+            var result = JsonConvert.SerializeObject(error);
             context.Response.ContentType = HttpConstants.TerminfinderMediaTypeJsonV1WithUtf8CharsetSuffix;
             context.Response.StatusCode = (int)httpStatusCode;
             return context.Response.WriteAsync(result);

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dataport.Terminfinder.WebAPI.Localisation.AttributeAdapters;
 
@@ -23,7 +23,7 @@ public class AttributeAdapterNoClientValidation<T> : AttributeAdapterBase<T> whe
     /// <inheritdoc />
     public override string GetErrorMessage(ModelValidationContextBase validationContext)
     {
-        string displayName = validationContext.ModelMetadata.GetDisplayName();
+        var displayName = validationContext.ModelMetadata.GetDisplayName();
         return GetErrorMessage(validationContext.ModelMetadata, displayName);
     }
 }

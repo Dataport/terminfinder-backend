@@ -41,17 +41,17 @@ public class EnumTypesSchemaFilter : ISchemaFilter
             var sb = new StringBuilder(schema.Description);
             sb.Append("<p>Members:</p><ul>");
 
-            string fullTypeName = context.Type.FullName;
+            var fullTypeName = context.Type.FullName;
 
-            foreach (string enumMemberName in schema.Enum.OfType<OpenApiString>().Select(v => v.Value))
+            foreach (var enumMemberName in schema.Enum.OfType<OpenApiString>().Select(v => v.Value))
             {
-                string fullEnumMemberName = $"F:{fullTypeName}.{enumMemberName}";
+                var fullEnumMemberName = $"F:{fullTypeName}.{enumMemberName}";
 
-                XElement enumMemberComments = _xmlComments.Descendants("member")
+                var enumMemberComments = _xmlComments.Descendants("member")
                     .FirstOrDefault(m => m.Attribute("name")?.Value.Equals
                         (fullEnumMemberName, StringComparison.OrdinalIgnoreCase) ?? false);
                 string summaryText = null;
-                XElement summary = enumMemberComments?.Descendants("summary").FirstOrDefault();
+                var summary = enumMemberComments?.Descendants("summary").FirstOrDefault();
 
                 if (summary != null)
                 {

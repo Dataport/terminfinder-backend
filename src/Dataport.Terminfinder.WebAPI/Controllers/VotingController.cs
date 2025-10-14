@@ -63,19 +63,19 @@ public class VotingController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGet}, Parameter: {CustomerId}, {AppointmentId}", nameof(Get), customerId,
             appointmentId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(appointmentId, out Guid appointmentIdGuid))
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
         ValidateAppointmentRequest(customerIdGuid, appointmentIdGuid, _appointmentBusinessLayer);
 
-        ICollection<Participant> participants =
+        var participants =
             _appointmentBusinessLayer.GetParticipants(customerIdGuid, appointmentIdGuid);
         if (participants.IsNullOrEmpty())
         {
@@ -118,12 +118,12 @@ public class VotingController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.NoInput);
         }
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        if (!Guid.TryParse(appointmentId, out Guid appointmentIdGuid))
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
@@ -135,10 +135,10 @@ public class VotingController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.ParticipantNotValid);
         }
 
-        bool isModelValid = TryValidateModelCreateAndUpdateParticipantModel(participants);
+        var isModelValid = TryValidateModelCreateAndUpdateParticipantModel(participants);
         if (!isModelValid)
         {
-            string additionalErrorMessage = BuildAdditionalErrorMessageFromModelState();
+            var additionalErrorMessage = BuildAdditionalErrorMessageFromModelState();
 
             throw CreateBadRequestException(ErrorType.AppointmentNotValid, additionalErrorMessage);
         }
@@ -150,7 +150,7 @@ public class VotingController : ApiControllerBase
         }
 
         _appointmentBusinessLayer.SetParticipantsForeignKeys(participants, customerIdGuid, appointmentIdGuid);
-        ICollection<Participant> collectionOfParticipants =
+        var collectionOfParticipants =
             _appointmentBusinessLayer.AddAndUpdateParticipants(customerIdGuid, appointmentIdGuid, participants);
         return Created(CreateCreatedUri(), collectionOfParticipants);
     }
@@ -166,13 +166,13 @@ public class VotingController : ApiControllerBase
             return ModelState.IsValid;
         }
 
-        int i = 0;
-        foreach (Participant participantElem in participants)
+        var i = 0;
+        foreach (var participantElem in participants)
         {
             TryValidateModel(participantElem, $"{nameof(participants)}[{i}]");
 
-            int y = 0;
-            foreach (Voting votingElem in participantElem.Votings)
+            var y = 0;
+            foreach (var votingElem in participantElem.Votings)
             {
                 TryValidateModel(votingElem, $"{nameof(participantElem.Votings)}[{y}]");
                 y++;

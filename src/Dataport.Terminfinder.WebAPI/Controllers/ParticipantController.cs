@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Dataport.Terminfinder.BusinessLayer;
+﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.BusinessObject.Error;
 using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Swagger;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dataport.Terminfinder.WebAPI.Controllers;
 
@@ -62,9 +62,9 @@ public class ParticipantController : ApiControllerBase
         Logger.LogDebug("Enter {NameofDelete}, Parameter: {CustomerId}, {AppointmentId}", nameof(Delete), customerId,
             appointmentId);
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid)
-            || !Guid.TryParse(appointmentId, out Guid appointmentIdGuid)
-            || !Guid.TryParse(participantId, out Guid participantIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid)
+            || !Guid.TryParse(appointmentId, out var appointmentIdGuid)
+            || !Guid.TryParse(participantId, out var participantIdGuid))
         {
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }

@@ -49,11 +49,11 @@ public class AppController : ApiControllerBase
         {
             Logger.LogDebug($"Enter {nameof(Get)}");
 
-            AppInfo info = _appConfigBusinessLayer.GetAppInfo();
+            var info = _appConfigBusinessLayer.GetAppInfo();
             if (info == null)
             {
-                string errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.VersionNumberNotFound)}";
-                string language = Thread.CurrentThread.CurrentCulture.Name;
+                var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.VersionNumberNotFound)}";
+                var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 ErrorResult errorObject = new()
                 {
@@ -74,8 +74,8 @@ public class AppController : ApiControllerBase
         {
             Console.WriteLine(e);
 
-            string errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
-            string language = Thread.CurrentThread.CurrentCulture.Name;
+            var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
+            var language = Thread.CurrentThread.CurrentCulture.Name;
 
             ErrorResult errorObject = new()
             {
