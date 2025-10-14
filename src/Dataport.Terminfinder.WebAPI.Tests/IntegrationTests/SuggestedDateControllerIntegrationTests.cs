@@ -12,7 +12,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
-        _testServer = new(builder);
+        _testServer = new TestServer(builder);
     }
 
     [TestMethod]
