@@ -32,14 +32,14 @@ public class PasswordAttributeTests
     [TestMethod]
     public void IsValid_ValidPassword_returnNoValidationResult()
     {
-        string validPassword = "Blafasel1!";
+        var validPassword = "Blafasel1!";
         CheckValidPasswordValue(validPassword);
     }
 
     [TestMethod]
     public void IsValid_InvalidPassword_returnValidationResult()
     {
-        string invalidPassword = string.Empty;
+        var invalidPassword = string.Empty;
         CheckInvalidPasswordValue(invalidPassword);
     }
 

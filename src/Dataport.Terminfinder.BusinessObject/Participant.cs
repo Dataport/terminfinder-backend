@@ -85,9 +85,9 @@ public class Participant
                 return true;
             }
 
-            bool result = true;
+            var result = true;
 
-            foreach (Voting vote in Votings)
+            foreach (var vote in Votings)
             {
                 result = result && vote.IsValid;
             }

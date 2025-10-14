@@ -10,7 +10,7 @@ public class GuidNullConverterTests
     [TestMethod]
     public void WriteJson_GuidValue_serializedStringValue()
     {
-        Guid guid = new("c1c2474b-488a-4ecf-94e8-47387bb715d5");
+        var guid = new Guid("c1c2474b-488a-4ecf-94e8-47387bb715d5");
         var sut = new GuidNullConverter();
         var sb = new StringBuilder();
         using var sw = new StringWriter(sb);
@@ -44,7 +44,7 @@ public class GuidNullConverterTests
     [TestMethod]
     public void ReadJson_GuidValueAsString_deserializedGuidValue()
     {
-        Guid guid = new("c1c2474b-488a-4ecf-94e8-47387bb715d5");
+        var guid = new Guid("c1c2474b-488a-4ecf-94e8-47387bb715d5");
         var sut = new GuidNullConverter();
 #pragma warning disable IDE0071 // Simplify interpolation
         using var sr = new StringReader($"\"{guid.ToString()}\"");

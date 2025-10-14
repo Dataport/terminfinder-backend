@@ -25,11 +25,11 @@ public class DeleteAppointmentsTests
     [TestMethod]
     public void DeleteExpiredAppointments_ConnectionStringIsEmpty_ApplicationException()
     {
-        string connectionString = string.Empty;
-        int deleteExpiredAppointmentsAfterDays = 7;
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var connectionString = string.Empty;
+        var deleteExpiredAppointmentsAfterDays = 7;
+        var customerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        string expectedErrorMessage = $"The connectionstring are not defined.";
+        var expectedErrorMessage = $"The connectionstring are not defined.";
 
         var mockRepository = new Mock<IRepository>();
         //mockRepository.Setup(m => m.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(false);
@@ -58,11 +58,11 @@ public class DeleteAppointmentsTests
     [TestMethod]
     public void DeleteExpiredAppointments_deleteExpiredAppointmentsAfterDaysGreaterThanZeroApplicationException()
     {
-        string connectionString = "connectionstring";
-        int deleteExpiredAppointmentsAfterDays = 0;
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var connectionString = "connectionstring";
+        var deleteExpiredAppointmentsAfterDays = 0;
+        var customerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        string expectedErrorMessage =
+        var expectedErrorMessage =
             $"The configurationvalue of deleteExpiredAppointmentsAfterDays has to be greater than zero.";
 
         var mockRepository = new Mock<IRepository>();
@@ -91,11 +91,11 @@ public class DeleteAppointmentsTests
     [TestMethod]
     public void DeleteExpiredAppointments_customerIdIsEmpty_ApplicationException()
     {
-        string connectionString = "connectionstring";
-        int deleteExpiredAppointmentsAfterDays = 7;
-        Guid customerId = Guid.Empty;
+        var connectionString = "connectionstring";
+        var deleteExpiredAppointmentsAfterDays = 7;
+        var customerId = Guid.Empty;
 
-        string expectedErrorMessage = $"The customerId is empty.";
+        var expectedErrorMessage = $"The customerId is empty.";
 
         var mockRepository = new Mock<IRepository>();
 
@@ -123,11 +123,11 @@ public class DeleteAppointmentsTests
     [TestMethod]
     public void DeleteExpiredAppointments_NoAppointmentsToDelete_true()
     {
-        string connectionString = "connectionstring";
-        int deleteExpiredAppointmentsAfterDays = 7;
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var connectionString = "connectionstring";
+        var deleteExpiredAppointmentsAfterDays = 7;
+        var customerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        List<Appointment> fakeAppointmentsToDelete = new();
+        var fakeAppointmentsToDelete = new List<Appointment>();
 
         var mockRepository = new Mock<IRepository>();
         mockRepository.Setup(m =>
@@ -151,12 +151,12 @@ public class DeleteAppointmentsTests
     [TestMethod]
     public void DeleteExpiredAppointments_AppointmentsToDelete_true()
     {
-        string connectionString = "connectionstring";
-        int deleteExpiredAppointmentsAfterDays = 7;
-        Guid customerId = new("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
+        var connectionString = "connectionstring";
+        var deleteExpiredAppointmentsAfterDays = 7;
+        var customerId = new Guid("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
 
-        List<Appointment> fakeAppointmentsToDelete = new();
-        Appointment fakeAppointment = new()
+        var fakeAppointmentsToDelete = new List<Appointment>();
+        var fakeAppointment = new Appointment
         {
             AppointmentId = Guid.NewGuid(),
             CustomerId = customerId

@@ -9,7 +9,7 @@ public class AppControllerTests
         var versionDate = "2010-10-30";
         var versionNumber = "1.2.3";
 
-        AppInfo appInfo = new()
+        var appInfo = new AppInfo
         {
             BuildDate = versionDate,
             VersionNumber = versionNumber

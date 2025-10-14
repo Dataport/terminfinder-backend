@@ -60,7 +60,7 @@ public class CustomerController : ApiControllerBase
                 var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerIdNotFound)}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
-                ErrorResult errorObject = new()
+                var errorObject = new ErrorResult
                 {
                     Code = ((int)ErrorType.CustomerIdNotFound).ToString(),
                     Message = Localizer[errorMessage],
@@ -77,7 +77,7 @@ public class CustomerController : ApiControllerBase
                 var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.WrongInputOrNotAllowed)}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
-                ErrorResult errorObject = new()
+                var errorObject = new ErrorResult
                 {
                     Code = ((int)ErrorType.CustomerIdNotFound).ToString(),
                     Message = Localizer[errorMessage],
@@ -96,7 +96,7 @@ public class CustomerController : ApiControllerBase
                 var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotFound)}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
-                ErrorResult errorObject = new()
+                var errorObject = new ErrorResult
                 {
                     Code = ((int)ErrorType.CustomerNotFound).ToString(),
                     Message = Localizer[errorMessage],
@@ -117,7 +117,7 @@ public class CustomerController : ApiControllerBase
             var errorMessageWithCode = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.CustomerNotValid)}";
             var languageName = Thread.CurrentThread.CurrentCulture.Name;
 
-            ErrorResult errorResultObject = new()
+            var errorResultObject = new ErrorResult
             {
                 Code = ((int)ErrorType.CustomerNotValid).ToString(),
                 Message = Localizer[errorMessageWithCode],
@@ -136,7 +136,7 @@ public class CustomerController : ApiControllerBase
             var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
             var language = Thread.CurrentThread.CurrentCulture.Name;
 
-            ErrorResult errorObject = new()
+            var errorObject = new ErrorResult
             {
                 Code = ((int)ErrorType.GeneralError).ToString(),
                 Message = Localizer[errorMessage],

@@ -26,7 +26,7 @@ public class BcryptWrapper : IBcryptWrapper
 
         ArgumentNullException.ThrowIfNull(password);
 
-        string salt = _saltGenerator.GenerateSalt();
+        var salt = _saltGenerator.GenerateSalt();
 
         return BCrypt.Net.BCrypt.HashPassword(password, salt);
     }

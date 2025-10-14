@@ -9,7 +9,7 @@ public class GuidNullConverter : JsonConverter
         string result = null;
 
 #pragma warning disable CA1806 // Do not ignore method results
-        Guid.TryParse(value?.ToString(), out Guid guid);
+        Guid.TryParse(value?.ToString(), out var guid);
 #pragma warning restore CA1806 // Do not ignore method results
 
         if (guid != Guid.Empty)
@@ -24,10 +24,10 @@ public class GuidNullConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
         Newtonsoft.Json.JsonSerializer serializer)
     {
-        object value = reader?.Value;
+        var value = reader?.Value;
 
 #pragma warning disable CA1806 // Do not ignore method results
-        Guid.TryParse(value?.ToString(), out Guid guid);
+        Guid.TryParse(value?.ToString(), out var guid);
 #pragma warning restore CA1806 // Do not ignore method results
         return guid;
     }

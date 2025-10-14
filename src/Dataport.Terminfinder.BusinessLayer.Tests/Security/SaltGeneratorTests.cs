@@ -21,8 +21,8 @@ public class SaltGeneratorTests
     [TestCategory(TestCategoryConstants.LongRunningTest)]
     public void GenerateSalt_nothing_generatedSaltStartsWithExpectedBcryptPrefix()
     {
-        SaltGenerator sut = CreateSut();
-        string salt = sut.GenerateSalt();
+        var sut = CreateSut();
+        var salt = sut.GenerateSalt();
         Assert.IsTrue(salt.StartsWith("$2b$10$"));
     }
 

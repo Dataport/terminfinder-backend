@@ -8,7 +8,7 @@ public class StringEnumLowerCamelCaseConverter : JsonConverter
     /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
     {
-        string result = value?.ToString()?.FirstCharacterToLower();
+        var result = value?.ToString()?.FirstCharacterToLower();
         writer.WriteValue(result);
     }
 
@@ -16,7 +16,7 @@ public class StringEnumLowerCamelCaseConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
         Newtonsoft.Json.JsonSerializer serializer)
     {
-        object value = reader?.Value;
+        var value = reader?.Value;
         return System.Enum.TryParse(objectType, value?.ToString(), true, out var result)
             ? result
             : Activator.CreateInstance(objectType);

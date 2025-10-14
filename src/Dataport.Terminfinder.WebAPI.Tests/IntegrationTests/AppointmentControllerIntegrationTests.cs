@@ -16,7 +16,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
-        _testServer = new(builder);
+        _testServer = new TestServer(builder);
     }
 
     [TestMethod]
@@ -159,7 +159,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         dto.Description = "new description";
 
         //new suggestedDate
-        SuggestedDate suggestedDate3 = new()
+        var suggestedDate3 = new SuggestedDate
         {
             AppointmentId = Guid.Empty,
             CustomerId = _customerId,
@@ -330,7 +330,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetAppointment_AppointmentId_NotFound()
     {
-        Guid appointmentId = new("C1C2474B-488A-4ECF-94E8-47387BB715D5");
+        var appointmentId = new Guid("C1C2474B-488A-4ECF-94E8-47387BB715D5");
 
         var client = _testServer.CreateClient();
 
@@ -375,7 +375,7 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task AddAppointment_WithAdminId_BadRequest()
     {
-        Guid adminId = new("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
+        var adminId = new Guid("FFFD657A-4D06-40DB-8443-D67BBB950EE7");
 
         var appointment = CreateTestAppointment(_customerId, adminId);
 

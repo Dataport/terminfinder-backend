@@ -21,7 +21,7 @@ public abstract class BaseIntegrationTests
 
     protected Appointment CreateTestAppointment(Guid customerId, Guid adminId, string password = null)
     {
-        Appointment appointment = new()
+        var appointment = new Appointment
         {
             AppointmentId = Guid.Empty,
             CreatorName = "Tom",
@@ -37,7 +37,7 @@ public abstract class BaseIntegrationTests
         var currentDateStartDate = DateTime.Now;
         var currentDateEndDate = DateTime.Now.AddDays(2);
 
-        SuggestedDate suggestedDate1 = new()
+        var suggestedDate1 = new SuggestedDate
         {
             AppointmentId = Guid.Empty,
             CustomerId = customerId,
@@ -46,7 +46,7 @@ public abstract class BaseIntegrationTests
             EndDate = currentDateStartDate.AddDays(1)
         };
 
-        SuggestedDate suggestedDate2 = new()
+        var suggestedDate2 = new SuggestedDate
         {
             AppointmentId = Guid.Empty,
             CustomerId = customerId,

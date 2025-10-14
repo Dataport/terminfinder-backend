@@ -282,7 +282,7 @@ public class AppointmentBusinessLayerTests
 
         for (var i = 0; i < 5; i++)
         {
-            SuggestedDate fakeSuggestedDate = new()
+            var fakeSuggestedDate = new SuggestedDate
             {
                 StartDate = DateTime.Now,
                 AppointmentId = ExpectedAppointmentId,
@@ -314,7 +314,7 @@ public class AppointmentBusinessLayerTests
 
         for (var i = 0; i < 4; i++)
         {
-            SuggestedDate fakeSuggestedDate1 = new()
+            var fakeSuggestedDate1 = new SuggestedDate
             {
                 StartDate = DateTime.Now,
                 AppointmentId = ExpectedAppointmentId,
@@ -346,7 +346,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void SetAppointmentForeignKeys_Okay()
     {
-        Appointment fakeAppointment = new()
+        var fakeAppointment = new Appointment
         {
             AppointmentId = ExpectedAppointmentId,
             CreatorName = "Tom",
@@ -358,10 +358,10 @@ public class AppointmentBusinessLayerTests
             SuggestedDates = new List<SuggestedDate>()
         };
 
-        SuggestedDate fakeSuggestedDate1 = new() { StartDate = DateTime.Now };
+        var fakeSuggestedDate1 = new SuggestedDate { StartDate = DateTime.Now };
         fakeAppointment.SuggestedDates.Add(fakeSuggestedDate1);
 
-        SuggestedDate fakeSuggestedDate2 = new() { StartDate = DateTime.Now };
+        var fakeSuggestedDate2 = new SuggestedDate { StartDate = DateTime.Now };
         fakeAppointment.SuggestedDates.Add(fakeSuggestedDate2);
 
         fakeSuggestedDate1.Votings = new List<Voting> { new() };
@@ -838,7 +838,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void ParticipantToDeleteAreValid_participantGuidsAreValid_true()
     {
-        Participant fakeParticipant = new()
+        var fakeParticipant = new Participant
         {
             ParticipantId = ExpectedParticipantId1,
             CustomerId = ExpectedCustomerId,
@@ -856,7 +856,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void ParticipantToDeleteAreValid_participantGuidsAreNotValid_false()
     {
-        Participant fakeParticipant = new() { CustomerId = ExpectedCustomerId, AppointmentId = ExpectedAppointmentId };
+        var fakeParticipant = new Participant { CustomerId = ExpectedCustomerId, AppointmentId = ExpectedAppointmentId };
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         var mockCustomerRepo = new Mock<ICustomerRepository>();
@@ -873,7 +873,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void ParticipantsAreValid_participantsAreValid_true()
     {
-        Participant fakeParticipant = new()
+        var fakeParticipant = new Participant
         {
             ParticipantId = ExpectedParticipantId1,
             CustomerId = ExpectedCustomerId,
@@ -902,7 +902,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void ParticipantsAreValid_VotingsAreValid_true()
     {
-        Participant fakeParticipant = new()
+        var fakeParticipant = new Participant
         {
             ParticipantId = ExpectedParticipantId1,
             CustomerId = ExpectedCustomerId,

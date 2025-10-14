@@ -17,7 +17,7 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetAppInfo_Okay()
     {
-        AppInfo expectedAppInfo = new()
+        var expectedAppInfo = new AppInfo
         {
             BuildDate = "2025-07-04",
             VersionNumber = "1.2.2"

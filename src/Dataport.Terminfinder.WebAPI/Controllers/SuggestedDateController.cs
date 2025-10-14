@@ -78,7 +78,7 @@ public class SuggestedDateController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
         }
 
-        SuggestedDate suggestedDate = new()
+        var suggestedDate = new SuggestedDate
         {
             CustomerId = customerIdGuid, AppointmentId = appointmentIdGuid, SuggestedDateId = suggestedDateIdGuid
         };
