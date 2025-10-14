@@ -8,7 +8,7 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 public class VotingControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
-    private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public void Initialize()
@@ -21,11 +21,11 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task AddAndUpdateParticipant_And_Votings()
     {
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
         var suggestedDate3 = new SuggestedDate
         {
             AppointmentId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             SuggestedDateId = Guid.Empty,
             StartDate = DateTime.Now.AddDays(3),
             EndDate = DateTime.Now.AddDays(4)
@@ -38,7 +38,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -53,7 +53,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var appointmentId = dto.AppointmentId;
 
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -73,7 +73,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var voting1 = new Voting
         {
             VotingId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             AppointmentId = appointmentId,
             ParticipantId = Guid.Empty,
             SuggestedDateId = suggestedDates[0].SuggestedDateId,
@@ -82,7 +82,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var voting2 = new Voting
         {
             VotingId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             AppointmentId = appointmentId,
             ParticipantId = Guid.Empty,
             SuggestedDateId = suggestedDates[1].SuggestedDateId,
@@ -91,7 +91,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var voting3 = new Voting
         {
             VotingId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             AppointmentId = appointmentId,
             ParticipantId = Guid.Empty,
             SuggestedDateId = suggestedDates[2].SuggestedDateId,
@@ -102,7 +102,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         participants.Add(new Participant
         {
             AppointmentId = appointmentId,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             ParticipantId = Guid.Empty,
             Name = "Joe",
             Votings = new List<Voting>() { voting1, voting2, voting3 }
@@ -111,7 +111,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         // Act
         var contentParticipant = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PutAsync($"votings/{_customerId}/{appointmentId}", contentParticipant);
+        response = await client.PutAsync($"votings/{ExpectedCustomerId}/{appointmentId}", contentParticipant);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -125,7 +125,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(3, responseparticipant[0].Votings.Count);
 
         //--- get appointment
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -145,7 +145,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         // Act
         contentParticipant = new StringContent(JsonConvert.SerializeObject(dto.Participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PutAsync($"votings/{_customerId}/{appointmentId}", contentParticipant);
+        response = await client.PutAsync($"votings/{ExpectedCustomerId}/{appointmentId}", contentParticipant);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -162,7 +162,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(VotingStatusType.Accepted, votingChange.Status);
 
         // Act Get voting
-        response = await client.GetAsync($"votings/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"votings/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
         var participantsWithVotings = JsonConvert.DeserializeObject<Participant[]>(responseText);
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -177,14 +177,14 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, password);
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -197,7 +197,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(dto.AppointmentId);
 
         // Act Get voting
-        response = await client.GetAsync($"votings/{_customerId}/{dto.AppointmentId}");
+        response = await client.GetAsync($"votings/{ExpectedCustomerId}/{dto.AppointmentId}");
 
         // Assert
         Assert.IsNotNull(response);
@@ -209,14 +209,14 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
     {
         var password = "P@$$w0rd";
 
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty, password);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty, password);
         var client = _testServer.CreateClient();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -232,7 +232,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             ParticipantId = Guid.Empty,
             Name = "Joe",
             Votings = new List<Voting>()
@@ -241,7 +241,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         // Act Put voting
         var contentParticipant = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PutAsync($"votings/{_customerId}/{dto.AppointmentId}", contentParticipant);
+        response = await client.PutAsync($"votings/{ExpectedCustomerId}/{dto.AppointmentId}", contentParticipant);
 
         // Assert
         Assert.IsNotNull(response);
@@ -251,7 +251,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task Put_AppointmentStatusIsPaused_NotFound()
     {
-        var appointment = CreateTestAppointment(_customerId, Guid.Empty);
+        var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
         appointment.AppointmentStatus = AppointmentStatusType.Paused;
         var client = _testServer.CreateClient();
 
@@ -259,7 +259,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
 
-        var response = await client.PostAsync($"appointment/{_customerId}", content);
+        var response = await client.PostAsync($"appointment/{ExpectedCustomerId}", content);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -275,7 +275,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             ParticipantId = Guid.Empty,
             Name = "Joe",
             Votings = new List<Voting>()
@@ -284,7 +284,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         // Act Put voting
         var contentParticipant = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        response = await client.PutAsync($"votings/{_customerId}/{dto.AppointmentId}", contentParticipant);
+        response = await client.PutAsync($"votings/{ExpectedCustomerId}/{dto.AppointmentId}", contentParticipant);
 
         // Assert
         Assert.IsNotNull(response);

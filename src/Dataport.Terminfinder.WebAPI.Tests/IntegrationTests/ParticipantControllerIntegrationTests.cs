@@ -9,7 +9,7 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 public class ParticipantControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
-    private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public void Initialize()
@@ -23,7 +23,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     public async Task DeleteParticipants_Okay()
     {
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
@@ -32,7 +32,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var voting1 = new Voting
         {
             VotingId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             AppointmentId = dto.AppointmentId,
             ParticipantId = Guid.Empty,
             SuggestedDateId = dto.SuggestedDates.First().SuggestedDateId,
@@ -43,7 +43,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             ParticipantId = Guid.Empty,
             Name = "Joe",
             Votings = new List<Voting>() { voting1 }
@@ -52,7 +52,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         // Act
         var contentParticipant = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        var response = await client.PutAsync($"votings/{_customerId}/{appointmentId}", contentParticipant);
+        var response = await client.PutAsync($"votings/{ExpectedCustomerId}/{appointmentId}", contentParticipant);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -63,7 +63,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(responseparticipant);
 
         // Act
-        var responseAppointment = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        var responseAppointment = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         responseAppointment.EnsureSuccessStatusCode();
 
         // Assert
@@ -77,7 +77,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(1, appointmentResult.Participants.Count);
 
         // Act
-        var result = await client.DeleteAsync($"participant/{_customerId}/{appointmentId}/{appointmentResult.Participants.First().ParticipantId}");
+        var result = await client.DeleteAsync($"participant/{ExpectedCustomerId}/{appointmentId}/{appointmentResult.Participants.First().ParticipantId}");
         result.EnsureSuccessStatusCode();
 
         // Assert
@@ -85,7 +85,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
 
         // Act
-        responseAppointment = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        responseAppointment = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         responseAppointment.EnsureSuccessStatusCode();
 
         // Assert
@@ -103,7 +103,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     public async Task DeleteParticipants_Participants_NotFound()
     {
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
@@ -112,7 +112,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var voting1 = new Voting
         {
             VotingId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             AppointmentId = dto.AppointmentId,
             ParticipantId = Guid.Empty,
             SuggestedDateId = dto.SuggestedDates.First().SuggestedDateId,
@@ -123,7 +123,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             ParticipantId = Guid.Empty,
             Name = "Joe",
             Votings = new List<Voting>() { voting1 }
@@ -132,7 +132,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         // Act
         var contentParticipant = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        var response = await client.PutAsync($"votings/{_customerId}/{appointmentId}", contentParticipant);
+        var response = await client.PutAsync($"votings/{ExpectedCustomerId}/{appointmentId}", contentParticipant);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -143,7 +143,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(responseparticipant);
 
         // Act
-        var responseAppointment = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        var responseAppointment = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         responseAppointment.EnsureSuccessStatusCode();
 
         // Assert
@@ -157,7 +157,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(1, appointmentResult.Participants.Count);
 
         // Act
-        var result = await client.DeleteAsync($"participant/{_customerId}/{appointmentId}/{Guid.NewGuid()}");
+        var result = await client.DeleteAsync($"participant/{ExpectedCustomerId}/{appointmentId}/{Guid.NewGuid()}");
 
         // Assert
         Assert.IsNotNull(result);
@@ -170,7 +170,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, password);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
@@ -179,7 +179,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var voting1 = new Voting
         {
             VotingId = Guid.Empty,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             AppointmentId = dto.AppointmentId,
             ParticipantId = Guid.Empty,
             SuggestedDateId = dto.SuggestedDates.First().SuggestedDateId,
@@ -190,7 +190,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
-            CustomerId = _customerId,
+            CustomerId = ExpectedCustomerId,
             ParticipantId = Guid.Empty,
             Name = "Joe",
             Votings = new List<Voting>() { voting1 }
@@ -202,7 +202,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
 
         var contentParticipant = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8,
             HttpConstants.TerminfinderMediaTypeJsonV1);
-        var response = await client.PutAsync($"votings/{_customerId}/{appointmentId}", contentParticipant);
+        var response = await client.PutAsync($"votings/{ExpectedCustomerId}/{appointmentId}", contentParticipant);
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -216,7 +216,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         credential = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{appointmentId}:23rfgt4-We"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credential);
 
-        var result = await client.DeleteAsync($"participant/{_customerId}/{appointmentId}/{responseparticipant[0].ParticipantId}");
+        var result = await client.DeleteAsync($"participant/{ExpectedCustomerId}/{appointmentId}/{responseparticipant[0].ParticipantId}");
 
         // Assert
         Assert.IsNotNull(result);

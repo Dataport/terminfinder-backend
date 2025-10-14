@@ -5,7 +5,7 @@
 public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
-    private Guid _customerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public void Initialize()
@@ -19,13 +19,13 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     public async Task DeleteSuggestedDates_Okay()
     {
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
 
         // Act
-        var response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        var response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -38,7 +38,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(2, appointmentResult.SuggestedDates.Count);
 
         // Act
-        var result = await client.DeleteAsync($"suggesteddate/{_customerId}/{appointmentId}/{appointmentResult.SuggestedDates.First().SuggestedDateId}");
+        var result = await client.DeleteAsync($"suggesteddate/{ExpectedCustomerId}/{appointmentId}/{appointmentResult.SuggestedDates.First().SuggestedDateId}");
         result.EnsureSuccessStatusCode();
 
         // Assert
@@ -46,7 +46,7 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
 
         // Act
-        response = await client.GetAsync($"appointment/{_customerId}/{appointmentId}");
+        response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
         response.EnsureSuccessStatusCode();
 
         // Assert
@@ -63,13 +63,13 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
     public async Task DeleteSuggestedDates_SuggestedDates_NotFound()
     {
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
 
         // Act
-        var result = await client.DeleteAsync($"suggesteddate/{_customerId}/{appointmentId}/{Guid.NewGuid()}");
+        var result = await client.DeleteAsync($"suggesteddate/{ExpectedCustomerId}/{appointmentId}/{Guid.NewGuid()}");
 
         // Assert
         Assert.IsNotNull(result);
@@ -82,13 +82,13 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         var password = "P@$$w0rd";
 
         var client = _testServer.CreateClient();
-        var dto = await CreateTestAppointmentInDatabase(client, _customerId, password);
+        var dto = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, password);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
 
         // Act
-        var result = await client.DeleteAsync($"suggesteddate/{_customerId}/{appointmentId}/{dto.SuggestedDates.First().SuggestedDateId}");
+        var result = await client.DeleteAsync($"suggesteddate/{ExpectedCustomerId}/{appointmentId}/{dto.SuggestedDates.First().SuggestedDateId}");
 
         // Assert
         Assert.IsNotNull(result);
@@ -102,11 +102,11 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         const string description = "Im the test description!";
         var client = _testServer.CreateClient();
         
-        var appointment = CreateTestAppointment(_customerId, It.IsAny<Guid>());
+        var appointment = CreateTestAppointment(ExpectedCustomerId, It.IsAny<Guid>());
         appointment.SuggestedDates.First().Description = description;
 
         // act
-        var result = await CreateTestAppointmentInDatabase(client, _customerId, null, appointment);
+        var result = await CreateTestAppointmentInDatabase(client, ExpectedCustomerId, null, appointment);
 
         // assert
         var resultDescription = result.SuggestedDates.First(s => s.Description==description).Description;
