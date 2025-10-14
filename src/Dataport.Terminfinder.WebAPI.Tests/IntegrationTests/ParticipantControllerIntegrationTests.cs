@@ -16,7 +16,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
     {
         var config = GetConfigurationBuilder();
         var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
-        _testServer = new(builder);
+        _testServer = new TestServer(builder);
     }
 
     [TestMethod]
@@ -40,7 +40,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         };
 
         var participants = dto.Participants ?? new List<Participant>();
-        participants.Add(new()
+        participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
             CustomerId = _customerId,
@@ -120,7 +120,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         };
 
         var participants = dto.Participants ?? new List<Participant>();
-        participants.Add(new()
+        participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
             CustomerId = _customerId,
@@ -187,7 +187,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         };
 
         var participants = dto.Participants ?? new List<Participant>();
-        participants.Add(new()
+        participants.Add(new Participant
         {
             AppointmentId = dto.AppointmentId,
             CustomerId = _customerId,
