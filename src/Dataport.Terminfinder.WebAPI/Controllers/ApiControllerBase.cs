@@ -139,9 +139,8 @@ public abstract class ApiControllerBase : ControllerBase
                     continue;
                 }
 
-                foreach (var error in ModelState[key].Errors)
+                foreach (var errorMessage in ModelState[key].Errors.Select(x => x.ErrorMessage))
                 {
-                    var errorMessage = error.ErrorMessage;
                     result.Add(errorMessage);
                 }
             }
