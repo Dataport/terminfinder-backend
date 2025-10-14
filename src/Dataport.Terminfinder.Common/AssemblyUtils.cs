@@ -17,7 +17,7 @@ public static class AssemblyUtils
     // ReSharper disable once UnusedMember.Global
     public static string GetVersion()
     {
-        Assembly assembly = GetDefaultAssembly();
+        var assembly = GetDefaultAssembly();
         return GetVersion(assembly);
     }
 
@@ -29,7 +29,7 @@ public static class AssemblyUtils
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        Assembly assembly = Assembly.GetAssembly(type);
+        var assembly = Assembly.GetAssembly(type);
         return GetVersion(assembly);
     }
 
@@ -41,7 +41,7 @@ public static class AssemblyUtils
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
-        FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+        var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
         return fvi.FileVersion;
     }
 
@@ -51,7 +51,7 @@ public static class AssemblyUtils
     /// <returns></returns>
     public static string GetProductVersion()
     {
-        Assembly assembly = GetDefaultAssembly();
+        var assembly = GetDefaultAssembly();
         return GetProductVersion(assembly);
     }
 
@@ -63,7 +63,7 @@ public static class AssemblyUtils
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        Assembly assembly = Assembly.GetAssembly(type);
+        var assembly = Assembly.GetAssembly(type);
         return GetProductVersion(assembly);
     }
 
@@ -75,7 +75,7 @@ public static class AssemblyUtils
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
-        FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+        var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
         return fvi.ProductVersion;
     }
 

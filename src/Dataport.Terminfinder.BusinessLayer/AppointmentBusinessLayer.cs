@@ -42,7 +42,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     {
         Logger.LogDebug($"Leave {nameof(CheckMaxTotalCountOfParticipants)}");
 
-        int countOfElementsToAdd = 0;
+        var countOfElementsToAdd = 0;
 
         if (!participants.IsNullOrEmpty())
         {
@@ -51,7 +51,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 select p).Count();
         }
 
-        int count = _appointmentRepo.GetNumberOfParticipants(customerId, appointmentId) + countOfElementsToAdd;
+        var count = _appointmentRepo.GetNumberOfParticipants(customerId, appointmentId) + countOfElementsToAdd;
 
         return count <= MaxCountOfElementsOfParticipants;
     }
@@ -62,7 +62,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     {
         Logger.LogDebug($"Leave {nameof(CheckMinTotalCountOfSuggestedDates)}");
 
-        int countOfElementsToAdd = 0;
+        var countOfElementsToAdd = 0;
 
         if (!suggestedDates.IsNullOrEmpty())
         {
@@ -71,7 +71,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 select s).Count();
         }
 
-        int count = _appointmentRepo.GetNumberOfSuggestedDates(customerId, appointmentId) + countOfElementsToAdd;
+        var count = _appointmentRepo.GetNumberOfSuggestedDates(customerId, appointmentId) + countOfElementsToAdd;
 
         return count >= MinCountOfElementsOfSuggestedDates;
     }
@@ -82,7 +82,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     {
         Logger.LogDebug($"Leave {nameof(CheckMinTotalCountOfSuggestedDatesWithToDeletedDates)}");
 
-        int countOfElementsToDelete = 0;
+        var countOfElementsToDelete = 0;
 
         if (!suggestedDates.IsNullOrEmpty())
         {
@@ -93,7 +93,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 select s).Count();
         }
 
-        int count = _appointmentRepo.GetNumberOfSuggestedDates(customerId, appointmentId) - countOfElementsToDelete;
+        var count = _appointmentRepo.GetNumberOfSuggestedDates(customerId, appointmentId) - countOfElementsToDelete;
 
         return (count >= MinCountOfElementsOfSuggestedDates);
     }
@@ -104,7 +104,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     {
         Logger.LogDebug($"Leave {nameof(CheckMaxTotalCountOfSuggestedDates)}");
 
-        int countOfElementsToAdd = 0;
+        var countOfElementsToAdd = 0;
 
         if (!suggestedDates.IsNullOrEmpty())
         {
@@ -113,7 +113,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 select s).Count();
         }
 
-        int count = _appointmentRepo.GetNumberOfSuggestedDates(customerId, appointmentId) + countOfElementsToAdd;
+        var count = _appointmentRepo.GetNumberOfSuggestedDates(customerId, appointmentId) + countOfElementsToAdd;
 
         return (count <= MaxCountOfElementsOfSuggestedDates);
     }
@@ -132,7 +132,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
             return null;
         }
 
-        Appointment result = _appointmentRepo.GetAppointment(customerId, appointmentId);
+        var result = _appointmentRepo.GetAppointment(customerId, appointmentId);
         return RemovePasswordFromAppointment(result);
     }
 
@@ -142,7 +142,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
         Logger.LogDebug("Enter {NameofIsAppointmentPasswordProtected}(Guid), (Guid))",
             nameof(IsAppointmentPasswordProtected));
 
-        string password = _appointmentRepo.GetAppointmentPassword(customerId, appointmentId);
+        var password = _appointmentRepo.GetAppointmentPassword(customerId, appointmentId);
         return IsPasswordSet(password);
     }
 
@@ -156,7 +156,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
             return null;
         }
 
-        Appointment result = _appointmentRepo.GetAppointmentByAdminId(customerId, adminId);
+        var result = _appointmentRepo.GetAppointmentByAdminId(customerId, adminId);
         return RemovePasswordFromAppointment(result);
     }
 
@@ -167,7 +167,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
             "Enter {NameofIsAppointmentPasswordProtectedByAdminId}(Guid), (Guid)",
             nameof(IsAppointmentPasswordProtectedByAdminId));
 
-        string password = _appointmentRepo.GetAppointmentPasswordByAdmin(customerId, adminId);
+        var password = _appointmentRepo.GetAppointmentPasswordByAdmin(customerId, adminId);
         return IsPasswordSet(password);
     }
 
@@ -378,7 +378,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
             return;
         }
 
-        foreach (Participant participant in participants)
+        foreach (var participant in participants)
         {
             participant.AppointmentId = appointmentId;
             participant.CustomerId = customerId;
@@ -388,7 +388,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 continue;
             }
 
-            foreach (Voting voting in participant.Votings)
+            foreach (var voting in participant.Votings)
             {
                 voting.AppointmentId = appointmentId;
                 voting.CustomerId = customerId;
@@ -409,14 +409,14 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
 
         if (!suggestedDates.IsNullOrEmpty())
         {
-            foreach (SuggestedDate suggestedDatesElem in suggestedDates)
+            foreach (var suggestedDatesElem in suggestedDates)
             {
                 suggestedDatesElem.AppointmentId = appointmentId;
                 suggestedDatesElem.CustomerId = customerId;
 
                 if (!suggestedDatesElem.Votings.IsNullOrEmpty())
                 {
-                    foreach (Voting voting in suggestedDatesElem.Votings)
+                    foreach (var voting in suggestedDatesElem.Votings)
                     {
                         voting.AppointmentId = appointmentId;
                         voting.CustomerId = customerId;
@@ -503,7 +503,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     {
         Logger.LogDebug($"Enter {nameof(ExistsCustomer)}");
 
-        if (!Guid.TryParse(customerId, out Guid customerIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
             return false;
         }
@@ -523,7 +523,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 $"The appointment with customer id '{customerId}' and appointment id '{appointmentId}' is not protected by a password");
         }
 
-        string appointmentPassword = _appointmentRepo.GetAppointmentPassword(customerId, appointmentId);
+        var appointmentPassword = _appointmentRepo.GetAppointmentPassword(customerId, appointmentId);
         if (appointmentPassword == null)
         {
             throw new InvalidOperationException(
@@ -546,7 +546,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 $"The appointment with customer id '{customerId}' and admin id '{adminId}' is not protected by a password");
         }
 
-        string appointmentPassword = _appointmentRepo.GetAppointmentPasswordByAdmin(customerId, adminId);
+        var appointmentPassword = _appointmentRepo.GetAppointmentPasswordByAdmin(customerId, adminId);
         if (appointmentPassword == null)
         {
             throw new InvalidOperationException(
@@ -569,7 +569,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 $"The appointment with customer id {customerId} and admin id '{adminId}' does not exist");
         }
 
-        AppointmentStatusType oldStatusIdentifier = _appointmentRepo
+        var oldStatusIdentifier = _appointmentRepo
             .GetAppointmentStatusTypeByAdmin(customerId, adminId).ToEnum<AppointmentStatusType>();
         if ((oldStatusIdentifier == AppointmentStatusType.Started &&
              newStatusType == AppointmentStatusType.Paused)
@@ -577,7 +577,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
                 newStatusType == AppointmentStatusType.Started))
         {
             _appointmentRepo.SetAppointmentStatusTypeByAdmin(customerId, adminId, newStatusType.ToString());
-            Appointment result = _appointmentRepo.GetAppointmentByAdminId(customerId, adminId);
+            var result = _appointmentRepo.GetAppointmentByAdminId(customerId, adminId);
             return RemovePasswordFromAppointment(result);
         }
 

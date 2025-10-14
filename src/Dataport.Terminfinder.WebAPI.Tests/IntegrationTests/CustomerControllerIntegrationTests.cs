@@ -18,7 +18,7 @@ public class CustomerControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetCustomer_Okay()
     {
-        Customer expectedCustomer = new()
+        var expectedCustomer = new Customer
         {
             CustomerId = _customerId,
             CustomerName = "Test",
@@ -46,7 +46,7 @@ public class CustomerControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetCustomer_NotFound()
     {
-        Guid customerId = new("B30FC6C3-5E3A-42CE-BC32-E85F8231992C");
+        var customerId = new Guid("B30FC6C3-5E3A-42CE-BC32-E85F8231992C");
 
         var client = _testServer.CreateClient();
 

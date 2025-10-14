@@ -29,7 +29,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var appointmentId = dto.AppointmentId;
 
         //--- add participiant
-        Voting voting1 = new()
+        var voting1 = new Voting
         {
             VotingId = Guid.Empty,
             CustomerId = _customerId,
@@ -109,7 +109,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var appointmentId = dto.AppointmentId;
 
         //--- add participiant
-        Voting voting1 = new()
+        var voting1 = new Voting
         {
             VotingId = Guid.Empty,
             CustomerId = _customerId,
@@ -176,7 +176,7 @@ public class ParticipantControllerIntegrationTests : BaseIntegrationTests
         var appointmentId = dto.AppointmentId;
 
         //--- add participiant
-        Voting voting1 = new()
+        var voting1 = new Voting
         {
             VotingId = Guid.Empty,
             CustomerId = _customerId,

@@ -22,7 +22,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
     public async Task AddAndUpdateParticipant_And_Votings()
     {
         var appointment = CreateTestAppointment(_customerId, Guid.Empty);
-        SuggestedDate suggestedDate3 = new()
+        var suggestedDate3 = new SuggestedDate
         {
             AppointmentId = Guid.Empty,
             CustomerId = _customerId,
@@ -70,7 +70,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(3, dto.SuggestedDates.Count);
 
         //--- add participiant
-        Voting voting1 = new()
+        var voting1 = new Voting
         {
             VotingId = Guid.Empty,
             CustomerId = _customerId,
@@ -79,7 +79,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
             SuggestedDateId = suggestedDates[0].SuggestedDateId,
             Status = VotingStatusType.Accepted
         };
-        Voting voting2 = new()
+        var voting2 = new Voting
         {
             VotingId = Guid.Empty,
             CustomerId = _customerId,
@@ -88,7 +88,7 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
             SuggestedDateId = suggestedDates[1].SuggestedDateId,
             Status = VotingStatusType.Declined
         };
-        Voting voting3 = new()
+        var voting3 = new Voting
         {
             VotingId = Guid.Empty,
             CustomerId = _customerId,

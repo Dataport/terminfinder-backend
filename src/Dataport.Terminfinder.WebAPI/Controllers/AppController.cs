@@ -55,7 +55,7 @@ public class AppController : ApiControllerBase
                 var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.VersionNumberNotFound)}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
-                ErrorResult errorObject = new()
+                var errorObject = new ErrorResult
                 {
                     Code = ((int)ErrorType.VersionNumberNotFound).ToString(),
                     Message = Localizer[errorMessage],
@@ -77,7 +77,7 @@ public class AppController : ApiControllerBase
             var errorMessage = $"ErrorCode{string.Format("{0:d4}", (int)ErrorType.GeneralError)}";
             var language = Thread.CurrentThread.CurrentCulture.Name;
 
-            ErrorResult errorObject = new()
+            var errorObject = new ErrorResult
             {
                 Code = ((int)ErrorType.GeneralError).ToString(),
                 Message = Localizer[errorMessage],

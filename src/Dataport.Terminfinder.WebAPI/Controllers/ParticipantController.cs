@@ -74,7 +74,7 @@ public class ParticipantController : ApiControllerBase
             throw CreateBadRequestException(ErrorType.NoInput);
         }
 
-        Participant participant = new()
+        var participant = new Participant
         {
             CustomerId = customerIdGuid, AppointmentId = appointmentIdGuid, ParticipantId = participantIdGuid
         };

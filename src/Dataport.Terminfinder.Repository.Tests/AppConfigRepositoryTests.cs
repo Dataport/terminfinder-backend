@@ -20,8 +20,8 @@ public class AppConfigRepositoryTests
     public void GetAppInfo_Okay()
     {
 
-        string version = "1.2.3";
-        string builddate = "2018-01-02";
+        var version = "1.2.3";
+        var builddate = "2018-01-02";
 
         // https://medium.com/@metse/entity-framework-core-unit-testing-3c412a0a997c
 
@@ -45,8 +45,8 @@ public class AppConfigRepositoryTests
         mockContext.Setup(c => c.AppConfig).Returns(mockSet.Object);
 
         // act fetch
-        AppConfigRepository repository = new (mockContext.Object, _logger);
-        AppInfo appInfo = repository.GetAppInfo();
+        var repository = new AppConfigRepository(mockContext.Object, _logger);
+        var appInfo = repository.GetAppInfo();
 
         // Assert
         Assert.AreEqual(appInfo.VersionNumber, version);
@@ -58,8 +58,8 @@ public class AppConfigRepositoryTests
     public void GetAppInfo_Nullable()
     {
 
-        string version = "1.2.3";
-        string builddate = "2018-01-02";
+        var version = "1.2.3";
+        var builddate = "2018-01-02";
 
         var appConfigs = new List<AppConfig>
         {
@@ -82,8 +82,8 @@ public class AppConfigRepositoryTests
         mockContext.Setup(c => c.SetTracking(It.IsAny<bool>()));
 
         // act fetch
-        AppConfigRepository repository = new (mockContext.Object, _logger);
-        AppInfo appInfo = repository.GetAppInfo();
+        var repository = new AppConfigRepository(mockContext.Object, _logger);
+        var appInfo = repository.GetAppInfo();
 
         // Assert
         Assert.AreEqual(null, appInfo);
