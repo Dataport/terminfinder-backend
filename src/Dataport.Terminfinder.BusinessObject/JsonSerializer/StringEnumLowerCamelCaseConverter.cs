@@ -16,7 +16,7 @@ public class StringEnumLowerCamelCaseConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
         Newtonsoft.Json.JsonSerializer serializer)
     {
-        var value = reader?.Value;
+        var value = reader.Value;
         return System.Enum.TryParse(objectType, value?.ToString(), true, out var result)
             ? result
             : Activator.CreateInstance(objectType);
