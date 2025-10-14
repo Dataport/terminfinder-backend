@@ -1,18 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
-using Dataport.Terminfinder.BusinessObject.Validators;
+﻿using Dataport.Terminfinder.BusinessObject.Validators;
 using Dataport.Terminfinder.WebAPI.Localisation.AttributeAdapters;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dataport.Terminfinder.WebAPI.Localisation;
 
 /// <inheritdoc />
 public class CustomValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
 {
-    private readonly IValidationAttributeAdapterProvider _baseProvider = new ValidationAttributeAdapterProvider();
+    private readonly ValidationAttributeAdapterProvider _baseProvider = new();
 
     /// <inheritdoc />
     public IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
     {
+        // ReSharper disable once ConvertIfStatementToSwitchStatement
         if (attribute is EnsureMinimumElementsAttribute ensureMinimumElementAttribute)
         {
             return new AttributeAdapterNoClientValidation<EnsureMinimumElementsAttribute>(ensureMinimumElementAttribute,

@@ -127,11 +127,13 @@ public abstract class ApiControllerBase : ControllerBase
     /// <exception cref="InvalidOperationException">Model state contains no error messages (model state is valid)</exception>
     /// <returns>the error messages</returns>
     [NotNull]
-    private IEnumerable<string> GetErrorMessagesFromModelState()
+    private HashSet<string> GetErrorMessagesFromModelState()
     {
+        // ReSharper disable once InvertIf
         if (!ModelState.IsValid && ModelState.Keys.Any(k => ModelState[k]!.Errors.Any()))
         {
             var result = new HashSet<string>();
+            // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var key in ModelState.Keys)
             {
                 if (ModelState[key]!.Errors.IsNullOrEmpty())
