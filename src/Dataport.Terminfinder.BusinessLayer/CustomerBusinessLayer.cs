@@ -1,5 +1,5 @@
-﻿using Dataport.Terminfinder.Repository;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
+using Dataport.Terminfinder.Repository;
 
 namespace Dataport.Terminfinder.BusinessLayer;
 
@@ -12,7 +12,7 @@ public class CustomerBusinessLayer : BusinessLayerBase, ICustomerBusinessLayer
     /// <param name="customerRepository">Customer repository</param>
     /// <param name="logger">Logger</param>
     public CustomerBusinessLayer(ICustomerRepository customerRepository,
-        ILogger<AppConfigBusinessLayer> logger)
+        ILogger<CustomerBusinessLayer> logger)
         : base(logger, customerRepository)
     {
         Logger.LogDebug($"Enter {nameof(CustomerBusinessLayer)}");
