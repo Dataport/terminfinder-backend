@@ -34,8 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageReference Include="log4net" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
 	  <PackageReference Include="Microsoft.CodeCoverage" Version="17.11.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">

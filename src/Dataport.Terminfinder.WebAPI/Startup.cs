@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
@@ -184,7 +185,10 @@ public class Startup
             .AddDataAnnotationsLocalization();
 
         services.AddSingleton<IValidationAttributeAdapterProvider, CustomValidationAttributeAdapterProvider>();
+        
         var connectionString = Configuration["ConnectionStrings:TerminfinderConnection"];
+        ArgumentException.ThrowIfNullOrEmpty(connectionString);
+        
         services.AddDbContext<DataContext>(options =>
         {
             options.UseNpgsql(connectionString);
@@ -193,6 +197,15 @@ public class Startup
                 options.EnableSensitiveDataLogging();
             }
         });
+        
+        services.AddHealthChecks()
+            .AddNpgSql(
+                connectionString: connectionString,
+                healthQuery: "SELECT 1;",
+                failureStatus: HealthStatus.Degraded,
+                name: "sql",
+                tags: ["db"]
+            );
     }
 
     /// <summary>
@@ -270,6 +283,10 @@ public class Startup
             await next();
         });
 
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapHealthChecks("/health");
+        });
     }
 }
