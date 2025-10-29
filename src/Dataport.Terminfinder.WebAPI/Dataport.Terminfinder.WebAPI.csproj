@@ -4,7 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Dataport.Terminfinder.WebAPI</RootNamespace>
-	<AssemblyName>Dataport.Terminfinder.WebAPI</AssemblyName>
+    <AssemblyName>Dataport.Terminfinder.WebAPI</AssemblyName>
+    <ContainerRepository>dataport-terminfinder-webapi</ContainerRepository>
     <DebugType>Portable</DebugType>
     <ProjectGuid>{1B884327-0051-4502-A301-D0EB71FC2EEB}</ProjectGuid>
 	<OutputType>Exe</OutputType>
