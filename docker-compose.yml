@@ -1,0 +1,45 @@
+﻿# DO NOT USE IN PRODUCTION
+
+name: terminfinder-webapi
+
+services:
+  terminfinder:
+    build: .
+    container_name: terminfinder-webapi
+    hostname: terminfinder-webapi
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+#      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__TerminfinderConnection=Host=db;Port=5432;Database=terminfinder;Username=postgres;password=p@55w0rd;
+#      - Logging__Console__LogLevel__Default=Debug
+#      - Logging__LogLevel__Default=Debug
+#      - Logging__LogLevel__System=Information
+#      - Logging__LogLevel__Microsoft=Information
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+  
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: postgres_db
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: p@55w0rd
+      POSTGRES_DB: terminfinder
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+      
+volumes:
+  postgres_data:
