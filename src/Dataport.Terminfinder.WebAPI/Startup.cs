@@ -79,6 +79,7 @@ public class Startup
         services.AddTransient<IAppointmentRepository, AppointmentRepository>();
         services.AddTransient<IAppConfigRepository, AppConfigRepository>();
         services.AddTransient<ICustomerRepository, CustomerRepository>();
+        services.AddTransient<ILegacyCustomerRepository, LegacyCustomerRepository>();
         services.AddTransient<IAppConfigRepository, AppConfigRepository>();
         services.AddTransient<IMigrationManager, MigrationManager>();
         services.AddTransient<IAppointmentBusinessLayer, AppointmentBusinessLayer>();

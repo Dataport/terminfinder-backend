@@ -48,7 +48,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
 
         var selectedCustomerId = (from c in Context.Customers
             where (c.CustomerId == customerId
-                   && c.Status == AppointmentStatusType.Started.ToString())
+                   && c.Status == nameof(AppointmentStatusType.Started))
             select c.CustomerId).SingleOrDefault();
 
         return (selectedCustomerId == customerId);

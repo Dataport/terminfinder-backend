@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dataport.Terminfinder.Repository;
 
@@ -49,6 +49,15 @@ public class DataContext : DbContext
             customer
                     .HasKey(c => c.CustomerId)
                     .HasName("customer_pkey");
+        });
+        
+        modelBuilder.Entity<LegacyCustomer>(legacyCustomer =>
+        {
+            legacyCustomer.Property(p => p.CreationDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            legacyCustomer
+                .HasKey(c => c.CustomerId)
+                .HasName("legacycustomer_pkey");
         });
 
         modelBuilder.Entity<Appointment>(appointment =>
@@ -212,6 +221,11 @@ public class DataContext : DbContext
     /// Customers
     /// </summary>
     public virtual DbSet<Customer> Customers { get; set; }
+    
+    /// <summary>
+    /// Legacy Customers
+    /// </summary>
+    public virtual DbSet<LegacyCustomer> LegacyCustomers { get; set; }
 
     /// <summary>
     /// Appointments
