@@ -26,74 +26,114 @@ public enum ErrorType
     WrongInputOrNotAllowed = 12,
 
     /// <summary>
-    /// customerid not defined
+    /// version number not found
+    /// </summary>
+    VersionNumberNotFound = 13,
+    
+    /// <summary>
+    /// One of  the validated IDs is not empty
+    /// </summary>
+    IdsMustBeEmpty = 14,
+
+    /// <summary>
+    /// customerId not defined
     /// </summary>
     CustomerIdNotFound = 20,
 
     /// <summary>
-    /// appointmentid not defined
+    /// customerId not valid
     /// </summary>
-    AppointmentIdNotFound = 30,
-
-    /// <summary>
-    /// adminid not defined
-    /// </summary>
-    AdminIdNotFound = 31,
+    CustomerIdNotValid = 21,
 
     /// <summary>
     /// customer not valid
     /// </summary>
-    CustomerNotValid = 40,
+    CustomerNotValid = 22,
 
     /// <summary>
     /// customer not valid
     /// </summary>
-    CustomerNotFound = 41,
+    CustomerNotFound = 23,
 
     /// <summary>
-    /// versionnumber not found
+    /// adminId not defined
     /// </summary>
-    VersionNumberNotFound = 50,
+    AdminIdNotFound = 30,
+
+    /// <summary>
+    /// adminId not valid
+    /// </summary>
+    AdminIdNotValid = 31,
+
+    /// <summary>
+    /// appointmentId not defined
+    /// </summary>
+    AppointmentIdNotFound = 40,
+
+    /// <summary>
+    /// appointmentId not valid
+    /// </summary>
+    AppointmentIdNotValid = 41,
 
     /// <summary>
     /// appointment not found
     /// </summary>
-    AppointmentNotFound = 60,
+    AppointmentNotFound = 42,
 
     /// <summary>
     /// appointment not valid
     /// </summary>
-    AppointmentNotValid = 61,
+    AppointmentNotValid = 43,
 
     /// <summary>
     /// The status of the appointment are not allowed in this context
     /// </summary>
-    AppointmentStatusTypeNotAllowed = 62,
+    AppointmentStatusTypeNotAllowed = 44,
 
     /// <summary>
     /// The appointment has not be started
     /// </summary>
-    AppointmentHasNotBeStarted = 63,
+    AppointmentHasNotBeStarted = 45,
+
+    /// <summary>
+    /// the suggested date not found
+    /// </summary>
+    SuggestedDateNotFound = 50,
+    
+    /// <summary>
+    /// suggestedDateId is not valid
+    /// </summary>
+    SuggestedDateIdNotValid = 51,
+
+    /// <summary>
+    /// participant not found
+    /// </summary>
+    ParticipantNotFound = 60,
+
+    /// <summary>
+    /// participantId not valid
+    /// </summary>
+    ParticipantIdNotValid = 61,
 
     /// <summary>
     /// participant not valid
     /// </summary>
-    ParticipantNotValid = 70,
+    ParticipantNotValid = 62,
 
     /// <summary>
     /// the maximum count of elements of suggested dates are exceeded
     /// </summary>
-    MaximumElementsOfSuggestedDatesAreExceeded = 80,
+    MaximumElementsOfSuggestedDatesAreExceeded = 70,
 
     /// <summary>
     /// the maximum count of elements of participants are exceeded
     /// </summary>
-    MaximumElementsOfParticipantsAreExceeded = 81,
+    MaximumElementsOfParticipantsAreExceeded = 71,
 
     /// <summary>
     /// the minimum count of elements of suggested dates are not exceeded
     /// </summary>
-    MinimumElementsOfSuggestedDatesAreNotExceeded = 82,
+    MinimumElementsOfSuggestedDatesAreNotExceeded = 72,
 
     /// <summary>
     /// Authorization failed
@@ -109,16 +149,5 @@ public enum ErrorType
     /// An error occurred when decoding the password from the basic authentication header
     /// (it is a client error)
     /// </summary>
-    DecodingPasswordFailed = 102,
-
-    /// <summary>
-    /// the suggested date not found
-    /// </summary>
-    SuggestedDateNotFound = 110,
-
-    /// <summary>
-    /// participant not found
-    /// </summary>
-    ParticipantNotFound = 120
-
+    DecodingPasswordFailed = 102
 }
