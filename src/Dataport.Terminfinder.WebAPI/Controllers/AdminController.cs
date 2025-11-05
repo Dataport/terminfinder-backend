@@ -66,10 +66,14 @@ public class AdminController : ApiControllerBase
     {
         Logger.LogDebug("Enter {NameofGet}, Parameter: {CustomerId}, {AdminId}", nameof(Get), customerId, adminId);
 
-        if (!Guid.TryParse(customerId, out var customerIdGuid)
-            || !Guid.TryParse(adminId, out var adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
+        }
+        
+        if (!Guid.TryParse(adminId, out var adminIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.AdminIdNotValid);
         }
 
         ValidateReadAppointmentByAdminIdRequest(customerIdGuid, adminIdGuid, _appointmentBusinessLayer);
@@ -100,10 +104,14 @@ public class AdminController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGetProtection}, Parameter: {CustomerId}, {AdminId}", nameof(GetProtection),
             customerId, adminId);
 
-        if (!Guid.TryParse(customerId, out var customerIdGuid)
-            || !Guid.TryParse(adminId, out var adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
+        }
+        
+        if (!Guid.TryParse(adminId, out var adminIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.AdminIdNotValid);
         }
 
         ValidateReadAppointmentByAdminIdRequestSkipPasswordVerification(customerIdGuid, adminIdGuid,
@@ -147,10 +155,14 @@ public class AdminController : ApiControllerBase
         Logger.LogDebug("Enter {NameofGetPasswordVerification}, Parameter: {CustomerId}, {AdminId}",
             nameof(GetPasswordVerification), customerId, adminId);
 
-        if (!Guid.TryParse(customerId, out var customerIdGuid)
-            || !Guid.TryParse(adminId, out var adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
+        }
+        
+        if (!Guid.TryParse(adminId, out var adminIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.AdminIdNotValid);
         }
 
         ValidateReadAppointmentByAdminIdRequestSkipPasswordVerification(customerIdGuid, adminIdGuid,
@@ -199,10 +211,14 @@ public class AdminController : ApiControllerBase
         Logger.LogDebug("Enter {NameofSetStatus}, Parameter: {CustomerId}, {AdminId}, {StatusType}", nameof(SetStatus),
             customerId, adminId, statusType);
 
-        if (!Guid.TryParse(customerId, out var customerIdGuid)
-            || !Guid.TryParse(adminId, out var adminIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
+        }
+        
+        if (!Guid.TryParse(adminId, out var adminIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.AdminIdNotValid);
         }
 
         ValidateReadAppointmentByAdminIdRequest(customerIdGuid, adminIdGuid, _appointmentBusinessLayer);

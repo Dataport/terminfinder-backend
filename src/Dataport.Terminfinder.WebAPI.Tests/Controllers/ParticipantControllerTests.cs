@@ -142,13 +142,13 @@ public class ParticipantControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Delete(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString(), ExpectedParticipantId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString, ExpectedParticipantId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
         var exceptionParticipantId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionParticipantId.ErrorCode);
+        Assert.AreEqual(ErrorType.ParticipantIdNotValid, exceptionParticipantId.ErrorCode);
     }
 
     [TestMethod]

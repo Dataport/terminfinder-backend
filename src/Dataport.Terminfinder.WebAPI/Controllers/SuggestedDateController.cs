@@ -65,17 +65,17 @@ public class SuggestedDateController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
         }
 
         if (!Guid.TryParse(suggestedDateId, out var suggestedDateIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.SuggestedDateIdNotValid);
         }
 
         var suggestedDate = new SuggestedDate

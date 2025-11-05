@@ -66,12 +66,12 @@ public class AppointmentController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
         }
 
         ValidateAppointmentRequest(customerIdGuid, appointmentIdGuid, _appointmentBusinessLayer);
@@ -109,12 +109,12 @@ public class AppointmentController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
         }
 
         ValidateAppointmentRequestSkipPasswordVerification(customerIdGuid, appointmentIdGuid,
@@ -158,12 +158,12 @@ public class AppointmentController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
         }
 
         ValidateAppointmentRequestSkipPasswordVerification(customerIdGuid, appointmentIdGuid,
@@ -210,10 +210,14 @@ public class AppointmentController : ApiControllerBase
 
         if (appointmentObject == null
             || (appointmentObject.AdminId == Guid.Empty && appointmentObject.AppointmentId != Guid.Empty)
-            || (appointmentObject.AdminId != Guid.Empty && appointmentObject.AppointmentId == Guid.Empty)
-            || !Guid.TryParse(customerId, out var customerIdGuid))
+            || (appointmentObject.AdminId != Guid.Empty && appointmentObject.AppointmentId == Guid.Empty))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.IdsMustBeEmpty);
+        }
+
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         ValidateCustomerRequest(customerIdGuid, _appointmentBusinessLayer);
@@ -267,7 +271,7 @@ public class AppointmentController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         ValidateAppointmentRequest(customerIdGuid, appointmentObject.AppointmentId, appointmentObject.AdminId,
@@ -293,7 +297,7 @@ public class AppointmentController : ApiControllerBase
 
         if (!Guid.TryParse(customerIdFromRequest, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (appointmentFromRequest == null)

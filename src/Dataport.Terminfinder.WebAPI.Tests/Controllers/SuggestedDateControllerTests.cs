@@ -112,13 +112,13 @@ public class SuggestedDateControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Delete(invalidGuidString, ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), invalidGuidString, ExpectedSuggestedDateId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
         var exceptionSuggestedDateId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), invalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionSuggestedDateId.ErrorCode);
+        Assert.AreEqual(ErrorType.SuggestedDateIdNotValid, exceptionSuggestedDateId.ErrorCode);
     }
 
     private static SuggestedDateController CreateSut(IAppointmentBusinessLayer appointmentBusinessLayer = null)

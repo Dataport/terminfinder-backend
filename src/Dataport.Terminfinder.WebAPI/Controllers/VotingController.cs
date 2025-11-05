@@ -65,12 +65,12 @@ public class VotingController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
         }
 
         ValidateAppointmentRequest(customerIdGuid, appointmentIdGuid, _appointmentBusinessLayer);
@@ -120,12 +120,12 @@ public class VotingController : ApiControllerBase
 
         if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
         }
 
         if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
         }
 
         ValidateAppointmentRequestStatusIsStarted(customerIdGuid, appointmentIdGuid, _appointmentBusinessLayer);

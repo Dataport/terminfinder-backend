@@ -40,7 +40,7 @@ public class ParticipantController : ApiControllerBase
     /// If the appointment is protected by a password, submit the credentials of the appointment via basic authentication http header.
     /// Please use the appointment id as username and use the password of the appointment as password in the basic authentication header.
     /// </summary>
-    /// <param name="participantId">participantid to delete</param>
+    /// <param name="participantId">participantId to delete</param>
     /// <param name="customerId">id of the customer</param>
     /// <param name="appointmentId">id of the appointment</param>
     /// <returns>ActionResult</returns>
@@ -62,11 +62,19 @@ public class ParticipantController : ApiControllerBase
         Logger.LogDebug("Enter {NameofDelete}, Parameter: {CustomerId}, {AppointmentId}", nameof(Delete), customerId,
             appointmentId);
 
-        if (!Guid.TryParse(customerId, out var customerIdGuid)
-            || !Guid.TryParse(appointmentId, out var appointmentIdGuid)
-            || !Guid.TryParse(participantId, out var participantIdGuid))
+        if (!Guid.TryParse(customerId, out var customerIdGuid))
         {
-            throw CreateBadRequestException(ErrorType.WrongInputOrNotAllowed);
+            throw CreateBadRequestException(ErrorType.CustomerIdNotValid);
+        }
+
+        if (!Guid.TryParse(appointmentId, out var appointmentIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.AppointmentIdNotValid);
+        }
+
+        if (!Guid.TryParse(participantId, out var participantIdGuid))
+        {
+            throw CreateBadRequestException(ErrorType.ParticipantIdNotValid);
         }
 
         if (string.IsNullOrEmpty(participantId) || participantIdGuid == Guid.Empty)

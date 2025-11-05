@@ -56,7 +56,7 @@ public class AdminControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
         
         var exception = Assert.ThrowsException<BadRequestException>(() => sut.Get(ExpectedCustomerId.ToString(), string.Empty));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.AdminIdNotValid, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -210,10 +210,10 @@ public class AdminControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetProtection(ExpectedInvalidGuidString, ExpectedAdminId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAdminId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetProtection(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAdminId.ErrorCode);
+        Assert.AreEqual(ErrorType.AdminIdNotValid, exceptionAdminId.ErrorCode);
     }
 
     [TestMethod]
@@ -287,7 +287,7 @@ public class AdminControllerTests
 
         var exception = Assert.ThrowsException<BadRequestException>(() =>
             sut.SetStatus(ExpectedInvalidGuidString, ExpectedInvalidGuidString, string.Empty));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -404,7 +404,7 @@ public class AdminControllerTests
 
         var exception = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetPasswordVerification(ExpectedInvalidGuidString, ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exception.ErrorCode);
     }
 
     private static AdminController CreateSut(
