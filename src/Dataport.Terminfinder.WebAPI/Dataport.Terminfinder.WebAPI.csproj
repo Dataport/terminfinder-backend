@@ -8,9 +8,9 @@
     <ContainerRepository>dataport-terminfinder-webapi</ContainerRepository>
     <DebugType>Portable</DebugType>
     <ProjectGuid>{1B884327-0051-4502-A301-D0EB71FC2EEB}</ProjectGuid>
-	<OutputType>Exe</OutputType>
-	<UseAppHost>true</UseAppHost>
-	<LangVersion>12</LangVersion>
+    <OutputType>Exe</OutputType>
+    <UseAppHost>true</UseAppHost>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,7 +21,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Xml\Dataport.Terminfinder.WebAPI.xml</DocumentationFile>
-	<OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <NoWarn>1701;1702;S3903</NoWarn>
   </PropertyGroup>
 
@@ -35,35 +35,35 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />
-    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
-    <PackageReference Include="log4net" Version="3.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
-	  <PackageReference Include="Microsoft.CodeCoverage" Version="17.11.1" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.8.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2"/>
+    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
+    <PackageReference Include="log4net" Version="3.0.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8"/>
+    <PackageReference Include="Microsoft.CodeCoverage" Version="17.11.1"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0"/>
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.22"/>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.8.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.1"/>
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dataport.Terminfinder.BusinessLayer\Dataport.Terminfinder.BusinessLayer.csproj" />
-    <ProjectReference Include="..\Dataport.Terminfinder.BusinessObject\Dataport.Terminfinder.BusinessObject.csproj" />
+    <ProjectReference Include="..\Dataport.Terminfinder.BusinessLayer\Dataport.Terminfinder.BusinessLayer.csproj"/>
+    <ProjectReference Include="..\Dataport.Terminfinder.BusinessObject\Dataport.Terminfinder.BusinessObject.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

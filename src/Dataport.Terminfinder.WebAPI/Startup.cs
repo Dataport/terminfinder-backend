@@ -4,8 +4,8 @@ using Dataport.Terminfinder.Common;
 using Dataport.Terminfinder.Repository;
 using Dataport.Terminfinder.Repository.Setup;
 using Dataport.Terminfinder.WebAPI.Constants;
-using Dataport.Terminfinder.WebAPI.ErrorHandling;
 using Dataport.Terminfinder.WebAPI.Localisation;
+using Dataport.Terminfinder.WebAPI.Middlewares;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Swagger;
 using Microsoft.AspNetCore.Localization;
@@ -89,6 +89,7 @@ public class Startup
         services.AddTransient<IBcryptWrapper, BcryptWrapper>();
         services.AddSingleton<IRequestContext, RequestContextAdapter>();
         services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddHttpClient();
         services.AddLogging();
 
         if (WebHostingEnvironment.IsDevelopment())
@@ -274,6 +275,7 @@ public class Startup
 
         // custom error handler
         app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+        app.UseMiddleware<LegacyCustomerMiddleware>();
 
         app.Use(async (context, next) =>
         {

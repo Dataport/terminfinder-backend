@@ -4,7 +4,7 @@ using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.Exceptions;
 using System.Net;
 
-namespace Dataport.Terminfinder.WebAPI.ErrorHandling;
+namespace Dataport.Terminfinder.WebAPI.Middlewares;
 
 /// <summary>
 /// Error handling middleware
@@ -104,8 +104,8 @@ public class ErrorHandlingMiddleware
         }
         catch (Exception innerException)
         {
-            _logger.LogError("An error occurred during handling an exception: {InnerExceptionMessage}", innerException.Message);
-            _logger.LogError("The submitted exception is: {ExceptionMessage}", exception?.Message);
+            _logger.LogError(innerException ,"An error occurred during handling an exception: {InnerExceptionMessage}", innerException.Message);
+            _logger.LogError(exception, "The submitted exception is: {ExceptionMessage}", exception?.Message);
             throw;
         }
     }

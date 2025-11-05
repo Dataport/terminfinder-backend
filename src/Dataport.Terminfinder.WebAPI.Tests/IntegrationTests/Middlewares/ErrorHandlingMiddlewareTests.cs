@@ -1,6 +1,6 @@
-﻿using Dataport.Terminfinder.WebAPI.ErrorHandling;
+﻿using Dataport.Terminfinder.WebAPI.Middlewares;
 
-namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests.ErrorHandling;
+namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests.Middlewares;
 
 [TestClass]
 [TestCategory("Integrationtest")]
