@@ -33,10 +33,10 @@ public class VotingControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Get(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
 
     [TestMethod]
@@ -172,10 +172,10 @@ public class VotingControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Put(participants, ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Put(participants, ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
 
     [TestMethod]

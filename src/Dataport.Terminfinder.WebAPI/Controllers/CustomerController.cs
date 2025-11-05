@@ -75,7 +75,7 @@ public class CustomerController : ApiControllerBase
 
             if (!Guid.TryParse(customerId, out var customerIdGuid))
             {
-                var errorMessage = $"ErrorCode{(int)ErrorType.WrongInputOrNotAllowed:d4}";
+                var errorMessage = $"ErrorCode{(int)ErrorType.CustomerIdNotValid:d4}";
                 var language = Thread.CurrentThread.CurrentCulture.Name;
 
                 var errorObject = new ErrorResult

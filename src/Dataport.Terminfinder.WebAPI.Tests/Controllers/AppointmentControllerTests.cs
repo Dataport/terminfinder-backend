@@ -95,7 +95,7 @@ public class AppointmentControllerTests
         // Act
         var exception = Assert.ThrowsException<BadRequestException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), string.Empty));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -213,10 +213,10 @@ public class AppointmentControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Get(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
 
     [TestMethod]
@@ -319,7 +319,7 @@ public class AppointmentControllerTests
         // Act
         var exception = Assert.ThrowsException<BadRequestException>(() => 
             sut.Post(appointment, ExpectedCustomerId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.IdsMustBeEmpty, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -337,7 +337,7 @@ public class AppointmentControllerTests
         // Act
         var exception = Assert.ThrowsException<BadRequestException>(() =>
             sut.Post(appointment, ExpectedCustomerId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.IdsMustBeEmpty, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -460,7 +460,7 @@ public class AppointmentControllerTests
 
         var exception = Assert.ThrowsException<BadRequestException>(() => 
             sut.Put(appointment, ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exception.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exception.ErrorCode);
     }
 
     [TestMethod]
@@ -526,10 +526,10 @@ public class AppointmentControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetProtection(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetProtection(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
 
     [TestMethod]
@@ -637,10 +637,10 @@ public class AppointmentControllerTests
 
         var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetPasswordVerification(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionCustomerId.ErrorCode);
+        Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
         var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
             sut.GetPasswordVerification(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
-        Assert.AreEqual(ErrorType.WrongInputOrNotAllowed, exceptionAppointmentId.ErrorCode);
+        Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
 
     private static AppointmentController CreateSut(
