@@ -1,0 +1,4 @@
+﻿include:
+  - project: "dabstimmbox/open-source/oss-pipelines"
+    ref: "main"
+    file: "backend.yml"
