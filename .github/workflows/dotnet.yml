@@ -11,47 +11,46 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./src
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: tool-manifest and local install tools
-      run: |
-        dotnet new tool-manifest
-        dotnet tool install --local JetBrains.ReSharper.GlobalTools
-        dotnet tool install --local CycloneDX
-        dotnet tool install --local dotnet-coverage
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: |
-        dotnet test --no-build --verbosity normal --filter TestCategory!=Integrationtest --settings Default.runsettings --logger trx /p:CollectCoverage=true /maxcpucount:1 --collect:"XPlat Code Coverage" --results-directory TestResultsCI /p:CoverletOutput="../TestResultsCI/" 
-        dotnet dotnet-coverage collect "dotnet test --filter TestCategory!=Integrationtest --no-restore --no-build" -f xml -o "coverage.xml"
-    - name: jetbrains resharper inspectcode
-      run: dotnet jb inspectcode --no-build "Dataport.Terminfinder.sln" -o="codeInspection.xml" --disable-settings-layers:SolutionPersonal -e:WARNING --no-swea
-    - name: Upload resharper file
-      uses: actions/upload-artifact@v4
-      with:
-        name: jetbrains resharper codeInspection
-        path: "src/codeInspection.xml"
-    - name: Upload code coverage file
-      uses: actions/upload-artifact@v4
-      with:
-        name: code coverage
-        path: "src/coverage.xml"
-    - name: sbom
-      run: dotnet dotnet-CycloneDX Dataport.Terminfinder.sln -t -f "sbom.xml"
-    - name: Upload sbom file
-      uses: actions/upload-artifact@v4
-      with:
-        name: CycloneDX sbom
-        path: "src/sbom.xml"
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: tool-manifest and local install tools
+        run: |
+          dotnet new tool-manifest
+          dotnet tool install --local JetBrains.ReSharper.GlobalTools
+          dotnet tool install --local CycloneDX
+          dotnet tool install --local dotnet-coverage
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: |
+          dotnet test --no-build --verbosity normal --filter TestCategory!=Integrationtest --settings Default.runsettings --logger trx /p:CollectCoverage=true /maxcpucount:1 --collect:"XPlat Code Coverage" --results-directory TestResultsCI /p:CoverletOutput="../TestResultsCI/" 
+          dotnet dotnet-coverage collect "dotnet test --filter TestCategory!=Integrationtest --no-restore --no-build" -f xml -o "coverage.xml"
+      - name: jetbrains resharper inspectcode
+        run: dotnet jb inspectcode --no-build "Dataport.Terminfinder.sln" -o="codeInspection.xml" --disable-settings-layers:SolutionPersonal -e:WARNING --no-swea
+      - name: Upload resharper file
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetbrains resharper codeInspection
+          path: "src/codeInspection.xml"
+      - name: Upload code coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          name: code coverage
+          path: "src/coverage.xml"
+      - name: sbom
+        run: dotnet dotnet-CycloneDX Dataport.Terminfinder.sln -t -f "sbom.xml"
+      - name: Upload sbom file
+        uses: actions/upload-artifact@v4
+        with:
+          name: CycloneDX sbom
+          path: "src/sbom.xml"
