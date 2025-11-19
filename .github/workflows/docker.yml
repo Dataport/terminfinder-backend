@@ -1,0 +1,42 @@
+﻿name: docker
+
+on:
+  workflow_run:
+    workflows: [ release ]
+    types: [ completed ]
+    branches: [ main ]
+
+jobs:
+  build-push-opencode:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    environment:
+      name: opencode.de
+      url: https://gitlab.opencode.de/groups/dataport/terminfinder/-/container_registries
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get latest tag from HEAD
+        id: get-tag
+        run: |
+          TAG=$(git tag --points-at HEAD | sed 's/^v//')
+          if [ -z "$TAG" ]; then
+            TAG="latest"
+          fi
+          echo "LATEST_TAG=$TAG" >> "$GITHUB_ENV"
+      - uses: docker/login-action@v3
+        with:
+          registry: registry.opencode.de
+          username: access-token
+          password: ${{ secrets.OPENCODE_DOCKER_ACCESS_TOKEN }}
+      - uses: docker/build-push-action@v6.1.0
+        with:
+          context: .
+          push: true
+          tags: registry.opencode.de/dataport/terminfinder/terminfinder-backend:${{ env.LATEST_TAG }}
