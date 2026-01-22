@@ -31,7 +31,7 @@ public class Program
             System.Console.WriteLine("Error: There are too many parameters.");
             System.Console.WriteLine(
                 "dotnet Dataport.Terminfinder.DeleteAppointments.dll customerid 'days after that expired appointments would be deleted'");
-            return (int)ErrorType.TooMuchParamters;
+            return (int)ErrorType.TooManyParameters;
         }
 
         if (!Guid.TryParse(args[0], out var customerId))
@@ -127,7 +127,7 @@ public class Program
         }
         catch (Exception e)
         {
-            var error = $"An unexpected error was occurred: {e.Message} ; {e.StackTrace}";
+            var error = $"An unexpected error has occurred: {e.Message} ; {e.StackTrace}";
             System.Console.WriteLine(error);
 #pragma warning disable CA2254 // Template should be a static expression
             logger?.LogError(e, error);

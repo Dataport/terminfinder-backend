@@ -7,7 +7,6 @@ namespace Dataport.Terminfinder.Repository.Setup;
 [ExcludeFromCodeCoverage]
 public class MigrationManager : IMigrationManager
 {
-
     private readonly ILogger<MigrationManager> _logger;
 
     private readonly DataContext _dataContext;
