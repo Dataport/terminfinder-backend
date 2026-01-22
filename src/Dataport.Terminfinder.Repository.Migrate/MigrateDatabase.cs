@@ -83,7 +83,7 @@ public static class MigrateDatabase
         }
         catch (Exception e)
         {
-            var error = $"An unexpected error was occurred: {e.Message} ; {e.StackTrace}";
+            var error = $"An unexpected error has occurred: {e.Message} ; {e.StackTrace}";
 #pragma warning disable CA2254 // Template should be a static expression
             logger.LogError(e, error);
 #pragma warning restore CA2254 // Template should be a static expression

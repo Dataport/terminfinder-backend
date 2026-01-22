@@ -11,14 +11,14 @@ public enum ErrorType
     NoError = 0,
 
     /// <summary>
-    /// Not enought parameters
+    /// Not enough parameters
     /// </summary>
     NotEnoughParameters = 10,
 
     /// <summary>
-    /// too much paramters
+    /// too many parameters
     /// </summary>
-    TooMuchParamters = 20,
+    TooManyParameters = 20,
 
     /// <summary>
     /// customerId are not valid
