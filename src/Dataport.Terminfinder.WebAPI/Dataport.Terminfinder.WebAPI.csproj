@@ -36,6 +36,9 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
+    <PackageReference Include="Hangfire" Version="1.8.22" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.22" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.8.1.2" />
     <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
     <PackageReference Include="log4net" Version="3.3.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
@@ -65,6 +68,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Dataport.Terminfinder.BusinessLayer\Dataport.Terminfinder.BusinessLayer.csproj" />
     <ProjectReference Include="..\Dataport.Terminfinder.BusinessObject\Dataport.Terminfinder.BusinessObject.csproj" />
+    <ProjectReference Include="..\Dataport.Terminfinder.Jobs.DeleteAppointments\Dataport.Terminfinder.Jobs.DeleteAppointments.csproj" />
   </ItemGroup>
 
   <ItemGroup>

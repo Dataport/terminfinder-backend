@@ -116,6 +116,57 @@ public class AppointmentRepository : RepositoryBase, IAppointmentRepository
     }
 
     /// <inheritdoc />
+    // TODO Testing
+    public List<Guid> GetAppointmentIdsToDelete(Guid customerId, DateTime deleteDate)
+    {
+        _logger.LogDebug(
+            "Enter {NameofGetListOfAppointmentsToDelete} with customerId: '{CustomerId}' and deleteDate: '{DeleteDate}'",
+            nameof(GetAppointmentIdsToDelete), customerId, deleteDate);
+
+        if (customerId == Guid.Empty)
+        {
+            return [];
+        }
+
+        var endDateIsSet = Context.Appointments
+            .Where(a => a.CustomerId == customerId)
+            .Select(a => new { a.AppointmentId, SuggestedDate = a.SuggestedDates })
+            .Where(x =>
+                x.SuggestedDate.Max(sd => sd.EndDate) < deleteDate.Date
+                && x.SuggestedDate.All(sd => sd.EndDate != null)
+                && x.SuggestedDate.Max(sd => sd.StartDate) >= deleteDate.Date
+            )
+            .Select(x => x.AppointmentId);
+
+        var endDateNotSet = Context.Appointments
+            .Where(a => a.CustomerId == customerId)
+            .Select(a => new { a.AppointmentId, SuggestedDate = a.SuggestedDates })
+            .Where(x =>
+                x.SuggestedDate.Any(sd => sd.EndDate == null)
+                && x.SuggestedDate.Max(sd => sd.StartDate) < deleteDate.Date 
+                && !x.SuggestedDate.Any(_ => x.SuggestedDate.Max(sd => sd.EndDate) >= deleteDate.Date))
+            .Select(x => x.AppointmentId);
+
+        var result = endDateIsSet.Union(endDateNotSet);
+
+        return result.ToList();
+    }
+
+    /// <inheritdoc />
+    // TODO Testing
+    public void DeleteAppointmentsById(List<Guid> appointmentIds)
+    {
+        _logger.LogDebug("Enter {NameOfDeleteAppointmentsById}. Deleting Appointments with Ids: '{AppointmentIds}'",
+            nameof(DeleteAppointmentsById), appointmentIds.ToString());
+
+        var deletedRowsCount = Context.Appointments
+            .Where(a => appointmentIds.Contains(a.AppointmentId))
+            .ExecuteDelete();
+
+        _logger.LogInformation("Deleted '{DeletedRowsCount}' rows from table 'Appointments'", deletedRowsCount);
+    }
+
+    /// <inheritdoc />
     public Appointment GetAppointment(Guid customerId, Guid appointmentId)
     {
         _logger.LogDebug($"Enter {nameof(GetAppointment)}");

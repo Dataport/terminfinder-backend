@@ -1,6 +1,8 @@
 ﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessLayer.Security;
 using Dataport.Terminfinder.Common;
+using Dataport.Terminfinder.Common.Services;
+using Dataport.Terminfinder.Jobs.DeleteAppointments;
 using Dataport.Terminfinder.Repository;
 using Dataport.Terminfinder.Repository.Setup;
 using Dataport.Terminfinder.WebAPI.Constants;
@@ -8,6 +10,8 @@ using Dataport.Terminfinder.WebAPI.ErrorHandling;
 using Dataport.Terminfinder.WebAPI.Localisation;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Swagger;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -88,6 +92,8 @@ public class Startup
         services.AddTransient<IBcryptWrapper, BcryptWrapper>();
         services.AddSingleton<IRequestContext, RequestContextAdapter>();
         services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddTransient<IDateTimeGeneratorService, DateTimeGeneratorService>();
+        services.AddTransient<DeleteAppointmentsService>();
         services.AddLogging();
 
         if (WebHostingEnvironment.IsDevelopment())
@@ -103,6 +109,14 @@ public class Startup
         }
 
         services.AddRouting();
+        
+        services.AddHangfire(config =>
+        {
+            // TODO erstmal nur für dev, prod sollte persistent funktionieren
+            config.UseMemoryStorage();
+        });
+        services.AddHangfireServer();
+        
         services.AddSwaggerGen(s =>
         {
             s.SwaggerDoc("v1",
@@ -147,6 +161,7 @@ public class Startup
 
             s.OperationFilter<BasicAuthOperationFilter>();
         }).AddSwaggerGenNewtonsoftSupport();
+        
         services.AddLocalization(options => options.ResourcesPath = "Resources");
         // supported language
         services.Configure<RequestLocalizationOptions>(options =>
@@ -235,6 +250,7 @@ public class Startup
                 c.SwaggerEndpoint($"./swagger/v1/swagger.json", "Terminfinder API V1");
                 c.RoutePrefix = string.Empty;
             });
+            app.UseHangfireDashboard();
         }
 
         // In the production deployment we configure that via the ingress controller.
@@ -254,6 +270,13 @@ public class Startup
         app.UseStaticFiles();
 
         app.UseRouting();
+
+        RecurringJob.AddOrUpdate<DeleteAppointmentsService>(
+            "delete-appointments",
+            deleteAppointmentsService =>
+                deleteAppointmentsService.ExecuteAsync(),
+            Cron.HourInterval(1)
+        );
 
         // Shows UseCors with CorsPolicyBuilder.
         // In the production deployment we configure that via the ingress controller.
@@ -287,6 +310,7 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health");
+            endpoints.MapHangfireDashboard();
         });
     }
 }

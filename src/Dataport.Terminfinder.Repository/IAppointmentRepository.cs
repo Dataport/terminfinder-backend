@@ -73,6 +73,22 @@ public interface IAppointmentRepository : IRepositoryBase
     bool ExistsAppointmentByAdminId(Guid customerId, Guid adminId);
 
     /// <summary>
+    /// Gets a list of all appointments Ids where all suggestedDates
+    /// - are past the deleteDate
+    /// - belong to the customerId
+    /// </summary>
+    /// <param name="customerId"></param>
+    /// <param name="deleteDate"></param>
+    /// <returns>List of appointments to delete</returns>
+    List<Guid> GetAppointmentIdsToDelete(Guid customerId, DateTime deleteDate);
+    
+    /// <summary>
+    /// Delete all appointments by Id
+    /// </summary>
+    /// <param name="appointmentIds"></param>
+    void DeleteAppointmentsById(List<Guid> appointmentIds);
+    
+    /// <summary>
     /// Check, if participant exists in the database
     /// </summary>
     /// <param name="customerId">id of the customer</param>
