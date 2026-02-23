@@ -1,6 +1,7 @@
 ﻿using Dataport.Terminfinder.BusinessLayer;
 using Dataport.Terminfinder.BusinessLayer.Security;
 using Dataport.Terminfinder.Common;
+using Dataport.Terminfinder.Common.Jobs.Configuration;
 using Dataport.Terminfinder.Common.Services;
 using Dataport.Terminfinder.Jobs.DeleteAppointments;
 using Dataport.Terminfinder.Repository;
@@ -93,8 +94,12 @@ public class Startup
         services.AddSingleton<IRequestContext, RequestContextAdapter>();
         services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         services.AddTransient<IDateTimeGeneratorService, DateTimeGeneratorService>();
-        services.AddTransient<DeleteAppointmentsService>();
         services.AddLogging();
+        
+        // Jobs
+        services.AddTransient<DeleteAppointmentsService>();
+
+        services.Configure<DeleteAppointmentsConfig>(Configuration.GetSection(DeleteAppointmentsConfig.SettingsKey));
 
         if (WebHostingEnvironment.IsDevelopment())
         {

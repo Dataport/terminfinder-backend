@@ -1,19 +1,18 @@
 ﻿using Dataport.Terminfinder.Common.Jobs;
+using Dataport.Terminfinder.Common.Jobs.Configuration;
 using Dataport.Terminfinder.Common.Services;
 using Dataport.Terminfinder.Repository;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Dataport.Terminfinder.Jobs.DeleteAppointments;
 
 public class DeleteAppointmentsService(
+    IOptions<DeleteAppointmentsConfig> options,
     IDateTimeGeneratorService dateTimeGeneratorService,
     IAppointmentRepository appointmentRepository,
     ILogger<DeleteAppointmentsService> logger) : IJob
 {
-    // TODO refactor zu appsettings/config
-    private readonly Guid _customerId = Guid.Parse("80248A42-8FE2-4D4A-89DA-02E683511F76");
-    private const int DeleteExpiredAppointmentsAfterDays = 7;
-
     public Task ExecuteAsync()
     {
         logger.LogDebug(
@@ -21,13 +20,14 @@ public class DeleteAppointmentsService(
             "customerId:'{CustomerId}', deleteExpiredAppointmentsAfterDays: '{DeleteExpiredAppointmentsAfterDays}'",
             nameof(DeleteAppointmentsService),
             nameof(ExecuteAsync),
-            _customerId,
-            DeleteExpiredAppointmentsAfterDays);
-        
-        var deleteDate = dateTimeGeneratorService.GetCurrentDateTime();
-        deleteDate = deleteDate.Subtract(TimeSpan.FromDays(DeleteExpiredAppointmentsAfterDays + 1));
+            options.Value.CustomerId,
+            options.Value.DeleteExpiredAppointmentsAfterDays);
 
-        var appointmentIdsToDelete = appointmentRepository.GetAppointmentIdsToDelete(_customerId, deleteDate);
+        var deleteDate = dateTimeGeneratorService.GetCurrentDateTime();
+        deleteDate = deleteDate.Subtract(TimeSpan.FromDays(options.Value.DeleteExpiredAppointmentsAfterDays + 1));
+
+        var appointmentIdsToDelete =
+            appointmentRepository.GetAppointmentIdsToDelete(options.Value.CustomerId, deleteDate);
 
         return appointmentIdsToDelete.Count == 0
             ? Task.CompletedTask
