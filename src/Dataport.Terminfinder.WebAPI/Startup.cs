@@ -10,6 +10,7 @@ using Dataport.Terminfinder.WebAPI.Constants;
 using Dataport.Terminfinder.WebAPI.ErrorHandling;
 using Dataport.Terminfinder.WebAPI.Localisation;
 using Dataport.Terminfinder.WebAPI.RequestContext;
+using Dataport.Terminfinder.WebAPI.Services;
 using Dataport.Terminfinder.WebAPI.Swagger;
 using Hangfire;
 using Hangfire.MemoryStorage;
@@ -96,9 +97,11 @@ public class Startup
         services.AddTransient<IDateTimeGeneratorService, DateTimeGeneratorService>();
         services.AddLogging();
         
-        // Jobs
+        // Hangfire Jobs
+        services.AddSingleton<HangfireJobRegistrationService>();
         services.AddTransient<DeleteAppointmentsService>();
 
+        // TODO Config Validator
         services.Configure<DeleteAppointmentsConfig>(Configuration.GetSection(DeleteAppointmentsConfig.SettingsKey));
 
         if (WebHostingEnvironment.IsDevelopment())
@@ -276,12 +279,8 @@ public class Startup
 
         app.UseRouting();
 
-        RecurringJob.AddOrUpdate<DeleteAppointmentsService>(
-            "delete-appointments",
-            deleteAppointmentsService =>
-                deleteAppointmentsService.ExecuteAsync(),
-            Cron.HourInterval(1)
-        );
+        var hangfireRegistrationService = app.ApplicationServices.GetRequiredService<HangfireJobRegistrationService>();
+        hangfireRegistrationService.RegisterJobs();
 
         // Shows UseCors with CorsPolicyBuilder.
         // In the production deployment we configure that via the ingress controller.
