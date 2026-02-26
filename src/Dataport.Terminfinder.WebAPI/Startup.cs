@@ -11,6 +11,7 @@ using Dataport.Terminfinder.WebAPI.ErrorHandling;
 using Dataport.Terminfinder.WebAPI.Localisation;
 using Dataport.Terminfinder.WebAPI.RequestContext;
 using Dataport.Terminfinder.WebAPI.Services;
+using Dataport.Terminfinder.WebAPI.Services.Configuration;
 using Dataport.Terminfinder.WebAPI.Swagger;
 using Hangfire;
 using Hangfire.MemoryStorage;
@@ -101,7 +102,7 @@ public class Startup
         services.AddSingleton<HangfireJobRegistrationService>();
         services.AddTransient<DeleteAppointmentsService>();
 
-        // TODO Config Validator
+        services.AddSingleton<IValidateOptions<DeleteAppointmentsConfig>, DeleteAppointmentsConfigValidator>();
         services.Configure<DeleteAppointmentsConfig>(Configuration.GetSection(DeleteAppointmentsConfig.SettingsKey));
 
         if (WebHostingEnvironment.IsDevelopment())
