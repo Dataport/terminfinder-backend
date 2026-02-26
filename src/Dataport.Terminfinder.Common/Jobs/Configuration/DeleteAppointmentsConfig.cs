@@ -24,11 +24,11 @@ public class DeleteAppointmentsConfig
     /// <summary>
     /// Is the job enabled?
     /// </summary>
-    public bool IsEnabled { get; set; }
+    public bool IsEnabled { get; init; }
     /// <summary>
     /// CustomerId to delete appointments for
     /// </summary>
-    public Guid CustomerId { get; init; }
+    public Guid CustomerId { get; set; }
     /// <summary>
     /// Days to wait before deletion of expired appointments
     /// </summary>

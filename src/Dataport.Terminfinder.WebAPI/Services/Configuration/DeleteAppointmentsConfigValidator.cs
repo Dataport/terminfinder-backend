@@ -21,6 +21,11 @@ public class DeleteAppointmentsConfigValidator(ILogger<DeleteAppointmentsConfigV
     {
         var failures = new List<string>();
 
+        if (!options.IsEnabled)
+        {
+            return failures;
+        }
+
         failures.AddRange(ValidateConfigValuesForCustomerId(options));
         failures.AddRange(ValidateConfigValuesForDeleteDays(options));
 
@@ -33,13 +38,7 @@ public class DeleteAppointmentsConfigValidator(ILogger<DeleteAppointmentsConfigV
 
         if (options.CustomerId == Guid.Empty)
         {
-            failures.Add($"Value '{options.CustomerId}' in property '{nameof(options.CustomerId)}' is an empty Guid.");
-        }
-
-        if (!Guid.TryParse(options.CustomerId.ToString(), out _))
-        {
-            failures.Add(
-                $"Value '{options.CustomerId}' in property '{nameof(options.CustomerId)}' is not a valid Guid.");
+            failures.Add($"Value '{options.CustomerId}' in property '{Prefix}{nameof(options.CustomerId)}' is an empty Guid.");
         }
 
         return failures;
@@ -50,7 +49,7 @@ public class DeleteAppointmentsConfigValidator(ILogger<DeleteAppointmentsConfigV
         var failures = new List<string>();
 
         failures.AddRange(ConfigValidatorUtils.ValidateRangeValue(
-            $"{Prefix}.{nameof(options.DeleteExpiredAppointmentsAfterDays)}",
+            $"{Prefix}{nameof(options.DeleteExpiredAppointmentsAfterDays)}",
             options.DeleteExpiredAppointmentsAfterDays,
             minInclusive: DeleteExpiredAppointmentsAfterDaysMinValue,
             maxInclusive: DeleteExpiredAppointmentsAfterDaysMaxValue));
