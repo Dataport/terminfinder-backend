@@ -16,9 +16,9 @@ jobs:
       run:
         working-directory: ./src
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
       - name: tool-manifest and local install tools
@@ -38,19 +38,19 @@ jobs:
       - name: jetbrains resharper inspectcode
         run: dotnet jb inspectcode --no-build "Dataport.Terminfinder.sln" -o="codeInspection.xml" --disable-settings-layers:SolutionPersonal -e:WARNING --no-swea
       - name: Upload resharper file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jetbrains resharper codeInspection
           path: "src/codeInspection.xml"
       - name: Upload code coverage file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: code coverage
           path: "src/coverage.xml"
       - name: sbom
         run: dotnet dotnet-CycloneDX Dataport.Terminfinder.sln -t -fn "sbom.xml"
       - name: Upload sbom file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: CycloneDX sbom
           path: "src/sbom.xml"
