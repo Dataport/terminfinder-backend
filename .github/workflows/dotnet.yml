@@ -48,7 +48,7 @@ jobs:
           name: code coverage
           path: "src/coverage.xml"
       - name: sbom
-        run: dotnet dotnet-CycloneDX Dataport.Terminfinder.sln -t -f "sbom.xml"
+        run: dotnet dotnet-CycloneDX Dataport.Terminfinder.sln -t -fn "sbom.xml"
       - name: Upload sbom file
         uses: actions/upload-artifact@v4
         with:
