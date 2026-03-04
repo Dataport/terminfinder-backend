@@ -1,4 +1,5 @@
 ﻿using Dataport.Terminfinder.Common.Jobs.Configuration;
+using Dataport.Terminfinder.Repository;
 using Dataport.Terminfinder.WebAPI.Services.Configuration;
 
 namespace Dataport.Terminfinder.WebAPI.Tests.Services.Configuration;
@@ -35,6 +36,24 @@ public class DeleteAppointmentsConfigValidatorTests
     }
 
     [TestMethod]
+    public void Validate_CustomerIdIsNotValid_ResultIsInvalid()
+    {
+        var config = CreateValidConfig();
+        var expectedFailureMessage = $"Value '{config.CustomerId}' in property '{DeleteAppointmentsConfig.SettingsKey}." +
+                                     $"{nameof(DeleteAppointmentsConfig.CustomerId)}' is not a valid customer Guid.";
+
+        var mockCustomerRepository = new Mock<ICustomerRepository>();
+        mockCustomerRepository
+            .Setup(cr => cr.ExistsCustomer(It.IsAny<Guid>()))
+            .Returns(false);
+
+        var sut = CreateSut(mockCustomerRepository.Object);
+
+        var result = sut.Validate(DeleteAppointmentsConfig.SettingsKey, config);
+        ConfigValidatorTestUtils.CheckInvalidValidationResult(result, expectedFailureMessage);
+    }
+
+    [TestMethod]
     [DataRow(-1)]
     [DataRow(366)]
     public void Validate_DeleteExpiredAppointmentsAfterDaysIsInvalid_ResultIsInvalid(int deleteDays)
@@ -51,10 +70,22 @@ public class DeleteAppointmentsConfigValidatorTests
         ConfigValidatorTestUtils.CheckInvalidValidationResult(result, expectedFailureMessage);
     }
 
-    private static DeleteAppointmentsConfigValidator CreateSut()
+    private static DeleteAppointmentsConfigValidator CreateSut(ICustomerRepository mockCustomerRepository = null)
     {
+        var mockCustomerRepositoryToUse = mockCustomerRepository ?? CreateDefaultMockCustomerRepository();
         var logger = new Mock<ILogger<DeleteAppointmentsConfigValidator>>();
-        return new DeleteAppointmentsConfigValidator(logger.Object);
+
+        return new DeleteAppointmentsConfigValidator(mockCustomerRepositoryToUse, logger.Object);
+    }
+
+    private static ICustomerRepository CreateDefaultMockCustomerRepository()
+    {
+        var mockCustomerRepository = new Mock<ICustomerRepository>();
+        mockCustomerRepository
+            .Setup(cr => cr.ExistsCustomer(It.IsAny<Guid>()))
+            .Returns(true);
+
+        return mockCustomerRepository.Object;
     }
 
     private static DeleteAppointmentsConfig CreateValidConfig()
