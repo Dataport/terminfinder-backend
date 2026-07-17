@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net8.0</TargetFramework>
+	<TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Dataport.Terminfinder.DeleteAppointments</AssemblyName>
     <StartupObject>Dataport.Terminfinder.Console.DeleteAppointments.Tool.Program</StartupObject>
@@ -12,7 +12,7 @@
 	<OutputType>Exe</OutputType>
 	<UseAppHost>true</UseAppHost>
     <ProjectGuid>{572E043B-91FA-48E0-AC5F-5A73945E953F}</ProjectGuid>
-    <LangVersion>12</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
