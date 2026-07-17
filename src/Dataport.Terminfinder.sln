@@ -42,6 +42,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataport.Terminfinder.Repos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataport.Terminfinder.Jobs.DeleteAppointments", "Dataport.Terminfinder.Jobs.DeleteAppointments\Dataport.Terminfinder.Jobs.DeleteAppointments.csproj", "{0F3EE925-F689-4AC5-90CC-758DFA7114D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dataport.Terminfinder.Jobs.DeleteAppointments.Tests", "Dataport.Terminfinder.Jobs.DeleteAppointments.Tests\Dataport.Terminfinder.Jobs.DeleteAppointments.Tests.csproj", "{B8E118F1-CDA0-4A63-A5C0-51A8327A1F75}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F3EE925-F689-4AC5-90CC-758DFA7114D5} = {0F3EE925-F689-4AC5-90CC-758DFA7114D5}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +109,10 @@ Global
 		{0F3EE925-F689-4AC5-90CC-758DFA7114D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F3EE925-F689-4AC5-90CC-758DFA7114D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F3EE925-F689-4AC5-90CC-758DFA7114D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E118F1-CDA0-4A63-A5C0-51A8327A1F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E118F1-CDA0-4A63-A5C0-51A8327A1F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E118F1-CDA0-4A63-A5C0-51A8327A1F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E118F1-CDA0-4A63-A5C0-51A8327A1F75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
