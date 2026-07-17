@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <DebugType>Portable</DebugType>
     <ProjectGuid>{D8A42831-89E7-4D75-B9A6-9C949A84C46D}</ProjectGuid>
-    <LangVersion>12</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

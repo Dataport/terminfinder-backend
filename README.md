@@ -33,7 +33,7 @@ Copyright © 2022-2024 Dataport AöR
 * PostgreSql Database
 
 ## Requirements
-* Microsoft dotnet 8, [ASP.NET Core Runtime 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+* Microsoft dotnet 10, [ASP.NET Core Runtime 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 * Database [PostgreSQL](https://www.postgresql.org/)
 
 ## Database

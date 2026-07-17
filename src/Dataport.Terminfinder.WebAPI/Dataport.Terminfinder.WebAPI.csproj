@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Dataport.Terminfinder.WebAPI</RootNamespace>
     <AssemblyName>Dataport.Terminfinder.WebAPI</AssemblyName>
@@ -10,7 +10,7 @@
     <ProjectGuid>{1B884327-0051-4502-A301-D0EB71FC2EEB}</ProjectGuid>
 	<OutputType>Exe</OutputType>
 	<UseAppHost>true</UseAppHost>
-	<LangVersion>12</LangVersion>
+	<LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
