@@ -61,7 +61,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         //--- get the appointment
         var appointmentId= dto.AppointmentId;
@@ -157,7 +156,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         var appointmentId = dto.AppointmentId;
         var adminId = dto.AdminId;
@@ -211,7 +209,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         Assert.IsNotNull(dto3);
         Assert.IsInstanceOfType(dto3, typeof(Appointment));
-        Assert.IsNotNull(dto3.AppointmentId);
         Assert.AreEqual(dto.AppointmentId, dto3.AppointmentId);
         Assert.AreEqual(dto.AdminId, dto3.AdminId);
 
@@ -433,7 +430,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
@@ -508,8 +504,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
-        Assert.IsNotNull(dto.AdminId);
 
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
@@ -566,8 +560,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
-        Assert.IsNotNull(dto.AdminId);
         var appointmentId = dto.AppointmentId;
 
 
@@ -607,8 +599,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
-        Assert.IsNotNull(dto.AdminId);
         var appointmentId = dto.AppointmentId;
         var adminId = dto.AdminId;
 

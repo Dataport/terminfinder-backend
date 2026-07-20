@@ -87,7 +87,6 @@ public abstract class BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         return dto;
     }

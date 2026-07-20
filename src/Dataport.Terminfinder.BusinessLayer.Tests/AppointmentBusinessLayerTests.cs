@@ -1023,8 +1023,7 @@ public class AppointmentBusinessLayerTests
         var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
 
         var appointmentObject = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
-        Assert.IsTrue(appointmentObject == null);
-        Assert.IsFalse(appointmentObject != null);
+        Assert.IsNull(appointmentObject);
     }
 
     [TestMethod]
