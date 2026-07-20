@@ -1,4 +1,4 @@
-﻿using Dataport.Terminfinder.Console.DeleteAppointments.Tool.Enum;
+﻿using Dataport.Terminfinder.Repository.Migrate.Enum;
 using Dataport.Terminfinder.Repository.Setup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

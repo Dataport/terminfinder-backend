@@ -1,4 +1,4 @@
-﻿namespace Dataport.Terminfinder.Console.DeleteAppointments.Tool.Enum;
+﻿namespace Dataport.Terminfinder.Repository.Migrate.Enum;
 
 /// <summary>
 /// Error numbers
