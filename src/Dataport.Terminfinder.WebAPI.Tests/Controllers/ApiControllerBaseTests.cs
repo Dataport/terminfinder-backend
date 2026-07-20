@@ -16,7 +16,7 @@ public class ApiControllerBaseTests
         sut.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
         sut.ModelState.Clear();
 
-        var exception = Assert.ThrowsException<ArgumentException>(() => 
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => 
             sut.PublicBuildAdditionalErrorMessageFromModelState());
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -29,7 +29,7 @@ public class ApiControllerBaseTests
 
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.PublicValidateCustomerRequest(invalidCustomerId, mockAppointmentBusinessLayer.Object));
         Assert.AreEqual(ErrorType.CustomerIdNotFound, exception.ErrorCode);
     }
@@ -39,7 +39,7 @@ public class ApiControllerBaseTests
     {
         var sut = CreateSut();
 
-        var exception = Assert.ThrowsException<NotFoundException>(() => 
+        var exception = Assert.ThrowsExactly<NotFoundException>(() => 
             sut.PublicValidateCustomerRequest(ExpectedCustomerId, null));
         Assert.AreEqual(ErrorType.CustomerIdNotFound, exception.ErrorCode);
     }
@@ -52,7 +52,7 @@ public class ApiControllerBaseTests
 
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.PublicValidateCustomerRequest(ExpectedCustomerId, mockAppointmentBusinessLayer.Object));
         Assert.AreEqual(ErrorType.CustomerIdNotFound, exception.ErrorCode);
     }
@@ -66,7 +66,7 @@ public class ApiControllerBaseTests
 
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.PublicValidateAppointmentRequest(ExpectedCustomerId, invalidAppointmentId,
                 mockAppointmentBusinessLayer.Object));
         Assert.AreEqual(ErrorType.AppointmentIdNotFound, exception.ErrorCode);
@@ -86,7 +86,7 @@ public class ApiControllerBaseTests
 
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.PublicValidateAppointmentRequest(ExpectedCustomerId, ExpectedAppointmentId, invalidAdminId,
                 mockAppointmentBusinessLayer.Object));
         Assert.AreEqual(ErrorType.AppointmentIdNotFound, exception.ErrorCode);
@@ -105,7 +105,7 @@ public class ApiControllerBaseTests
 
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.PublicValidateAppointmentRequest(ExpectedCustomerId, ExpectedAppointmentId, ExpectedAdminId,
                 mockAppointmentBusinessLayer.Object));
         Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);

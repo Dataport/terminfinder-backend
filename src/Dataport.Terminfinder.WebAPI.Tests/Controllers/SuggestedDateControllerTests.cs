@@ -56,7 +56,7 @@ public class SuggestedDateControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<BadRequestException>(() => sut.Delete(ExpectedCustomerId.ToString(),
+        var exception = Assert.ThrowsExactly<BadRequestException>(() => sut.Delete(ExpectedCustomerId.ToString(),
             ExpectedAppointmentId.ToString(), expectedSuggestedDateId.ToString()));
         Assert.AreEqual(ErrorType.NoInput, exception.ErrorCode);
     }
@@ -76,7 +76,7 @@ public class SuggestedDateControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<NotFoundException>(() => sut.Delete(ExpectedCustomerId.ToString(),
+        var exception = Assert.ThrowsExactly<NotFoundException>(() => sut.Delete(ExpectedCustomerId.ToString(),
             ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
         Assert.AreEqual(ErrorType.SuggestedDateNotFound, exception.ErrorCode);
     }
@@ -98,7 +98,7 @@ public class SuggestedDateControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<UnauthorizedException>(() => sut.Delete(ExpectedCustomerId.ToString(),
+        var exception = Assert.ThrowsExactly<UnauthorizedException>(() => sut.Delete(ExpectedCustomerId.ToString(),
             ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
         Assert.AreEqual(ErrorType.PasswordRequired, exception.ErrorCode);
     }
@@ -110,13 +110,13 @@ public class SuggestedDateControllerTests
 
         var sut = CreateSut();
 
-        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionCustomerId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(invalidGuidString, ExpectedAppointmentId.ToString(), ExpectedSuggestedDateId.ToString()));
         Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
-        var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionAppointmentId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), invalidGuidString, ExpectedSuggestedDateId.ToString()));
         Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
-        var exceptionSuggestedDateId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionSuggestedDateId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), invalidGuidString));
         Assert.AreEqual(ErrorType.SuggestedDateIdNotValid, exceptionSuggestedDateId.ErrorCode);
     }

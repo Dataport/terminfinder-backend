@@ -4,7 +4,6 @@ using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.Repository;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Dataport.Terminfinder.BusinessLayer.Tests;
@@ -689,7 +688,7 @@ public class AppointmentBusinessLayerTests
 
         var sut = CreateSut(mockAppointmentRepo.Object);
 
-        var exception = Assert.ThrowsException<InvalidOperationException>(() => 
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() => 
             sut.VerifyAppointmentPassword(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -727,7 +726,7 @@ public class AppointmentBusinessLayerTests
 
         var sut = CreateSut(mockAppointmentRepo.Object);
 
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.VerifyAppointmentPasswordByAdminId(ExpectedCustomerId, ExpectedAdminId, ExpectedPassword));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -1039,7 +1038,7 @@ public class AppointmentBusinessLayerTests
 
         var sut = CreateSut(mockAppointmentRepo.Object);
 
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, AppointmentStatusType.Undefined));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }

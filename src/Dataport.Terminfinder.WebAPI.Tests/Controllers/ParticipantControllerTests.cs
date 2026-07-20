@@ -51,7 +51,7 @@ public class ParticipantControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(),
                 expectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.NoInput, exception.ErrorCode);
@@ -77,7 +77,7 @@ public class ParticipantControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<NotFoundException>(() => 
+        var exception = Assert.ThrowsExactly<NotFoundException>(() => 
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), 
                 ExpectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.ParticipantNotFound, exception.ErrorCode);
@@ -102,7 +102,7 @@ public class ParticipantControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<NotFoundException>(() => 
+        var exception = Assert.ThrowsExactly<NotFoundException>(() => 
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(),
                 ExpectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);
@@ -128,7 +128,7 @@ public class ParticipantControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<UnauthorizedException>(() =>
+        var exception = Assert.ThrowsExactly<UnauthorizedException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), 
                 ExpectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.PasswordRequired, exception.ErrorCode);
@@ -140,13 +140,13 @@ public class ParticipantControllerTests
         var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
         var sut = CreateSut(mockBusinessLayer.Object);
 
-        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionCustomerId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString(), ExpectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
-        var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionAppointmentId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString, ExpectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
-        var exceptionParticipantId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionParticipantId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), ExpectedInvalidGuidString));
         Assert.AreEqual(ErrorType.ParticipantIdNotValid, exceptionParticipantId.ErrorCode);
     }
@@ -167,7 +167,7 @@ public class ParticipantControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object);
 
-        var exception = Assert.ThrowsException<BadRequestException>(() => 
+        var exception = Assert.ThrowsExactly<BadRequestException>(() => 
             sut.Delete(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString(), 
                 ExpectedParticipantId.ToString()));
         Assert.AreEqual(ErrorType.ParticipantNotValid, exception.ErrorCode);

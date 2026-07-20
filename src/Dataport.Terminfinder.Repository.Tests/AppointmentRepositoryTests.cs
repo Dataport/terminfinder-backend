@@ -336,7 +336,7 @@ public class AppointmentRepositoryTests
         
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.GetAppointmentPassword(ExpectedCustomerId, unknownAppointmentId));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -365,7 +365,7 @@ public class AppointmentRepositoryTests
         
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.GetAppointmentPasswordByAdmin(ExpectedCustomerId, unknownAdminId));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -413,7 +413,7 @@ public class AppointmentRepositoryTests
         // act fetch
         var sut = CreateSut(mockAppointmentsSet);
         
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.GetAppointmentStatusTypeByAdmin(ExpectedCustomerId, ExpectedAdminId));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -426,7 +426,7 @@ public class AppointmentRepositoryTests
         
         var sut = CreateSut();
         
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.GetAppointmentStatusTypeByAdmin(Guid.Empty, Guid.Empty));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
@@ -443,7 +443,7 @@ public class AppointmentRepositoryTests
         
         var sut = CreateSut();
 
-        var exception = Assert.ThrowsException<InvalidOperationException>(() =>
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
             sut.SetAppointmentStatusTypeByAdmin(Guid.Empty, Guid.Empty, nameof(AppointmentStatusType.Paused)));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }

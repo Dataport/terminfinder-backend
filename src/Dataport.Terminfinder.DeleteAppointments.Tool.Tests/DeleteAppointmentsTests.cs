@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
 
@@ -36,7 +35,7 @@ public class DeleteAppointmentsTests
         var deleteExpiredAppointments = new DeleteAppointmentsService(mockRepository.Object, _logger);
 
         // Act
-        var exception = Assert.ThrowsException<ArgumentException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentException>(() =>
             deleteExpiredAppointments.DeleteExpiredAppointments(connectionString, customerId,
                 deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake));
         Assert.AreEqual(expectedErrorMessage, exception.Message);
@@ -56,7 +55,7 @@ public class DeleteAppointmentsTests
         var deleteExpiredAppointments = new DeleteAppointmentsService(mockRepository.Object, _logger);
 
         // Act
-        var exception = Assert.ThrowsException<ArgumentException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentException>(() =>
             deleteExpiredAppointments.DeleteExpiredAppointments(connectionString, customerId,
                 deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake));
         Assert.AreEqual(expectedErrorMessage, exception.Message);
@@ -77,7 +76,7 @@ public class DeleteAppointmentsTests
         var deleteExpiredAppointments = new DeleteAppointmentsService(mockRepository.Object, _logger);
 
         // Act
-        var exception = Assert.ThrowsException<ArgumentException>(() =>
+        var exception = Assert.ThrowsExactly<ArgumentException>(() =>
             deleteExpiredAppointments.DeleteExpiredAppointments(connectionString, customerId,
                 deleteExpiredAppointmentsAfterDays, _dateTimeGeneratorServiceFake));
         Assert.AreEqual(expectedErrorMessage, exception.Message);

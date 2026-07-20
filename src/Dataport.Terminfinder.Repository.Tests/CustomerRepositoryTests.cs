@@ -44,7 +44,7 @@ public class CustomerRepositoryTests
 
         var sut = CreateSut();
 
-        var exception = Assert.ThrowsException<ArgumentNullException>(() => sut.GetCustomer(Guid.Empty));
+        var exception = Assert.ThrowsExactly<ArgumentNullException>(() => sut.GetCustomer(Guid.Empty));
         Assert.AreEqual(expectedExceptionMessage, exception.Message);
     }
 
