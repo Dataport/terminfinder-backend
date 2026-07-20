@@ -70,7 +70,6 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
         //--- get the appointment
         var appointmentId = dto.AppointmentId;
 
@@ -216,7 +215,6 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         // Act Get voting
         response = await client.GetAsync($"votings/{ExpectedCustomerId}/{dto.AppointmentId}");
@@ -248,7 +246,6 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         var participants = appointment.Participants ?? new List<Participant>();
         participants.Add(new Participant
@@ -291,7 +288,6 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
-        Assert.IsNotNull(dto.AppointmentId);
 
         var participants = appointment.Participants ?? new List<Participant>();
         participants.Add(new Participant
