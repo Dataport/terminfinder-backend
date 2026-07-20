@@ -1,5 +1,4 @@
-﻿using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -7,7 +6,6 @@ using System.Xml.Linq;
 
 namespace Dataport.Terminfinder.WebAPI.Swagger;
 
-    // s. https://www.codeproject.com/Articles/5300099/Description-of-the-Enumeration-Members-in-Swashbuc
 /// <summary>
 /// Swagger documentation for EnumTypes
 /// </summary>
@@ -29,21 +27,21 @@ public class EnumTypesSchemaFilter : ISchemaFilter
     }
 
     /// <inheritdoc />
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(IOpenApiSchema schema, SchemaFilterContext context)
     {
         if (_xmlComments == null)
         {
             return;
         }
 
-        if (schema.Enum.Count > 0 && context.Type is { IsEnum: true })
+        if (schema is OpenApiSchema { Enum.Count: > 0 } openApiSchema && context.Type is { IsEnum: true })
         {
-            var sb = new StringBuilder(schema.Description);
+            var sb = new StringBuilder(openApiSchema.Description);
             sb.Append("<p>Members:</p><ul>");
 
             var fullTypeName = context.Type.FullName;
 
-            foreach (var enumMemberName in schema.Enum.OfType<OpenApiString>().Select(v => v.Value))
+            foreach (var enumMemberName in openApiSchema.Enum.Select(v => v.AsValue()))
             {
                 var fullEnumMemberName = $"F:{fullTypeName}.{enumMemberName}";
 
@@ -69,7 +67,7 @@ public class EnumTypesSchemaFilter : ISchemaFilter
 
             sb.Append("</ul>");
 
-            schema.Description = sb.ToString();
+            openApiSchema.Description = sb.ToString();
         }
     }
 }
