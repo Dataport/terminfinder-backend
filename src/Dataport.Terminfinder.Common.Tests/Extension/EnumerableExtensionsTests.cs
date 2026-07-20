@@ -1,5 +1,4 @@
 ﻿using Dataport.Terminfinder.Common.Extension;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections;
 
 namespace Dataport.Terminfinder.Common.Tests.Extension;

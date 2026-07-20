@@ -1,6 +1,5 @@
 ﻿using Dataport.Terminfinder.BusinessLayer.Security;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Dataport.Terminfinder.BusinessLayer.Tests.Security;

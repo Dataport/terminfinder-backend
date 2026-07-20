@@ -1,5 +1,5 @@
-﻿using Dataport.Terminfinder.Repository;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
+using Dataport.Terminfinder.Repository;
 
 namespace Dataport.Terminfinder.BusinessLayer;
 
