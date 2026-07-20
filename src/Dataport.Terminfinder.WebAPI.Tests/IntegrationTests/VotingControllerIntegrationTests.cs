@@ -8,14 +8,36 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 public class VotingControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
+    private IHost _host;
     private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
-    public void Initialize()
+    public async Task Initialize()
     {
         var config = GetConfigurationBuilder();
-        var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
-        _testServer = new TestServer(builder);
+        _host = new HostBuilder()
+            .ConfigureWebHost(builder =>
+                {
+                    builder
+                        .UseTestServer()
+                        .UseStartup<Startup>()
+                        .UseConfiguration(config);
+                }
+            )
+            .Build();
+        await _host.StartAsync();
+        _testServer = _host.GetTestServer();
+    }
+
+    [TestCleanup]
+    public async Task Cleanup()
+    {
+        if (_testServer != null)
+        {
+            await _host.StopAsync();
+            _testServer.Dispose();
+        }
+        _host?.Dispose();
     }
 
     [TestMethod]

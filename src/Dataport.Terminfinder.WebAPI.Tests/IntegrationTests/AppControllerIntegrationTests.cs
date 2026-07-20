@@ -5,13 +5,35 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 public class AppControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
+    private IHost _host;
 
     [TestInitialize]
-    public void Initialize()
+    public async Task Initialize()
     {
         var config = GetConfigurationBuilder();
-        var builder = new WebHostBuilder().UseStartup<Startup>().UseConfiguration(config);
-        _testServer = new TestServer(builder);
+        _host = new HostBuilder()
+            .ConfigureWebHost(builder =>
+                {
+                    builder
+                        .UseTestServer()
+                        .UseStartup<Startup>()
+                        .UseConfiguration(config);
+                }
+            )
+            .Build();
+        await _host.StartAsync();
+        _testServer = _host.GetTestServer();
+    }
+
+    [TestCleanup]
+    public async Task Cleanup()
+    {
+        if (_testServer != null)
+        {
+            await _host.StopAsync();
+            _testServer.Dispose();
+        }
+        _host?.Dispose();
     }
 
     [TestMethod]
