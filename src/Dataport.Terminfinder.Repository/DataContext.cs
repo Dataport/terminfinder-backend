@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Dataport.Terminfinder.BusinessObject;
+﻿using Dataport.Terminfinder.BusinessObject;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dataport.Terminfinder.Repository;
 
