@@ -133,6 +133,6 @@ public class SuggestedDateControllerIntegrationTests : BaseIntegrationTests
         // assert
         var resultDescription = result.SuggestedDates.First(s => s.Description == expectedDescription).Description;
         Assert.IsNotNull(resultDescription);
-        Assert.AreEqual(expectedDescription, expectedDescription);
+        Assert.AreEqual(expectedDescription, resultDescription);
     }
 }
