@@ -40,28 +40,28 @@ public class BasicAuthenticationEncoderTests
     [TestMethod]
     public void Decode_invalidBasicAuthenticationPayloadValueNoBasicAtBeginning_throwException()
     {
-        Assert.ThrowsException<DecodingBasicAuthenticationValueFailedException>(() =>
+        Assert.ThrowsExactly<DecodingBasicAuthenticationValueFailedException>(() =>
             BasicAuthenticationValueEncoder.Decode(" dXNlcm5hbWU6UDQkJHcwcmQ="));
     }
 
     [TestMethod]
     public void Decode_invalidBasicAuthenticationPayloadValueNoColonInEncodedBasicAuthValue_throwException()
     {
-        Assert.ThrowsException<DecodingBasicAuthenticationValueFailedException>(() =>
+        Assert.ThrowsExactly<DecodingBasicAuthenticationValueFailedException>(() =>
             BasicAuthenticationValueEncoder.Decode("Basic dXNlcm5hbWVQNCQkdzByZA=="));
     }
 
     [TestMethod]
     public void Decode_invalidBasicAuthenticationPayloadValueInvalidEncodedBasicAuthValue_throwException()
     {
-        Assert.ThrowsException<DecodingBasicAuthenticationValueFailedException>(() =>
+        Assert.ThrowsExactly<DecodingBasicAuthenticationValueFailedException>(() =>
             BasicAuthenticationValueEncoder.Decode("Basic aaaaaaa"));
     }
 
     [TestMethod]
     public void Decode_null_throwException()
     {
-        Assert.ThrowsException<ArgumentNullException>(() => BasicAuthenticationValueEncoder.Decode(null));
+        Assert.ThrowsExactly<ArgumentNullException>(() => BasicAuthenticationValueEncoder.Decode(null));
     }
 
     [TestMethod]

@@ -26,7 +26,7 @@ public class EnsureMinimumElementsAttributeTests
     [TestMethod]
     public void Constructor_MinElementsValueIsTooSmall_throwException()
     {
-        Assert.ThrowsException<ArgumentException>(() => new EnsureMinimumElementsAttribute
+        Assert.ThrowsExactly<ArgumentException>(() => new EnsureMinimumElementsAttribute
         {
             ErrorMessage = ExectedEnsureMinimumElementsAttributeErrorMessage,
             MinElements = 0

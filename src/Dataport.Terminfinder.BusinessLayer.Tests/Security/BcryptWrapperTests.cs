@@ -1,6 +1,5 @@
 ﻿using Dataport.Terminfinder.BusinessLayer.Security;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace Dataport.Terminfinder.BusinessLayer.Tests.Security;
@@ -26,7 +25,7 @@ public class BcryptWrapperTests
     public void HashPassword_null_throwException()
     {
         var sut = CreateSut(saltGenerator);
-        Assert.ThrowsException<ArgumentNullException>(() => sut.HashPassword(null));
+        Assert.ThrowsExactly<ArgumentNullException>(() => sut.HashPassword(null));
     }
 
     [TestMethod]
@@ -42,14 +41,14 @@ public class BcryptWrapperTests
     public void HashPassword_passwordIsNullHashIsNotNull_throwException()
     {
         var sut = CreateSut(saltGenerator);
-        Assert.ThrowsException<ArgumentNullException>(() => sut.Verify(null, string.Empty));
+        Assert.ThrowsExactly<ArgumentNullException>(() => sut.Verify(null, string.Empty));
     }
 
     [TestMethod]
     public void HashPassword_passwordIsNotNullPasswordIsNull_throwException()
     {
         var sut = CreateSut(saltGenerator);
-        Assert.ThrowsException<ArgumentNullException>(() => sut.Verify(string.Empty, null));
+        Assert.ThrowsExactly<ArgumentNullException>(() => sut.Verify(string.Empty, null));
     }
 
     [TestMethod]

@@ -62,7 +62,7 @@ public class DateConverterTests
         var dt = "99.99.2015";
         var sut = new DateConverter();
         
-        Assert.ThrowsException<FormatException>(() =>
+        Assert.ThrowsExactly<FormatException>(() =>
         {
             using var sr = new StringReader($"\"{dt}\"");
             using var jsonReader = new JsonTextReader(sr);

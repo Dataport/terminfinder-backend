@@ -21,7 +21,7 @@ public class VotingControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<UnauthorizedException>(() =>
+        var exception = Assert.ThrowsExactly<UnauthorizedException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.PasswordRequired, exception.ErrorCode);
     }
@@ -31,10 +31,10 @@ public class VotingControllerTests
     {
         var sut = CreateSut();
 
-        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionCustomerId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Get(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
-        var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionAppointmentId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
         Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
@@ -51,7 +51,7 @@ public class VotingControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object);
 
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.Get(ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);
     }
@@ -72,7 +72,7 @@ public class VotingControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<UnauthorizedException>(() =>
+        var exception = Assert.ThrowsExactly<UnauthorizedException>(() =>
             sut.Put([null], ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.PasswordRequired, exception.ErrorCode);
     }
@@ -92,7 +92,7 @@ public class VotingControllerTests
         var sut = CreateSut(mockBusinessLayer.Object);
 
         // Act
-        var exception = Assert.ThrowsException<NotFoundException>(() =>
+        var exception = Assert.ThrowsExactly<NotFoundException>(() =>
             sut.Put([null], ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.AppointmentNotFound, exception.ErrorCode);
     }
@@ -158,7 +158,7 @@ public class VotingControllerTests
     {
         var sut = CreateSut();
 
-        var exception = Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Put(null, ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.NoInput, exception.ErrorCode);
     }
@@ -170,10 +170,10 @@ public class VotingControllerTests
 
         var sut = CreateSut();
 
-        var exceptionCustomerId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionCustomerId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Put(participants, ExpectedInvalidGuidString, ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.CustomerIdNotValid, exceptionCustomerId.ErrorCode);
-        var exceptionAppointmentId = Assert.ThrowsException<BadRequestException>(() =>
+        var exceptionAppointmentId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Put(participants, ExpectedCustomerId.ToString(), ExpectedInvalidGuidString));
         Assert.AreEqual(ErrorType.AppointmentIdNotValid, exceptionAppointmentId.ErrorCode);
     }
@@ -190,7 +190,7 @@ public class VotingControllerTests
         mockBusinessLayer.Setup(x => x.ExistsAppointmentIsStarted(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
         var sut = CreateSut(mockBusinessLayer.Object);
-        var exception = Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Put(participants, ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.ParticipantNotValid, exception.ErrorCode);
     }
@@ -229,7 +229,7 @@ public class VotingControllerTests
             });
 
         var sut = CreateSut(mockBusinessLayer.Object, objectModelValidator.Object);
-        var exception = Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Put(participants, ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.AppointmentNotValid, exception.ErrorCode);
     }
@@ -261,7 +261,7 @@ public class VotingControllerTests
 
         var sut = CreateSut(mockBusinessLayer.Object);
 
-        var exception = Assert.ThrowsException<BadRequestException>(() =>
+        var exception = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Put(participants, ExpectedCustomerId.ToString(), ExpectedAppointmentId.ToString()));
         Assert.AreEqual(ErrorType.MaximumElementsOfParticipantsAreExceeded, exception.ErrorCode);
     }

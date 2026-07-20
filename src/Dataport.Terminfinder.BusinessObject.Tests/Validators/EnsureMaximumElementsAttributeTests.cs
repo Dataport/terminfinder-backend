@@ -26,7 +26,7 @@ public class EnsureMaximumElementsAttributeTests
     [TestMethod]
     public void Constructor_MaxElementsValueIsTooGreat_throwException()
     {
-        Assert.ThrowsException<ArgumentException>(() => new EnsureMaximumElementsAttribute()
+        Assert.ThrowsExactly<ArgumentException>(() => new EnsureMaximumElementsAttribute()
         {
             ErrorMessage = ExectedEnsureMaximumElementsAttributeErrorMessage,
             MaxElements = 10001
