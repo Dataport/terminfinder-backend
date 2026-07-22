@@ -34,7 +34,7 @@ public class Startup
     private static readonly string ContactUrl = "https://www.dataport.de";
     private static readonly string ContactEmail = "dataportdabstimmbox@dataport.de";
     private static readonly string ContactName = "dataport";
-    private static readonly string LicenseText = "EUPL-1.2 Copyright © 2022-2023 Dataport AöR";
+    private static readonly string LicenseText = "EUPL-1.2 Copyright © 2022-2026 Dataport AöR";
     private static readonly string LicenseUri = "https://opensource.org/licenses/EUPL-1.2";
 
     private static readonly string OpenApiTitle = "Terminfinder API";
