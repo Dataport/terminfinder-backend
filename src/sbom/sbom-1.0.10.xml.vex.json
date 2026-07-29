@@ -1,0 +1,310 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://openvex.dev/docs/public/vex-635f09914756661b3204ab38d973bfde8ea40de74bb6de1e0842b172c71dea6d",
+  "author": "Unknown Author",
+  "timestamp": "2024-10-07T16:04:57.767716+02:00",
+  "last_updated": "2024-10-07T16:04:58.357187+02:00",
+  "version": 25,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2018-8292"
+      },
+      "timestamp": "2024-10-07T16:04:57.767717+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/System.Net.Http@4.3.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2019-0820"
+      },
+      "timestamp": "2024-10-07T16:04:57.794104+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/System.Text.RegularExpressions@4.3.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29337"
+      },
+      "timestamp": "2024-10-07T16:04:57.822161+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.Build.NuGetSdkResolver@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29337"
+      },
+      "timestamp": "2024-10-07T16:04:57.846366+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.CommandLine@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29337"
+      },
+      "timestamp": "2024-10-07T16:04:57.870539+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.Commands@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29337"
+      },
+      "timestamp": "2024-10-07T16:04:57.894572+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.Common@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29337"
+      },
+      "timestamp": "2024-10-07T16:04:57.919599+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.PackageManagement@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2023-29337"
+      },
+      "timestamp": "2024-10-07T16:04:57.943734+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.Protocol@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-0057"
+      },
+      "timestamp": "2024-10-07T16:04:57.967608+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.CommandLine@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-0057"
+      },
+      "timestamp": "2024-10-07T16:04:57.992193+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/NuGet.Packaging@6.3.1"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-32655"
+      },
+      "timestamp": "2024-10-07T16:04:58.016667+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Npgsql@6.0.8"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-32655"
+      },
+      "timestamp": "2024-10-07T16:04:58.041429+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Npgsql@6.0.9"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.065354+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.linux-arm64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.089427+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.linux-arm@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.113636+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.linux-musl-arm64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.137656+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.linux-musl-arm@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.162181+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.linux-musl-x64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.186511+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.linux-x64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.210177+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.osx-arm64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.234964+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.osx-x64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.259049+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.win-arm64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.283192+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.win-arm@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.308488+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.win-x64@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.33303+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/Microsoft.NetCore.App.Runtime.win-x86@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    },
+    {
+      "vulnerability": {
+        "name": "CVE-2024-38095"
+      },
+      "timestamp": "2024-10-07T16:04:58.357188+02:00",
+      "products": [
+        {
+          "@id": "pkg:nuget/System.Formats.Asn1@5.0.0"
+        }
+      ],
+      "status": "under_investigation"
+    }
+  ]
+}
