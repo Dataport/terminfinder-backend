@@ -180,6 +180,39 @@ public class DataContext : DbContext
             voting.HasIndex(x => x.SuggestedDateId)
                 .HasDatabaseName("voting_suggesteddateid_ix");
         });
+
+        modelBuilder.Entity<AppointmentStatistic>(appointmentStatistic =>
+        {
+            appointmentStatistic
+                .HasIndex(x => new { x.CustomerId, x.YearMonth })
+                .IsUnique();
+
+            appointmentStatistic
+                .Property(x => x.Count)
+                .HasDefaultValue(1);
+        });
+
+        modelBuilder.Entity<ParticipantStatistic>(participantStatistic =>
+        {
+            participantStatistic
+                .HasIndex(x => new { x.CustomerId, x.YearMonth })
+                .IsUnique();
+
+            participantStatistic
+                .Property(x => x.Count)
+                .HasDefaultValue(1);
+        });
+
+        modelBuilder.Entity<VotingStatistic>(votingStatistic =>
+        {
+            votingStatistic
+                .HasIndex(x => new { x.CustomerId, x.YearMonth })
+                .IsUnique();
+
+            votingStatistic
+                .Property(x => x.Count)
+                .HasDefaultValue(1);
+        });
     }
 
     /// <summary>
@@ -232,4 +265,19 @@ public class DataContext : DbContext
     /// Participants
     /// </summary>
     public virtual DbSet<Participant> Participants { get; set; }
+
+    /// <summary>
+    /// Statistics for appointments
+    /// </summary>
+    public virtual DbSet<AppointmentStatistic> AppointmentStatistics { get; set; }
+
+    /// <summary>
+    /// Statistics for participants
+    /// </summary>
+    public virtual DbSet<ParticipantStatistic> ParticipantStatistics { get; set; }
+
+    /// <summary>
+    /// Statistics for votings
+    /// </summary>
+    public virtual DbSet<VotingStatistic> VotingStatistics { get; set; }
 }
