@@ -137,8 +137,7 @@ public class ParticipantControllerTests
     [TestMethod]
     public void DeleteParticipants_GuidsAreInvalid_ThrowsException()
     {
-        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-        var sut = CreateSut(mockBusinessLayer.Object);
+        var sut = CreateSut();
 
         var exceptionCustomerId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.Delete(ExpectedInvalidGuidString, ExpectedAppointmentId.ToString(), ExpectedParticipantId.ToString()));

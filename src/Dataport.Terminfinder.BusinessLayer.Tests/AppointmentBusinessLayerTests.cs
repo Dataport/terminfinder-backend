@@ -1,4 +1,4 @@
-﻿using Dataport.Terminfinder.BusinessLayer.Security;
+using Dataport.Terminfinder.BusinessLayer.Security;
 using Dataport.Terminfinder.BusinessObject;
 using Dataport.Terminfinder.BusinessObject.Enum;
 using Dataport.Terminfinder.Repository;
@@ -31,11 +31,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfParticipantsInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
@@ -48,11 +47,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfParticipantsInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
@@ -65,11 +63,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
@@ -82,11 +79,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsTrue(result);
@@ -99,11 +95,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsFalse(result);
@@ -116,11 +111,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfParticipantsInDatabase = 4900;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfParticipants(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfParticipantsInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
 
         Assert.IsFalse(result);
@@ -137,11 +131,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
@@ -154,11 +147,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
@@ -171,11 +163,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
@@ -188,11 +179,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
@@ -205,11 +195,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
@@ -222,11 +211,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 90;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMaxTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
@@ -243,11 +231,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 10;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMinTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsTrue(result);
@@ -260,11 +247,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 0;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMinTotalCountOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId, suggestedDates);
 
         Assert.IsFalse(result);
@@ -295,11 +281,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 5;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(ExpectedCustomerId,
             ExpectedAppointmentId, suggestedDates);
 
@@ -327,11 +312,10 @@ public class AppointmentBusinessLayerTests
         var fakeCountOfSuggestedDatesInDatabase = 5;
 
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockAppointmentRepo.Setup(bl => bl.GetNumberOfSuggestedDates(ExpectedCustomerId, ExpectedAppointmentId))
             .Returns(fakeCountOfSuggestedDatesInDatabase);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
         var result = sut.CheckMinTotalCountOfSuggestedDatesWithToDeletedDates(ExpectedCustomerId,
             ExpectedAppointmentId, suggestedDates);
 
@@ -364,10 +348,7 @@ public class AppointmentBusinessLayerTests
         fakeAppointment.SuggestedDates.Add(fakeSuggestedDate2);
 
         fakeSuggestedDate1.Votings = new List<Voting> { new() };
-
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         sut.SetAppointmentForeignKeys(fakeAppointment, ExpectedCustomerId);
 
@@ -410,10 +391,7 @@ public class AppointmentBusinessLayerTests
                 }
             }
         ];
-
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         sut.SetParticipantsForeignKeys(fakeParticipants, ExpectedCustomerId, ExpectedAppointmentId);
 
@@ -449,7 +427,7 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.GetAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsNotNull(result);
@@ -465,7 +443,7 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(false);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.GetAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsNull(result);
@@ -480,8 +458,7 @@ public class AppointmentBusinessLayerTests
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns("Dummy");
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
 
         var result = sut.IsAppointmentPasswordProtected(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsTrue(result);
@@ -500,7 +477,7 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.GetAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsNotNull(result);
@@ -516,7 +493,7 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(false);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.GetAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsNull(result);
@@ -532,8 +509,7 @@ public class AppointmentBusinessLayerTests
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPasswordByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns("Dummy");
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
 
         var result = sut.IsAppointmentPasswordProtectedByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsTrue(result);
@@ -555,7 +531,7 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.AddAppointment(new Appointment
         {
@@ -582,7 +558,7 @@ public class AppointmentBusinessLayerTests
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.AddAppointment(new Appointment
         {
@@ -611,7 +587,7 @@ public class AppointmentBusinessLayerTests
         );
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.UpdateAppointment(new Appointment
         {
@@ -638,7 +614,7 @@ public class AppointmentBusinessLayerTests
 
         var mockCustomerRepo = new Mock<ICustomerRepository>();
         mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, customerRepository: mockCustomerRepo.Object);
 
         var result = sut.UpdateAppointment(new Appointment
         {
@@ -666,11 +642,10 @@ public class AppointmentBusinessLayerTests
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.GetAppointmentPassword(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns(ExpectedHashPassword);
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
         mockBcryptWrapper.Setup(w => w.Verify(ExpectedPassword, ExpectedHashPassword)).Returns(true);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, bcryptWrapper: mockBcryptWrapper.Object);
 
         var result = sut.VerifyAppointmentPassword(ExpectedCustomerId, ExpectedAppointmentId, ExpectedPassword);
         Assert.IsTrue(result);
@@ -704,11 +679,10 @@ public class AppointmentBusinessLayerTests
         mockAppointmentRepo.Setup(r => r.GetAppointmentPasswordByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
             .Returns(ExpectedHashPassword);
 
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockBcryptWrapper = new Mock<IBcryptWrapper>();
         mockBcryptWrapper.Setup(w => w.Verify(ExpectedPassword, ExpectedHashPassword)).Returns(true);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, bcryptWrapper: mockBcryptWrapper.Object);
 
         var result = sut.VerifyAppointmentPasswordByAdminId(ExpectedCustomerId, ExpectedAdminId, ExpectedPassword);
         Assert.IsTrue(result);
@@ -740,9 +714,8 @@ public class AppointmentBusinessLayerTests
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointment(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
 
         var result = sut.ExistsAppointment(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsTrue(result);
@@ -775,9 +748,8 @@ public class AppointmentBusinessLayerTests
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentIsStarted(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(false);
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
 
         var result = sut.ExistsAppointmentIsStarted(ExpectedCustomerId, ExpectedAppointmentId);
         Assert.IsFalse(result);
@@ -801,9 +773,7 @@ public class AppointmentBusinessLayerTests
     {
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object);
 
         var result = sut.ExistsAppointmentByAdminId(ExpectedCustomerId, ExpectedAdminId);
         Assert.IsTrue(result);
@@ -843,10 +813,7 @@ public class AppointmentBusinessLayerTests
             CustomerId = ExpectedCustomerId,
             AppointmentId = ExpectedAppointmentId
         };
-
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         var result = sut.ParticipantToDeleteAreValid(fakeParticipant);
         Assert.IsTrue(result);
@@ -856,10 +823,7 @@ public class AppointmentBusinessLayerTests
     public void ParticipantToDeleteAreValid_participantGuidsAreNotValid_false()
     {
         var fakeParticipant = new Participant { CustomerId = ExpectedCustomerId, AppointmentId = ExpectedAppointmentId };
-
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         var result = sut.ParticipantToDeleteAreValid(fakeParticipant);
         Assert.IsFalse(result);
@@ -878,10 +842,7 @@ public class AppointmentBusinessLayerTests
             CustomerId = ExpectedCustomerId,
             AppointmentId = ExpectedAppointmentId
         };
-
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         var result = sut.ParticipantsAreValid(new List<Participant> { fakeParticipant });
         Assert.IsTrue(result);
@@ -890,9 +851,7 @@ public class AppointmentBusinessLayerTests
     [TestMethod]
     public void ParticipantsAreValid_participantsAreNull_false()
     {
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         var result = sut.ParticipantsAreValid(null);
         Assert.IsFalse(result);
@@ -918,10 +877,7 @@ public class AppointmentBusinessLayerTests
                 }
             }
         };
-
-        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object);
+        var sut = CreateSut();
 
         var result = sut.ParticipantsAreValid(new List<Participant> { fakeParticipant });
         Assert.IsTrue(result);
@@ -938,7 +894,6 @@ public class AppointmentBusinessLayerTests
         var oldStatusType = AppointmentStatusType.Started;
         var newStatusType = AppointmentStatusType.Paused;
 
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
         mockAppointmentRepo.Setup(r => r.GetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
@@ -956,7 +911,7 @@ public class AppointmentBusinessLayerTests
         mockAppointmentBusinessLayer
             .Setup(r => r.IsAppointmentPasswordProtectedByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, bcryptWrapper: mockBcryptWrapper.Object);
 
         var appointment = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsFalse(appointment == null);
@@ -970,7 +925,6 @@ public class AppointmentBusinessLayerTests
         var oldStatusType = AppointmentStatusType.Paused;
         var newStatusType = AppointmentStatusType.Started;
 
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
         mockAppointmentRepo.Setup(r => r.GetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
@@ -988,7 +942,7 @@ public class AppointmentBusinessLayerTests
         mockAppointmentBusinessLayer
             .Setup(r => r.IsAppointmentPasswordProtectedByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, bcryptWrapper: mockBcryptWrapper.Object);
 
         var appointment = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsFalse(appointment == null);
@@ -1002,7 +956,6 @@ public class AppointmentBusinessLayerTests
         var oldStatusType = AppointmentStatusType.Deleted;
         var newStatusType = AppointmentStatusType.Started;
 
-        var mockCustomerRepo = new Mock<ICustomerRepository>();
         var mockAppointmentRepo = new Mock<IAppointmentRepository>();
         mockAppointmentRepo.Setup(r => r.ExistsAppointmentByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
         mockAppointmentRepo.Setup(r => r.GetAppointmentStatusTypeByAdmin(It.IsAny<Guid>(), It.IsAny<Guid>()))
@@ -1020,7 +973,7 @@ public class AppointmentBusinessLayerTests
         mockAppointmentBusinessLayer
             .Setup(r => r.IsAppointmentPasswordProtectedByAdminId(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(true);
 
-        var sut = CreateSut(mockAppointmentRepo.Object, mockCustomerRepo.Object, mockBcryptWrapper.Object);
+        var sut = CreateSut(mockAppointmentRepo.Object, bcryptWrapper: mockBcryptWrapper.Object);
 
         var appointmentObject = sut.SetAppointmentStatusType(ExpectedCustomerId, ExpectedAdminId, newStatusType);
         Assert.IsNull(appointmentObject);
