@@ -80,6 +80,7 @@ public class Startup
         services.AddTransient<IAppConfigRepository, AppConfigRepository>();
         services.AddTransient<ICustomerRepository, CustomerRepository>();
         services.AddTransient<IAppConfigRepository, AppConfigRepository>();
+        services.AddTransient<IStatisticRepository, StatisticRepository>();
         services.AddTransient<IMigrationManager, MigrationManager>();
         services.AddTransient<IAppointmentBusinessLayer, AppointmentBusinessLayer>();
         services.AddTransient<IAppConfigBusinessLayer, AppConfigBusinessLayer>();
