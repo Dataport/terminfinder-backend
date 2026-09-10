@@ -1,4 +1,5 @@
-﻿using Dataport.Terminfinder.WebAPI.Constants;
+using Dataport.Terminfinder.Repository;
+using Dataport.Terminfinder.WebAPI.Constants;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -10,7 +11,8 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
     private IHost _host;
-    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+
+    private static readonly DateOnly ExpectedCurrentMonth = new(2026, 9, 1);
 
     [TestInitialize]
     public async Task Initialize()
@@ -28,6 +30,8 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
             .Build();
         await _host.StartAsync();
         _testServer = _host.GetTestServer();
+
+        EnsureCustomerExists(_host);
     }
 
     [TestCleanup]
@@ -45,8 +49,19 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     public async Task AddAppointment()
     {
         var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
-
         var client = _testServer.CreateClient();
+        ResetStatistics();
+
+        // assert statistics before
+        using (var statsBeforeScope = _host.Services.CreateScope())
+        {
+            var statsBeforeContext = statsBeforeScope.ServiceProvider.GetRequiredService<DataContext>();
+            var appointmentStatisticsBefore = statsBeforeContext.AppointmentStatistics
+                .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+                .ToList();
+
+            Assert.IsEmpty(appointmentStatisticsBefore);
+        }
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -62,8 +77,19 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.IsNotNull(dto);
         Assert.IsInstanceOfType(dto, typeof(Appointment));
 
+        // assert statistics after
+        using (var statsAfterScope = _host.Services.CreateScope())
+        {
+            var statsAfterContext = statsAfterScope.ServiceProvider.GetRequiredService<DataContext>();
+            var appointmentStatisticsAfter = statsAfterContext.AppointmentStatistics
+                .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+                .ToList();
+
+            Assert.HasCount(1, appointmentStatisticsAfter);
+        }
+
         //--- get the appointment
-        var appointmentId= dto.AppointmentId;
+        var appointmentId = dto.AppointmentId;
 
         // Act
         response = await client.GetAsync($"appointment/{ExpectedCustomerId}/{appointmentId}");
@@ -88,7 +114,6 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         var expectedSuggestedDates = appointment.SuggestedDates.OrderBy(s => s.StartDate).ToList();
 
         Assert.AreEqual(expectedSuggestedDates[0].StartDate.Date, responseSuggestedDates[0].StartDate.Date);
-
         Assert.AreEqual(((DateTime)expectedSuggestedDates[0].EndDate!).Date, ((DateTime)responseSuggestedDates[0].EndDate!).Date);
         Assert.IsNull(responseSuggestedDates[0].StartTime);
         Assert.IsNull(responseSuggestedDates[0].EndTime);
@@ -140,8 +165,8 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
     public async Task UpdateAppointment()
     {
         var appointment = CreateTestAppointment(ExpectedCustomerId, Guid.Empty);
-
         var client = _testServer.CreateClient();
+        ResetStatistics();
 
         // Act
         var content = new StringContent(JsonConvert.SerializeObject(appointment), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
@@ -256,6 +281,82 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(timeExpectedUtf.Hour, timeResponseUtf.Hour);
         Assert.AreEqual(timeExpectedUtf.Minute, timeResponseUtf.Minute);
         Assert.AreEqual(((DateTime)expectedSuggestedDates[1].EndDate).Date, ((DateTime)responseSuggestedDates[1].EndDate).Date);
+
+        // assert statistics before
+        int participantStatisticBefore;
+        int votingStatisticBefore;
+
+        using (var statsBeforeScope = _host.Services.CreateScope())
+        {
+            var statsBeforeContext = statsBeforeScope.ServiceProvider.GetRequiredService<DataContext>();
+            participantStatisticBefore = statsBeforeContext.ParticipantStatistics
+                .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+                .Sum(x => x.Count);
+            votingStatisticBefore = statsBeforeContext.VotingStatistics
+                .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+                .Sum(x => x.Count);
+        }
+
+        Assert.AreEqual(0, participantStatisticBefore);
+        Assert.AreEqual(0, votingStatisticBefore);
+
+        var suggestedDate = dto3.SuggestedDates.First();
+        var participants = new[]
+        {
+            new Participant
+            {
+                AppointmentId = appointmentId,
+                CustomerId = ExpectedCustomerId,
+                ParticipantId = Guid.Empty,
+                Name = "Participant",
+                Votings = new List<Voting>
+                {
+                    new()
+                    {
+                        VotingId = Guid.Empty,
+                        CustomerId = ExpectedCustomerId,
+                        AppointmentId = appointmentId,
+                        ParticipantId = Guid.Empty,
+                        SuggestedDateId = suggestedDate.SuggestedDateId,
+                        Status = VotingStatusType.Accepted
+                    },
+                    new()
+                    {
+                        VotingId = Guid.Empty,
+                        CustomerId = ExpectedCustomerId,
+                        AppointmentId = appointmentId,
+                        ParticipantId = Guid.Empty,
+                        SuggestedDateId = suggestedDate.SuggestedDateId,
+                        Status = VotingStatusType.Declined
+                    }
+                }
+            }
+        };
+
+        var statsContent = new StringContent(JsonConvert.SerializeObject(participants), Encoding.UTF8, HttpConstants.TerminfinderMediaTypeJsonV1);
+        var statsResponse = await client.PutAsync($"votings/{ExpectedCustomerId}/{appointmentId}", statsContent);
+        statsResponse.EnsureSuccessStatusCode();
+
+        var expectedParticipantStatisticAfter = participants.Count(p => p.ParticipantId == Guid.Empty);
+        var expectedVotingStatisticAfter = participants.Sum(p => p.Votings.Count(v => v.VotingId == Guid.Empty));
+
+        // assert statistics after
+        int participantStatisticAfter;
+        int votingStatisticAfter;
+
+        using (var statsAfterScope = _host.Services.CreateScope())
+        {
+            var statsAfterContext = statsAfterScope.ServiceProvider.GetRequiredService<DataContext>();
+            participantStatisticAfter = statsAfterContext.ParticipantStatistics
+                .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+                .Sum(x => x.Count);
+            votingStatisticAfter = statsAfterContext.VotingStatistics
+                .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+                .Sum(x => x.Count);
+        }
+
+        Assert.AreEqual(expectedParticipantStatisticAfter, participantStatisticAfter);
+        Assert.AreEqual(expectedVotingStatisticAfter, votingStatisticAfter);
 
         Assert.AreEqual(expectedSuggestedDates[2].StartDate.Date, responseSuggestedDates[2].StartDate.Date);
         Assert.AreEqual(((DateTime)expectedSuggestedDates[2].EndDate!).Date, ((DateTime)responseSuggestedDates[2].EndDate!).Date);
@@ -633,5 +734,37 @@ public class AppointmentControllerIntegrationTests : BaseIntegrationTests
         Assert.AreEqual(appointmentId, passwordVerificationResult.AppointmentId);
         Assert.IsTrue(passwordVerificationResult.IsProtectedByPassword);
         Assert.IsFalse(passwordVerificationResult.IsPasswordValid);
+    }
+
+    private void ResetStatistics()
+    {
+        using var scope = _host.Services.CreateScope();
+        var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+        var existingAppointmentStatistics = dataContext.AppointmentStatistics
+            .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+            .ToList();
+        if (existingAppointmentStatistics.Count != 0)
+        {
+            dataContext.AppointmentStatistics.RemoveRange(existingAppointmentStatistics);
+        }
+
+        var existingParticipantStatistics = dataContext.ParticipantStatistics
+            .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+            .ToList();
+        if (existingParticipantStatistics.Count != 0)
+        {
+            dataContext.ParticipantStatistics.RemoveRange(existingParticipantStatistics);
+        }
+
+        var existingVotingStatistics = dataContext.VotingStatistics
+            .Where(x => x.CustomerId == ExpectedCustomerId && x.YearMonth == ExpectedCurrentMonth)
+            .ToList();
+        if (existingVotingStatistics.Count != 0)
+        {
+            dataContext.VotingStatistics.RemoveRange(existingVotingStatistics);
+        }
+
+        dataContext.SaveChanges();
     }
 }
