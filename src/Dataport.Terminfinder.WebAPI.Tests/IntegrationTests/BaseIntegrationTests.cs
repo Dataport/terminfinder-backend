@@ -1,4 +1,5 @@
-﻿using Dataport.Terminfinder.WebAPI.Constants;
+using Dataport.Terminfinder.Repository;
+using Dataport.Terminfinder.WebAPI.Constants;
 using System.Text;
 
 namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
@@ -6,6 +7,10 @@ namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 [ExcludeFromCodeCoverage]
 public abstract class BaseIntegrationTests
 {
+    protected static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
+    protected const string ExpectedCustomerName = "Test";
+    protected const string ExpectedCustomerStatus = nameof(AppointmentStatusType.Started);
+
     /// <summary>
     /// ConfigurationBuilder for integrationstest
     /// </summary>
@@ -17,6 +22,30 @@ public abstract class BaseIntegrationTests
             .AddJsonFile("appsettings.test.json", optional: false, reloadOnChange: true)
             .Build();
         return config;
+    }
+
+    protected static void EnsureCustomerExists(IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+        var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+        var existingCustomer = dataContext.Customers.SingleOrDefault(x => x.CustomerId == ExpectedCustomerId);
+        if (existingCustomer == null)
+        {
+            dataContext.Customers.Add(new Customer
+            {
+                CustomerId = ExpectedCustomerId,
+                CustomerName = ExpectedCustomerName,
+                Status = ExpectedCustomerStatus
+            });
+        }
+        else
+        {
+            existingCustomer.CustomerName = ExpectedCustomerName;
+            existingCustomer.Status = ExpectedCustomerStatus;
+        }
+
+        dataContext.SaveChanges();
     }
 
     protected static Appointment CreateTestAppointment(Guid customerId, Guid adminId, string password = null)

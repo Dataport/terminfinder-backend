@@ -16,6 +16,7 @@ public class AppointmentBusinessLayerTests
     private static readonly Guid ExpectedCustomerId = Guid.Parse("BE1D657A-4D06-40DB-8443-D67BBB950EE7");
     private static readonly Guid ExpectedParticipantId1 = Guid.Parse("09F659EF-CBBE-4B8F-BF0F-73BC3C942C0A");
     private static readonly Guid ExpectedParticipantId2 = Guid.Parse("D1C2DB5B-3FD8-4D8B-9A64-0C90298897D0");
+    private static readonly string ExpectedParticipantName = "Max";
     private static readonly Guid ExpectedVotingId = Guid.Parse("B198FD02-2C48-4932-AC34-A6878C65DC36");
     private static readonly VotingStatusType ExpectedVotingStatus = VotingStatusType.Accepted;
     private static readonly string ExpectedPassword = "P4$$w0rd";
@@ -416,6 +417,53 @@ public class AppointmentBusinessLayerTests
 
     #endregion
 
+    #region AddAndUpdateParticipants
+
+    [TestMethod]
+    public void AddAndUpdateParticipants_IncrementParticipantStatisticCount_CallsExpectedMethod()
+    {
+        var mockStatisticRepo = new Mock<IStatisticRepository>();
+        var sut = CreateSut(statisticRepository: mockStatisticRepo.Object);
+
+        var participants = new List<Participant>
+        {
+            new() { ParticipantId = Guid.Empty, Name = ExpectedParticipantName }
+        };
+
+        sut.AddAndUpdateParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
+
+        mockStatisticRepo.Verify(r => r.IncrementParticipantStatisticCount(ExpectedCustomerId), Times.Once());
+        mockStatisticRepo.Verify(r => r.IncrementVotingStatisticCount(It.IsAny<Guid>(), It.IsAny<int>()), Times.Never());
+    }
+
+    [TestMethod]
+    public void AddAndUpdateParticipants_IncrementVotingStatisticCount_CallsExpectedMethod()
+    {
+        var mockStatisticRepo = new Mock<IStatisticRepository>();
+        var sut = CreateSut(statisticRepository: mockStatisticRepo.Object);
+
+        var participants = new List<Participant>
+        {
+            new()
+            {
+                ParticipantId = Guid.Empty,
+                Name = ExpectedParticipantName,
+                Votings = new List<Voting>
+                {
+                    new() { VotingId = Guid.Empty },
+                    new() { VotingId = Guid.Empty }
+                }
+            }
+        };
+
+        sut.AddAndUpdateParticipants(ExpectedCustomerId, ExpectedAppointmentId, participants);
+
+        mockStatisticRepo.Verify(r => r.IncrementParticipantStatisticCount(ExpectedCustomerId), Times.Once());
+        mockStatisticRepo.Verify(r => r.IncrementVotingStatisticCount(ExpectedCustomerId, 2), Times.Once());
+    }
+
+    #endregion
+
     #region GetAppointment
 
     [TestMethod]
@@ -566,6 +614,26 @@ public class AppointmentBusinessLayerTests
         });
         Assert.IsNotNull(result);
         mockAppointmentRepo.Verify(r => r.AddAndUpdateAppointment(It.IsAny<Appointment>()), Times.Once());
+    }
+
+    [TestMethod]
+    public void AddAppointment_IncrementAppointmentStatisticCount_CallsExpectedMethod()
+    {
+        var mockAppointmentRepo = new Mock<IAppointmentRepository>();
+        var mockCustomerRepo = new Mock<ICustomerRepository>();
+        mockCustomerRepo.Setup(r => r.ExistsCustomer(It.IsAny<Guid>())).Returns(true);
+
+        var mockStatisticRepo = new Mock<IStatisticRepository>();
+        var sut = CreateSut(mockAppointmentRepo.Object, mockStatisticRepo.Object, mockCustomerRepo.Object);
+
+        sut.AddAppointment(
+            new Appointment
+            {
+                AppointmentId = ExpectedAppointmentId, CustomerId = ExpectedCustomerId, Password = ExpectedPassword
+            }
+        );
+
+        mockStatisticRepo.Verify(r => r.IncrementAppointmentStatisticCount(ExpectedCustomerId), Times.Once());
     }
 
     #endregion
