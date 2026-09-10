@@ -1062,16 +1062,19 @@ public class AppointmentBusinessLayerTests
 
     private static AppointmentBusinessLayer CreateSut(
         [CanBeNull] IAppointmentRepository appointmentRepository = null,
+        [CanBeNull] IStatisticRepository statisticRepository = null,
         [CanBeNull] ICustomerRepository customerRepository = null,
         [CanBeNull] IBcryptWrapper bcryptWrapper = null)
     {
         var appointmentRepositoryToUse = appointmentRepository ?? new Mock<IAppointmentRepository>().Object;
+        var statisticRepositoryToUse = statisticRepository ?? new Mock<IStatisticRepository>().Object;
         var customerRepositoryToUse = customerRepository ?? new Mock<ICustomerRepository>().Object;
         var mockBcryptWrapper = bcryptWrapper ?? CreateDefaultBcryptWrapper();
         var logger = new Mock<ILogger<AppointmentBusinessLayer>>();
 
         return new AppointmentBusinessLayer(
             appointmentRepositoryToUse,
+            statisticRepositoryToUse,
             customerRepositoryToUse,
             mockBcryptWrapper,
             logger.Object);

@@ -10,6 +10,7 @@ namespace Dataport.Terminfinder.BusinessLayer;
 public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessLayer
 {
     private readonly IAppointmentRepository _appointmentRepo;
+    private readonly IStatisticRepository _statisticRepo;
     private readonly IBcryptWrapper _bcryptWrapper;
     private static readonly int MaxCountOfElementsOfParticipants = 5000;
     private static readonly int MaxCountOfElementsOfSuggestedDates = 100;
@@ -19,10 +20,12 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
     /// constructor
     /// </summary>
     /// <param name="appointmentRepo">Appointment repository</param>
+    /// <param name="statisticRepo">Statistic repository</param>
     /// <param name="customerRepo">Customer repository</param>
     /// <param name="bcryptWrapper">BCryptWrapper</param>
     /// <param name="logger">Logger</param>
     public AppointmentBusinessLayer(IAppointmentRepository appointmentRepo,
+        IStatisticRepository statisticRepo,
         ICustomerRepository customerRepo,
         IBcryptWrapper bcryptWrapper,
         ILogger<AppointmentBusinessLayer> logger)
@@ -31,6 +34,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
         Logger.LogDebug($"Enter {nameof(AppointmentBusinessLayer)}");
 
         _appointmentRepo = appointmentRepo;
+        _statisticRepo = statisticRepo;
         _bcryptWrapper = bcryptWrapper ?? throw new ArgumentNullException(nameof(bcryptWrapper));
     }
 
@@ -185,6 +189,7 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
         if (appointment != null && ExistsCustomer(appointment.CustomerId))
         {
             HashPasswordInAppointment(appointment);
+            _statisticRepo.IncrementAppointmentStatisticCount(appointment.CustomerId);
             _appointmentRepo.AddAndUpdateAppointment(appointment);
             appointment = _appointmentRepo.GetAppointment(appointment.CustomerId, appointment.AppointmentId);
         }
@@ -288,6 +293,17 @@ public class AppointmentBusinessLayer : BusinessLayerBase, IAppointmentBusinessL
         if (participants.IsNullOrEmpty())
         {
             return (participants);
+        }
+
+        if (participants.Any(participant => participant.ParticipantId == Guid.Empty))
+        {
+            _statisticRepo.IncrementParticipantStatisticCount(customerId);
+        }
+
+        var newVotingCount = participants.Sum(p => p.Votings?.Count(v => v.VotingId == Guid.Empty) ?? 0);
+        if (newVotingCount > 0)
+        {
+            _statisticRepo.IncrementVotingStatisticCount(customerId, newVotingCount);
         }
 
         _appointmentRepo.AddAndUpdateParticipants(participants);
