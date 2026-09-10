@@ -203,10 +203,7 @@ public class AdminControllerTests
     [TestMethod]
     public void GetProtection_GuidsAreInvalid_ThrowsException()
     {
-        var mockRequestContext = new Mock<IRequestContext>();
-        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-
-        var sut = CreateSut(mockBusinessLayer.Object, mockRequestContext.Object);
+        var sut = CreateSut();
 
         var exceptionCustomerId = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.GetProtection(ExpectedInvalidGuidString, ExpectedAdminId.ToString()));
@@ -397,10 +394,7 @@ public class AdminControllerTests
     [TestMethod]
     public void GetPasswordVerification_GuidsInvalid_ThrowsException()
     {
-        var mockRequestContext = new Mock<IRequestContext>();
-        var mockBusinessLayer = new Mock<IAppointmentBusinessLayer>();
-
-        var sut = CreateSut(mockBusinessLayer.Object, mockRequestContext.Object);
+        var sut = CreateSut();
 
         var exception = Assert.ThrowsExactly<BadRequestException>(() =>
             sut.GetPasswordVerification(ExpectedInvalidGuidString, ExpectedInvalidGuidString));
