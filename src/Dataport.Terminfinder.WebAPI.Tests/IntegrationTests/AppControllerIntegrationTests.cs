@@ -1,3 +1,5 @@
+using Dataport.Terminfinder.Repository;
+
 namespace Dataport.Terminfinder.WebAPI.Tests.IntegrationTests;
 
 [TestClass]
@@ -41,11 +43,18 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
     [TestMethod]
     public async Task GetAppInfo_Okay()
     {
-        var expectedAppInfo = new AppInfo
+        var expectedAppInfo = new AppInfo();
+
+        using (var scope = _host.Services.CreateScope())
         {
-            BuildDate = "2025-07-04",
-            VersionNumber = "1.2.2"
-        };
+            var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+            expectedAppInfo.VersionNumber = dataContext.AppConfig
+                .Single(x => x.Key == "version")
+                .Value;
+            expectedAppInfo.BuildDate = dataContext.AppConfig
+                .Single(x => x.Key == "builddate")
+                .Value;
+        }
 
         var client = _testServer.CreateClient();
 
