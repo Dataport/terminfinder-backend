@@ -9,7 +9,6 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
 {
     private TestServer _testServer;
     private IHost _host;
-    private static readonly Guid ExpectedCustomerId = new("E1E81104-3944-4588-A48E-B64BDE473E1A");
 
     [TestInitialize]
     public async Task Initialize()
@@ -27,6 +26,8 @@ public class VotingControllerIntegrationTests : BaseIntegrationTests
             .Build();
         await _host.StartAsync();
         _testServer = _host.GetTestServer();
+
+        EnsureCustomerExists(_host);
     }
 
     [TestCleanup]
