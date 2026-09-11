@@ -23,6 +23,8 @@ public class AppControllerIntegrationTests : BaseIntegrationTests
             .Build();
         await _host.StartAsync();
         _testServer = _host.GetTestServer();
+
+        EnsureCustomerExists(_host);
     }
 
     [TestCleanup]
