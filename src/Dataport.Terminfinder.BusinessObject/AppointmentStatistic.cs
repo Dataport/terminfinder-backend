@@ -4,13 +4,13 @@
 /// Representation for an appointment statistic
 /// </summary>
 [ExcludeFromCodeCoverage]
-[Table("appointmentStatistic", Schema = "public")]
+[Table("appointmentstatistic", Schema = "public")]
 public class AppointmentStatistic
 {
     /// <summary>
     /// Identifier of the appointment statistic
     /// </summary>
-    [Column("appointmentStatisticId")]
+    [Column("appointmentstatisticid")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid AppointmentStatisticId { get; set; }
 
@@ -18,13 +18,13 @@ public class AppointmentStatistic
     /// Identifier of the customer
     /// </summary>
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    [Column("customerId")]
+    [Column("customerid")]
     public Guid CustomerId { get; set; }
 
     /// <summary>
     /// The year and month for which the statistic is recorded
     /// </summary>
-    [Column("yearMonth")]
+    [Column("yearmonth")]
     public DateOnly YearMonth { get; set; }
 
     /// <summary>

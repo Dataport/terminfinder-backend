@@ -1,11 +1,11 @@
 SELECT customer.customername                       AS customer,
-    TO_CHAR(appointment."yearMonth", 'Month YYYY') AS month,
+    TO_CHAR(appointment."yearmonth", 'Month YYYY') AS month,
     appointment.count                              AS appointments,
     participant.count                              AS participants,
     voting.count                                   AS votings
-FROM "appointmentStatistic" appointment
-         LEFT JOIN "participantStatistic" participant ON appointment."customerId" = participant."customerId"
-         LEFT JOIN "votingStatistic" voting ON appointment."customerId" = voting."customerId"
-         LEFT JOIN customer ON appointment."customerId" = customer.customerid
-WHERE appointment."customerId" = '11111111-1111-1111-1111-111111111111'
-ORDER BY appointment."yearMonth" DESC;
+FROM "appointmentstatistic" appointment
+         LEFT JOIN "participantstatistic" participant ON appointment."customerid" = participant."customerid"
+         LEFT JOIN "votingstatistic" voting ON appointment."customerid" = voting."customerid"
+         LEFT JOIN customer ON appointment."customerid" = customer.customerid
+WHERE appointment."customerid" = '11111111-1111-1111-1111-111111111111'
+ORDER BY appointment."yearmonth" DESC;
