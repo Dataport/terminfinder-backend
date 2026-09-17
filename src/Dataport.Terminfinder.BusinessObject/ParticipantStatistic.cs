@@ -4,13 +4,13 @@
 /// Representation for a Participant statistic
 /// </summary>
 [ExcludeFromCodeCoverage]
-[Table("participantStatistic", Schema = "public")]
+[Table("participantstatistic", Schema = "public")]
 public class ParticipantStatistic
 {
     /// <summary>
     /// Identifier of the participant statistic
     /// </summary>
-    [Column("participantStatisticId")]
+    [Column("participantstatisticid")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid ParticipantStatisticId { get; set; }
 
@@ -18,13 +18,13 @@ public class ParticipantStatistic
     /// Identifier of the customer
     /// </summary>
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    [Column("customerId")]
+    [Column("customerid")]
     public Guid CustomerId { get; set; }
 
     /// <summary>
     /// The year and month for which the statistic is recorded
     /// </summary>
-    [Column("yearMonth")]
+    [Column("yearmonth")]
     public DateOnly YearMonth { get; set; }
 
     /// <summary>

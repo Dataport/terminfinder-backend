@@ -4,13 +4,13 @@
 /// Representation for a Voting statistic
 /// </summary>
 [ExcludeFromCodeCoverage]
-[Table("votingStatistic", Schema = "public")]
+[Table("votingstatistic", Schema = "public")]
 public class VotingStatistic
 {
     /// <summary>
     /// Identifier of the voting statistic
     /// </summary>
-    [Column("votingStatisticId")]
+    [Column("votingstatisticid")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid VotingStatisticId { get; set; }
 
@@ -18,13 +18,13 @@ public class VotingStatistic
     /// Identifier of the customer
     /// </summary>
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    [Column("customerId")]
+    [Column("customerid")]
     public Guid CustomerId { get; set; }
 
     /// <summary>
     /// The year and month for which the statistic is recorded
     /// </summary>
-    [Column("yearMonth")]
+    [Column("yearmonth")]
     public DateOnly YearMonth { get; set; }
 
     /// <summary>

@@ -115,7 +115,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
                     b.Property<Guid>("AppointmentStatisticId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("appointmentStatisticId");
+                        .HasColumnName("appointmentstatisticid");
 
                     b.Property<int>("Count")
                         .ValueGeneratedOnAdd()
@@ -125,18 +125,18 @@ namespace Dataport.Terminfinder.Repository.Migrations
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
-                        .HasColumnName("customerId");
+                        .HasColumnName("customerid");
 
                     b.Property<DateOnly>("YearMonth")
                         .HasColumnType("date")
-                        .HasColumnName("yearMonth");
+                        .HasColumnName("yearmonth");
 
                     b.HasKey("AppointmentStatisticId");
 
                     b.HasIndex("CustomerId", "YearMonth")
                         .IsUnique();
 
-                    b.ToTable("appointmentStatistic", "public");
+                    b.ToTable("appointmentstatistic", "public");
                 });
 
             modelBuilder.Entity("Dataport.Terminfinder.BusinessObject.Customer", b =>
@@ -214,7 +214,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
                     b.Property<Guid>("ParticipantStatisticId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("participantStatisticId");
+                        .HasColumnName("participantstatisticid");
 
                     b.Property<int>("Count")
                         .ValueGeneratedOnAdd()
@@ -224,18 +224,18 @@ namespace Dataport.Terminfinder.Repository.Migrations
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
-                        .HasColumnName("customerId");
+                        .HasColumnName("customerid");
 
                     b.Property<DateOnly>("YearMonth")
                         .HasColumnType("date")
-                        .HasColumnName("yearMonth");
+                        .HasColumnName("yearmonth");
 
                     b.HasKey("ParticipantStatisticId");
 
                     b.HasIndex("CustomerId", "YearMonth")
                         .IsUnique();
 
-                    b.ToTable("participantStatistic", "public");
+                    b.ToTable("participantstatistic", "public");
                 });
 
             modelBuilder.Entity("Dataport.Terminfinder.BusinessObject.SuggestedDate", b =>
@@ -356,7 +356,7 @@ namespace Dataport.Terminfinder.Repository.Migrations
                     b.Property<Guid>("VotingStatisticId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("votingStatisticId");
+                        .HasColumnName("votingstatisticid");
 
                     b.Property<int>("Count")
                         .ValueGeneratedOnAdd()
@@ -366,18 +366,18 @@ namespace Dataport.Terminfinder.Repository.Migrations
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid")
-                        .HasColumnName("customerId");
+                        .HasColumnName("customerid");
 
                     b.Property<DateOnly>("YearMonth")
                         .HasColumnType("date")
-                        .HasColumnName("yearMonth");
+                        .HasColumnName("yearmonth");
 
                     b.HasKey("VotingStatisticId");
 
                     b.HasIndex("CustomerId", "YearMonth")
                         .IsUnique();
 
-                    b.ToTable("votingStatistic", "public");
+                    b.ToTable("votingstatistic", "public");
                 });
 
             modelBuilder.Entity("Dataport.Terminfinder.BusinessObject.Appointment", b =>

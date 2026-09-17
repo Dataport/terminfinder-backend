@@ -13,76 +13,76 @@ namespace Dataport.Terminfinder.Repository.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sqlInhalt = "update public.appconfig set configvalue='1.4.0' WHERE configkey='version';";
+            var sqlInhalt = "update public.appconfig set configvalue='1.4.1' WHERE configkey='version';";
             migrationBuilder.Sql(sqlInhalt, suppressTransaction: true);
 
-            sqlInhalt = "update public.appconfig set configvalue='2026-09-09' WHERE configkey='builddate';";
+            sqlInhalt = "update public.appconfig set configvalue='2026-09-17' WHERE configkey='builddate';";
             migrationBuilder.Sql(sqlInhalt, suppressTransaction: true);
 
             migrationBuilder.CreateTable(
-                name: "appointmentStatistic",
+                name: "appointmentstatistic",
                 schema: "public",
                 columns: table => new
                 {
-                    appointmentStatisticId = table.Column<Guid>(type: "uuid", nullable: false),
-                    customerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    yearMonth = table.Column<DateOnly>(type: "date", nullable: false),
+                    appointmentstatisticid = table.Column<Guid>(type: "uuid", nullable: false),
+                    customerid = table.Column<Guid>(type: "uuid", nullable: false),
+                    yearmonth = table.Column<DateOnly>(type: "date", nullable: false),
                     count = table.Column<int>(type: "integer", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_appointmentStatistic", x => x.appointmentStatisticId);
+                    table.PrimaryKey("PK_appointmentstatistic", x => x.appointmentstatisticid);
                 });
 
             migrationBuilder.CreateTable(
-                name: "participantStatistic",
+                name: "participantstatistic",
                 schema: "public",
                 columns: table => new
                 {
-                    participantStatisticId = table.Column<Guid>(type: "uuid", nullable: false),
-                    customerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    yearMonth = table.Column<DateOnly>(type: "date", nullable: false),
+                    participantstatisticid = table.Column<Guid>(type: "uuid", nullable: false),
+                    customerid = table.Column<Guid>(type: "uuid", nullable: false),
+                    yearmonth = table.Column<DateOnly>(type: "date", nullable: false),
                     count = table.Column<int>(type: "integer", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_participantStatistic", x => x.participantStatisticId);
+                    table.PrimaryKey("PK_participantstatistic", x => x.participantstatisticid);
                 });
 
             migrationBuilder.CreateTable(
-                name: "votingStatistic",
+                name: "votingstatistic",
                 schema: "public",
                 columns: table => new
                 {
-                    votingStatisticId = table.Column<Guid>(type: "uuid", nullable: false),
-                    customerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    yearMonth = table.Column<DateOnly>(type: "date", nullable: false),
+                    votingstatisticid = table.Column<Guid>(type: "uuid", nullable: false),
+                    customerid = table.Column<Guid>(type: "uuid", nullable: false),
+                    yearmonth = table.Column<DateOnly>(type: "date", nullable: false),
                     count = table.Column<int>(type: "integer", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_votingStatistic", x => x.votingStatisticId);
+                    table.PrimaryKey("PK_votingstatistic", x => x.votingstatisticid);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_appointmentStatistic_customerId_yearMonth",
+                name: "IX_appointmentstatistic_customerid_yearmonth",
                 schema: "public",
-                table: "appointmentStatistic",
-                columns: new[] { "customerId", "yearMonth" },
+                table: "appointmentstatistic",
+                columns: new[] { "customerid", "yearmonth" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_participantStatistic_customerId_yearMonth",
+                name: "IX_participantstatistic_customerid_yearmonth",
                 schema: "public",
-                table: "participantStatistic",
-                columns: new[] { "customerId", "yearMonth" },
+                table: "participantstatistic",
+                columns: new[] { "customerid", "yearmonth" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_votingStatistic_customerId_yearMonth",
+                name: "IX_votingstatistic_customerid_yearmonth",
                 schema: "public",
-                table: "votingStatistic",
-                columns: new[] { "customerId", "yearMonth" },
+                table: "votingstatistic",
+                columns: new[] { "customerid", "yearmonth" },
                 unique: true);
         }
 
@@ -96,15 +96,15 @@ namespace Dataport.Terminfinder.Repository.Migrations
             migrationBuilder.Sql(sqlInhalt, suppressTransaction: true);
 
             migrationBuilder.DropTable(
-                name: "appointmentStatistic",
+                name: "appointmentstatistic",
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "participantStatistic",
+                name: "participantstatistic",
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "votingStatistic",
+                name: "votingstatistic",
                 schema: "public");
         }
     }
